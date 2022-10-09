@@ -5,8 +5,6 @@ import com.attrsense.android.baselibrary.BuildConfig
 import com.attrsense.android.baselibrary.config.AppConfig
 import com.attrsense.android.baselibrary.http.HttpDns
 import com.attrsense.android.baselibrary.http.HttpEventListener
-import com.attrsense.android.baselibrary.util.JsonUtil
-import com.attrsense.android.baselibrary.util.JsonUtil.decodeUnicode
 import com.blankj.utilcode.util.JsonUtils
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.orhanobut.logger.Logger
@@ -72,27 +70,21 @@ object HttpModule {
 
     private class HttpLogger : HttpLoggingInterceptor.Logger {
         private val mMessage = java.lang.StringBuilder()
-        override fun log(result: String) {
+        override fun log(message: String) {
             // 请求或者响应开始
-            var message: String? = result
-            if (message!!.startsWith("--> POST") || message.startsWith("--> GET")) {
+            var localMsg: String? = message
+            if (localMsg!!.startsWith("--> POST") || localMsg.startsWith("--> GET")) {
                 mMessage.setLength(0)
             }
             // 以{}或者[]形式的说明是响应结果的json数据，需要进行格式化
-            if (message.startsWith("{") && message.endsWith("}")
-                || message.startsWith("[") && message.endsWith("]")
+            if (localMsg.startsWith("{") && localMsg.endsWith("}")
+                || localMsg.startsWith("[") && localMsg.endsWith("]")
             ) {
-                message = JsonUtils.formatJson(message)
-//                JsonUtil.formatJson(decodeUnicode(message))
+                localMsg = JsonUtils.formatJson(localMsg)
             }
-            mMessage.append(
-                """
-                $message
-                
-                """.trimIndent()
-            )
+            mMessage.append("$localMsg\n")
             // 响应结束，打印整条日志
-            if (message!!.startsWith("<-- END HTTP")) {
+            if (localMsg!!.startsWith("<-- END HTTP")) {
                 Logger.i(mMessage.toString())
             }
         }
