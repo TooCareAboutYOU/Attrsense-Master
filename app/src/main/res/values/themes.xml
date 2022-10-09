@@ -15,24 +15,25 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <!--    &lt;!&ndash;    启动页Style &ndash;&gt;-->
-    <!--    <style name="Theme.SplashScreen.Starting" parent="Theme.SplashScreen">-->
-    <!--        &lt;!&ndash;展示背景色&ndash;&gt;-->
-    <!--        <item name="windowSplashScreenBackground">@color/white</item>-->
-    <!--        &lt;!&ndash; 启动页展示的图片&ndash;&gt;-->
-    <!--        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>-->
-    <!--        &lt;!&ndash; 展示时常(低版本不生效需要代码设置)&ndash;&gt;-->
-    <!--        <item name="windowSplashScreenAnimationDuration">1000</item>-->
-    <!--        &lt;!&ndash; 启动画面退出后 Activity 的主题&ndash;&gt;-->
-    <!--        <item name="postSplashScreenTheme">@style/Launcher</item>-->
-    <!--    </style>-->
+    <!--    启动页Style -->
+    <style name="Theme.SplashScreen.Starting" parent="Theme.SplashScreen">
+        <!--展示背景色-->
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <!-- 启动页展示的图片-->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <!-- 展示时常(低版本不生效需要代码设置)-->
+        <item name="windowSplashScreenAnimationDuration">3000</item>
+        <!-- 启动画面退出后 Activity 的主题-->
+        <item name="postSplashScreenTheme">@style/Launcher</item>
+    </style>
 
-    <!--    &lt;!&ndash;    启动页下一页的Style&ndash;&gt;-->
-    <!--    <style name="Launcher">-->
-    <!--        <item name="windowActionBar">false</item>-->
-    <!--        <item name="windowNoTitle">true</item>-->
-    <!--        <item name="android:windowTranslucentStatus">true</item>-->
-    <!--        <item name="android:windowTranslucentNavigation">true</item>-->
-    <!--    </style>-->
+    <!--    启动页下一页的Style-->
+    <style name="Launcher">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
 
 </resources>

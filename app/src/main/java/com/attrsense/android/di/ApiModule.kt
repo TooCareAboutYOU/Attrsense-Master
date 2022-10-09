@@ -1,4 +1,4 @@
-package com.attrsense.android.di.module
+package com.attrsense.android.di
 
 import com.attrsense.android.http.ApiService
 import dagger.Module

@@ -1,4 +1,4 @@
-package com.attrsense.android.baselibrary.base
+package com.attrsense.android.baselibrary.base.internal
 
 import android.app.Activity
 import android.content.Context
@@ -12,7 +12,7 @@ import com.trello.rxlifecycle2.components.support.RxFragment
  * date : 2022/10/8 10:07
  * mark : custom something
  */
-open class BaseFragment : RxFragment() {
+internal class BaseFragment : RxFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

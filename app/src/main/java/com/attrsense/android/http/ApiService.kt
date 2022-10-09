@@ -1,15 +1,12 @@
 package com.attrsense.android.http
 
 import com.attrsense.android.baselibrary.base.BaseResponse
+import com.attrsense.android.model.GitHubBean
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
 import com.attrsense.android.model.LoginBean
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.PUT
+import okhttp3.ResponseBody
+import retrofit2.http.*
 
 /**
  * author : zhangshuai@attrsense.com
@@ -18,17 +15,22 @@ import retrofit2.http.PUT
  */
 interface ApiService {
 
+    @GET("users/Guolei1130")
+    @Headers("Content-Type: application/json; charset=utf-8", "Accept: application/json")
+    suspend fun getUsers(): GitHubBean
+
     /**
      * 手机号+验证码登录注册
      * @param mobile 手机号
      * @param code 验证码, 默认为"111111"
      */
-    @Headers("Content-Type : application/json")
     @POST("v1/user/mobile_auth")
+    @Headers("Content-Type: application/json; charset=utf-8", "Accept: application/json")
+    @FormUrlEncoded
     suspend fun login(
         @Field("mobile") mobile: String,
         @Field("code") code: String
-    ): BaseResponse<LoginBean>
+    ): BaseResponse<LoginBean?>
 
     /**
      * 刷新token
@@ -45,9 +47,9 @@ interface ApiService {
      * @param roi_rate 压缩参数2
      * @param image_file 图片文件
      */
-    @FormUrlEncoded
-    @Headers("Content-Type : multipart/form-data")
     @POST("v1/upload_file")
+    @FormUrlEncoded
+    @Headers("Content-Type: multipart/form-data")
     suspend fun uploadFile(
         @Header("Authorization") Authorization: String,
         @Field("rate") rate: String,
@@ -63,8 +65,9 @@ interface ApiService {
      * @param roi_rate 编码参数1
      * @param filename 图片文件名
      */
-    @Headers("Content-Type : application/json")
     @POST("v1/upload_file_md5")
+    @Headers("Content-Type : application/json")
+    @FormUrlEncoded
     suspend fun updateFileFast(
         @Header("Authorization") Authorization: String,
         @Field("md5") md5: String,
@@ -80,8 +83,9 @@ interface ApiService {
      * @param page 查询的页号
      * @param per_page 每页数目
      */
-    @Headers("Content-Type : application/json")
     @POST("v1/query_files")
+
+    @Headers("Content-Type : application/json")
     suspend fun queryUploadFile(
         @Header("Authorization") Authorization: String,
         @Field("page") page: Int,
@@ -93,7 +97,8 @@ interface ApiService {
      * 删除文件
      * @param url
      */
-    @Headers("Content-Type : application/json")
     @POST("v1/delete_file")
+    @FormUrlEncoded
+    @Headers("Content-Type : application/json")
     suspend fun deleteFile(@Field("url") url: String): BaseResponse<Any>
 }
