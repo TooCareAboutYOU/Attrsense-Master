@@ -8,6 +8,8 @@ import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.orhanobut.logger.Logger
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -22,6 +24,8 @@ open class BaseActivity : RxAppCompatActivity() {
 //    @Inject
 //    lateinit var mmkv:MMKV
 
+    val mDisposables: CompositeDisposable = CompositeDisposable()
+
     @Inject
     lateinit var _mmkv: MMKVUtilsEvent
 
@@ -31,12 +35,14 @@ open class BaseActivity : RxAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ReactiveNetwork.observeNetworkConnectivity(this)
+        //临时监听网络状态
+        val mDisposable = ReactiveNetwork.observeNetworkConnectivity(this)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-//                Logger.i("网络状态：${it.state()}")
+                Logger.i("网络状态：${it.state()}")
             }
+        mDisposables.add(mDisposable)
     }
 
     override fun onRestart() {
@@ -61,6 +67,6 @@ open class BaseActivity : RxAppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        mDisposables.dispose()
     }
-
 }

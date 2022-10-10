@@ -1,3 +1,5 @@
+import com.attrsense.android.Deps
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -12,15 +14,15 @@ kapt {
 }
 android {
     namespace 'com.attrsense.android'
-    compileSdk 32
+    compileSdk Deps.compileSdk
 
     defaultConfig {
-        applicationId "com.attrsense.android"
-        minSdk 21
-        targetSdk 31
-        versionCode 1
-        versionName "1.0.0"
-        multiDexEnabled = true
+        applicationId Deps.applicationId
+        minSdk Deps.minSdk
+        targetSdk Deps.targetSdk
+        versionCode Deps.versionCode
+        versionName Deps.versionName
+        multiDexEnabled = Deps.multiDexEnabled
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        javaCompileOptions {
 //            annotationProcessorOptions {
@@ -36,16 +38,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility Deps.sourceCompatibility
+        targetCompatibility Deps.targetCompatibility
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = Deps.jvmTarget
     }
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
-            version '3.18.1'
+            version Deps.cmakeVersion
         }
     }
     buildFeatures {
@@ -55,14 +57,8 @@ android {
 }
 
 dependencies {
-    def hilt_version = '2.44'
-    api "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-
-    def arouter = '1.5.2'
-//    api "com.alibaba:arouter-api:$arouter"
-//    kapt "com.alibaba:arouter-compiler:$arouter"
-
+    api Deps.hiltDaggerAndroid
+    kapt Deps.hiltDaggerCompiler
     implementation project(":BaseLibrary")
 }
 

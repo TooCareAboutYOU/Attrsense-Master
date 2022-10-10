@@ -1,5 +1,6 @@
 package com.attrsense.android.baselibrary.base
 
+import com.google.gson.Gson
 import kotlinx.serialization.Serializable
 
 /**
@@ -12,4 +13,8 @@ open class BaseResponse<T>(
     val data: T,
     val message: String,
     val errorCode: Int,
-)
+) {
+    override fun toString(): String {
+        return Gson().toJson(this)
+    }
+}

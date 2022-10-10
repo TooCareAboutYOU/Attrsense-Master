@@ -7,6 +7,7 @@ import com.attrsense.android.baselibrary.http.HttpDns
 import com.attrsense.android.baselibrary.http.HttpEventListener
 import com.blankj.utilcode.util.JsonUtils
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import com.orhanobut.logger.Logger
 import dagger.Module
 import dagger.Provides
@@ -45,15 +46,18 @@ object HttpModule {
         val interceptorLogger = HttpLoggingInterceptor(HttpLogger()).apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
-
-        return OkHttpClient.Builder()
+        val builder = OkHttpClient.Builder()
             .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
             .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
             .readTimeout(TIME_OUT, TimeUnit.SECONDS)
             .addNetworkInterceptor(interceptorLogger)
             .eventListenerFactory(HttpEventListener.FACTORY)
             .dns(HttpDns())
-            .sslSocketFactory(createSSLSocketFactory()!!, trustManager).build()
+            .sslSocketFactory(createSSLSocketFactory()!!, trustManager)
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(OkHttpProfilerInterceptor())
+        }
+        return builder.build()
     }
 
     @Singleton
@@ -68,12 +72,16 @@ object HttpModule {
             .build()
     }
 
+
     private class HttpLogger : HttpLoggingInterceptor.Logger {
         private val mMessage = java.lang.StringBuilder()
         override fun log(message: String) {
             // 请求或者响应开始
             var localMsg: String? = message
-            if (localMsg!!.startsWith("--> POST") || localMsg.startsWith("--> GET")) {
+            if (localMsg!!.startsWith("--> POST") || localMsg.startsWith("--> GET") || localMsg.startsWith(
+                    "--> PUT"
+                )
+            ) {
                 mMessage.setLength(0)
             }
             // 以{}或者[]形式的说明是响应结果的json数据，需要进行格式化

@@ -1,19 +1,16 @@
 package com.attrsense.android.ui.main
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.attrsense.android.baselibrary.base.BaseResponse
+import android.util.Log
+import androidx.lifecycle.*
 import com.attrsense.android.http.ApiService
-import com.attrsense.android.model.GitHubBean
+import com.attrsense.android.model.HPIImageBean
 import com.attrsense.android.model.LoginBean
+import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Response
-import okhttp3.ResponseBody
 import javax.inject.Inject
 
 /**
@@ -22,23 +19,41 @@ import javax.inject.Inject
  * mark : custom something
  */
 @HiltViewModel
-class MainViewModel @Inject constructor(private val apiService: ApiService) : ViewModel() {
+class MainViewModel constructor() : ViewModel() {
 
-    val loginLiveData: MutableLiveData<GitHubBean?> = MutableLiveData()
+    private lateinit var _apiService: ApiService
 
-    fun login(mobile: String, code: String) {
-        viewModelScope.launch {
-//            val result: BaseResponse<LoginBean?> = withContext(Dispatchers.IO) {
-//                apiService.login("18874703154", "111111")
-//            }
-//            loginLiveData.value = result.data
+    @Inject
+    constructor(apiService: ApiService) : this() {
+        _apiService = apiService
+    }
 
-            val result = withContext(Dispatchers.IO) {
-                apiService.getUsers()
+    private val githubLiveData: MutableLiveData<String> = MutableLiveData()
+    fun requestImage(format: String) {
+        githubLiveData.value = format
+    }
+
+    fun github(): LiveData<Result<HPIImageBean?>> = githubLiveData.switchMap { format ->
+        liveData {
+            val result = try {
+                Log.i("PrintLog", "发起请求: $format")
+                Result.success(_apiService.getHPIImage(format, 1, 1))
+            } catch (e: Exception) {
+                Log.i("PrintLog", "请求失败！$e")
+                Result.failure(e)
             }
-            loginLiveData.value = result
+            Logger.json("${result.getOrNull()?.toString()}")
+            emit(result)
         }
     }
 
+//    val loginLiveData: MutableLiveData<LoginBean?> = MutableLiveData()
+//    fun login(mobile: String, code: String) {
+//        viewModelScope.launch {
+//            loginLiveData.value = withContext(Dispatchers.IO) {
+//                apiService.login(mobile, code)
+//            }.data
+//        }
+//    }
 
 }

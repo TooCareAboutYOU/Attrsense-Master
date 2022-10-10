@@ -7,7 +7,7 @@ import java.util.Collections
 import javax.inject.Inject
 
 /**
- *
+ * 轻量级数据缓存
  */
 interface MMKVUtilsEvent {
     fun setValue(key: String, value: Any?)
@@ -107,6 +107,4 @@ class MMKVUtils @Inject constructor(private val _mmkv: MMKV) : MMKVUtilsEvent {
     override fun clearAll() {
         _mmkv.clearAll()
     }
-
-
 }

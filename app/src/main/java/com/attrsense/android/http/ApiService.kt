@@ -1,10 +1,7 @@
 package com.attrsense.android.http
 
 import com.attrsense.android.baselibrary.base.BaseResponse
-import com.attrsense.android.model.GitHubBean
-import com.attrsense.android.model.ImageInfoBean
-import com.attrsense.android.model.ImagesBean
-import com.attrsense.android.model.LoginBean
+import com.attrsense.android.model.*
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -15,9 +12,14 @@ import retrofit2.http.*
  */
 interface ApiService {
 
-    @GET("users/Guolei1130")
-    @Headers("Content-Type: application/json; charset=utf-8", "Accept: application/json")
-    suspend fun getUsers(): GitHubBean
+    //https://cn.bing.com/HPImageArchive.aspx?format=js&idx=1&n=1
+    @GET("HPImageArchive.aspx")
+    @Headers("Accept: application/json")
+    suspend fun getHPIImage(
+        @Query("format") format: String,
+        @Query("idx") idx: Int,
+        @Query("n") n: Int
+    ): HPIImageBean
 
     /**
      * 手机号+验证码登录注册

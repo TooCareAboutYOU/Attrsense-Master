@@ -1,8 +1,11 @@
 package com.attrsense.android.baselibrary.base.internal
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.os.Looper
 import android.util.Log
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.attrsense.android.baselibrary.BuildConfig
 import com.attrsense.android.baselibrary.service.AppInitIntentService
@@ -20,7 +23,8 @@ import com.orhanobut.logger.PrettyFormatStrategy
 open class BaseApplication : Application() {
 
     companion object {
-        lateinit var INSTANCE: Context
+        private lateinit var instance: Application
+        fun instance() = instance
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -30,8 +34,20 @@ open class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        INSTANCE = applicationContext
-        initLogger()
+        instance = this
+        ProcessLifecycleOwner.get().lifecycle.addObserver(BaseApplicationObserver())
+
+        Looper.myQueue().addIdleHandler {
+            try {
+                Log.i("printInfo", "BaseApplication::onCreate: ")
+                initLogger()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            false
+        }
+
+
 //        AppInitIntentService.startService(this)
     }
 

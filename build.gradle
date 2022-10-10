@@ -19,10 +19,11 @@ buildscript {
         //kotlin序列化
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
 
+        def aspectjrt_version = "1.9.4"
+        classpath "org.aspectj:aspectjtools:$aspectjrt_version"
 
         def hilt_version = "2.44"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
-
 
 //        def nav_version = "2.4.2"
 //        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
@@ -35,6 +36,8 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
     id 'com.google.dagger.hilt.android' version '2.44' apply false
 }
+
+//apply from: "config.gradle"
 
 task clean(type: Delete) {
     delete rootProject.buildDir
