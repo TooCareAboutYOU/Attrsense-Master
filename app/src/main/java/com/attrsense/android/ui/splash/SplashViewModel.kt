@@ -17,7 +17,7 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(private val apiService: ApiService) : ViewModel() {
 
     private val githubLiveData: MutableLiveData<String> = MutableLiveData()
-    fun requestImage(format: String) {
+    fun load(format: String) {
         githubLiveData.value = format
     }
 
@@ -35,8 +35,4 @@ class SplashViewModel @Inject constructor(private val apiService: ApiService) : 
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.i("printInfo", "SplashViewModel::onCleared: ")
-    }
 }

@@ -2,10 +2,11 @@ package com.attrsense.android
 
 import org.gradle.api.JavaVersion
 
-// TODO:  修改文件后必须 Rebuild project
+
 /**
- * 应用版本控制文件
+ * 应用版本控制
  */
+// TODO:  修改文件后必须 Rebuild project
 object Versions {
     //应用配置
     object AndroidConfig {

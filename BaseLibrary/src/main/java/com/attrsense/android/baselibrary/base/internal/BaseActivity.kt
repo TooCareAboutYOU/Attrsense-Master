@@ -24,7 +24,7 @@ open class BaseActivity : RxAppCompatActivity() {
 //    @Inject
 //    lateinit var mmkv:MMKV
 
-    val mDisposables: CompositeDisposable = CompositeDisposable()
+    private val mDisposables: CompositeDisposable = CompositeDisposable()
 
     @Inject
     lateinit var _mmkv: MMKVUtilsEvent
@@ -69,4 +69,19 @@ open class BaseActivity : RxAppCompatActivity() {
         super.onDestroy()
         mDisposables.dispose()
     }
+
+    /**
+     * 自定义函数
+     */
+    //手动添加指定Disposable
+    fun addDisposable(disposable: Disposable) {
+        mDisposables.add(disposable)
+    }
+
+    //手动移除指定Disposable
+    fun removeDisposable(disposable: Disposable) {
+        mDisposables.remove(disposable)
+    }
+
+
 }

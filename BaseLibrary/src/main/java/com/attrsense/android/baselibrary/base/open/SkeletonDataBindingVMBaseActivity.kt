@@ -11,15 +11,19 @@ import androidx.lifecycle.ViewModelProvider
 /**
  * author : zhangshuai@attrsense.com
  * date : 2022/10/8 10:07
- * mark : 包含视图的基类-样式一
+ * mark : 包含视图的基类-样式二
  */
-abstract class SkeletonDataBindingBaseActivity<DB : ViewDataBinding> :
+abstract class SkeletonDataBindingVMBaseActivity<DB : ViewDataBinding, VM : ViewModel> :
     SkeletonBaseActivity() {
 
     lateinit var mDataBinding: DB
 
+    lateinit var mViewModel: VM
+
     @LayoutRes
     protected abstract fun setLayoutResId(): Int
+
+    protected abstract fun setViewModel(): Class<VM>
 
     open fun initViewBefore() {}
 
@@ -29,6 +33,7 @@ abstract class SkeletonDataBindingBaseActivity<DB : ViewDataBinding> :
         initViewBefore()
         super.onCreate(savedInstanceState)
         this.mDataBinding = DataBindingUtil.setContentView(this, setLayoutResId())
+        mViewModel = loadViewModel(setViewModel())
         initView()
     }
 

@@ -19,14 +19,7 @@ import javax.inject.Inject
  * mark : custom something
  */
 @HiltViewModel
-class MainViewModel constructor() : ViewModel() {
-
-    private lateinit var _apiService: ApiService
-
-    @Inject
-    constructor(apiService: ApiService) : this() {
-        _apiService = apiService
-    }
+class MainViewModel @Inject constructor(private val apiService: ApiService) : ViewModel() {
 
     private val githubLiveData: MutableLiveData<String> = MutableLiveData()
     fun requestImage(format: String) {
@@ -36,10 +29,10 @@ class MainViewModel constructor() : ViewModel() {
     fun github(): LiveData<Result<HPIImageBean?>> = githubLiveData.switchMap { format ->
         liveData {
             val result = try {
-                Log.i("PrintLog", "发起请求: $format")
-                Result.success(_apiService.getHPIImage(format, 1, 1))
+                Log.i("printInfo", "发起请求: $format")
+                Result.success(apiService.getHPIImage(format, 1, 1))
             } catch (e: Exception) {
-                Log.i("PrintLog", "请求失败！$e")
+                Log.i("printInfo", "请求失败！$e")
                 Result.failure(e)
             }
             Logger.json("${result.getOrNull()?.toString()}")
@@ -47,13 +40,13 @@ class MainViewModel constructor() : ViewModel() {
         }
     }
 
-//    val loginLiveData: MutableLiveData<LoginBean?> = MutableLiveData()
-//    fun login(mobile: String, code: String) {
-//        viewModelScope.launch {
-//            loginLiveData.value = withContext(Dispatchers.IO) {
-//                apiService.login(mobile, code)
-//            }.data
-//        }
-//    }
+    val loginLiveData: MutableLiveData<LoginBean?> = MutableLiveData()
+    fun login(mobile: String, code: String) {
+        viewModelScope.launch {
+            loginLiveData.value = withContext(Dispatchers.IO) {
+                apiService.login(mobile, code)
+            }.data
+        }
+    }
 
 }
