@@ -1,17 +1,18 @@
 package com.attrsense.android.ui.splash
 
 import android.content.Intent
-import android.util.Log
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.SkeletonDataBindingVMBaseActivity
+import com.attrsense.android.baselibrary.test.Event
 import com.attrsense.android.databinding.ActivitySplashBinding
 import com.attrsense.android.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import java.util.concurrent.atomic.AtomicBoolean
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, SplashViewModel>() {
@@ -30,10 +31,11 @@ class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, 
     override fun initView() {
 
         mDataBinding.acTv.setOnClickListener {
-            mViewModel.load("js")
+            startActivity(Intent(this, MainActivity::class.java))
+//            mViewModel.load("js")
         }
         mViewModel.github().observe(this) {
-            startActivity(Intent(this, MainActivity::class.java))
+//            startActivity(Intent(this, MainActivity::class.java))
         }
 
         countDowntime()

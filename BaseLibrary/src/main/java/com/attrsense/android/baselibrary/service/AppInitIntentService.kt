@@ -14,9 +14,31 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.FormatStrategy
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 
+
+class TestEntryPoint @Inject constructor() {
+    val name = "哈哈哈哈"
+}
 
 internal class AppInitIntentService : IntentService("AppInitIntentService") {
+
+    //当前类不没有使用@AndroidEntryPoint 标记的，然后生成的TestEntryPoint是被@Inject 标记的，所以这些代码可以用在其他不被Hilt支持的类里面
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface ExampleDaoEntryPoint {
+        fun getBaseResponse(): TestEntryPoint
+    }
+
+    private fun getResponse(application: Context): TestEntryPoint {
+        return EntryPointAccessors.fromApplication(application, ExampleDaoEntryPoint::class.java)
+            .getBaseResponse()
+    }
 
     companion object {
         @JvmStatic
@@ -41,6 +63,9 @@ internal class AppInitIntentService : IntentService("AppInitIntentService") {
         val notification = Notification.Builder(this).setChannelId(channelId)
             .build()
         startForeground(1, notification)
+
+        val result = getResponse(applicationContext)
+        Log.i("printInfo", "AppInitIntentService::createNotification: ${result.name}")
     }
 
     override fun onHandleIntent(intent: Intent?) {

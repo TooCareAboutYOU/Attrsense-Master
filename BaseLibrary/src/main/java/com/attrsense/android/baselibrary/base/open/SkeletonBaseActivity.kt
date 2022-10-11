@@ -14,7 +14,10 @@ import kotlin.reflect.KClass
  */
 open class SkeletonBaseActivity : BaseActivity() {
 
-    //手动实例化ViewModel
+    /**
+     * 子类需添加注释：@AndroidEntryPoint
+     * 手动实例化ViewModel
+     */
     protected fun <VM : ViewModel> loadViewModel(vm: Class<VM>): VM {
         return ViewModelProvider(this)[vm]
     }

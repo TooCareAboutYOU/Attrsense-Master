@@ -43,7 +43,7 @@ internal class BaseApplicationObserver : DefaultLifecycleObserver, LifecycleEven
     }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-        Log.i(
+        Log.d(
             TAG,
             "BaseApplicationObserver::onStateChanged: ${source.lifecycle.currentState}, event= $event"
         )

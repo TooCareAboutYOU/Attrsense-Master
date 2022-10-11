@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 open class BaseResponse<T>(
     val data: T,
     val message: String,
-    val errorCode: Int,
+    val errorCode: String,
 ) {
     override fun toString(): String {
         return Gson().toJson(this)

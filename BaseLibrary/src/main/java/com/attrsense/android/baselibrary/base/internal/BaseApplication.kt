@@ -35,18 +35,17 @@ open class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
         ProcessLifecycleOwner.get().lifecycle.addObserver(BaseApplicationObserver())
 
         Looper.myQueue().addIdleHandler {
             try {
-                Log.i("printInfo", "BaseApplication::onCreate: ")
                 initLogger()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             false
         }
-
 
 //        AppInitIntentService.startService(this)
     }

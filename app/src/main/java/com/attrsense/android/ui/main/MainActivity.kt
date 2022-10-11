@@ -42,9 +42,10 @@ class MainActivity : SkeletonDataBindingBaseActivity<ActivityMainBinding>() {
         }
 
         mDataBinding.sampleText.setOnClickListener {
-            mainViewModel.requestImage("js")
+//            mainViewModel.requestImage("js")
+            mainViewModel.login("188747012354", "111111")
         }
-        mainViewModel.github().observe(this) {
+        mainViewModel.loginLiveData.observe(this) {
 
         }
     }
