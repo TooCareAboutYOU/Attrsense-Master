@@ -2,7 +2,7 @@ package com.attrsense.android.baselibrary.di
 
 import android.content.Context
 import com.attrsense.android.baselibrary.util.MMKVUtils
-import com.attrsense.android.baselibrary.util.MMKVUtilsEvent
+import com.attrsense.android.baselibrary.util.MMKVUtilsImpl
 import com.tencent.mmkv.MMKV
 import dagger.Binds
 import dagger.Module
@@ -30,10 +30,10 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideMMKVUtils(mmkv: MMKV): MMKVUtilsEvent = MMKVUtils(mmkv)
+    fun provideMMKVUtils(mmkv: MMKV): MMKVUtils = MMKVUtilsImpl(mmkv)
     //或者方式二
 //    @Singleton
 //    @Binds
-//    abstract fun provideMMKVUtils(mmkvUtils: MMKVUtils):MMKVUtilsEvent
+//    abstract fun provideMMKVUtils(mmkvUtils: MMKVUtilsImpl):MMKVUtils
 
 }

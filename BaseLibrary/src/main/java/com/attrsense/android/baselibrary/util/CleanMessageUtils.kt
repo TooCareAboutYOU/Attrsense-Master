@@ -44,7 +44,7 @@ class CleanMessageUtils {
     private fun deleteDir(dir: File?): Boolean {
         if (dir != null && dir.isDirectory) {
             val children = dir.list()
-            var size = 0
+            val size: Int
             if (children != null) {
                 size = children.size
                 for (i in 0 until size) {

@@ -59,6 +59,19 @@ object Versions {
 
     //第三方库
     object ExtLibrary {
+        const val hiltDaggerVersion = "2.44"
+        const val hiltVersion = "1.0.0"
+        const val aRouterVersion = "1.5.2"
+        const val rxjavaVersion = "3.1.5"
+        const val rxAndroidVersion = "3.0.0"
+        const val rxBindingVersion = "4.0.0"
+        const val rxLifecycleVersion = "2.2.2"
+        const val lifecycleVersion = "2.5.1"
+        const val activityKtxVersion = "1.4.0"
+        const val fragmentKtxVersion = "1.4.1"
+        const val retrofit2Version = "2.9.0"
+        const val okhttpLoggingInterceptorVersion = "4.9.3"
+        const val retrofit2CoroutinesAdapterKtxVersion = "0.9.2"
         const val photoViewVersion = "2.3.0"
         const val circleImageViewVersion = "3.0.1"
         const val immersionBarVersion = "3.2.2"
@@ -69,19 +82,6 @@ object Versions {
         const val loggerVersion = "2.2.0"
         const val utilCodexVersion = "1.31.0"
         const val mmkvVersion = "1.2.14"
-        const val hiltDaggerVersion = "2.44"
-        const val hiltVersion = "1.0.0"
-        const val aRouterVersion = "1.5.2"
-        const val rxjavaVersion = "2.2.19"
-        const val rxAndroidVersion = "2.1.1"
-        const val rxBindingVersion = "2.0.0"
-        const val rxLifecycleVersion = "2.2.2"
-        const val lifecycleVersion = "2.5.1"
-        const val activityKtxVersion = "1.4.0"
-        const val fragmentKtxVersion = "1.4.1"
-        const val retrofit2Version = "2.9.0"
-        const val okhttpLoggingInterceptorVersion = "4.9.3"
-        const val retrofit2CoroutinesAdapterKtxVersion = "0.9.2"
     }
 }
 
@@ -176,45 +176,6 @@ object Deps {
     // optional - RxJava2 support
     val pagingRxjava2 = "androidx.paging:paging-rxjava2:${Versions.BaseLibrary.pagingVersion}"
 
-    //图片展示 https://github.com/Baseflow/PhotoView
-    val photoView = "com.github.chrisbanes:PhotoView:${Versions.ExtLibrary.photoViewVersion}"
-
-    //裁剪圆形图片  https://github.com/hdodenhof/CircleImageView
-    val circleImageview =
-        "de.hdodenhof:circleimageview:${Versions.ExtLibrary.circleImageViewVersion}"
-
-    //导航栏  https://github.com/gyf-dev/ImmersionBar
-    val immersionBar =
-        "com.geyifeng.immersionbar:immersionbar:${Versions.ExtLibrary.immersionBarVersion}"
-
-    // 导航栏kotlin扩展
-    val immersionBarKtx =
-        "com.geyifeng.immersionbar:immersionbar-ktx:${Versions.ExtLibrary.immersionBarVersion}"
-
-    //状态栏 https://github.com/jgilfelt/SystemBarTint
-    val systemBarTint =
-        "com.readystatesoftware.systembartint:systembartint:${Versions.ExtLibrary.systemBarTintVersion}"
-
-    //面向切面
-    val aspectJrt = "org.aspectj:aspectjrt:${Versions.ExtLibrary.aspectJrtVersion}"
-
-    //动态申请权限 https://github.com/tbruyelle/RxPermissions
-    val rxPermissions =
-        "com.github.tbruyelle:rxpermissions:${Versions.ExtLibrary.rxPermissionsVersion}"
-
-    //监听网络 https://github.com/pwittchen/ReactiveNetwork
-    val reactiveNetwork =
-        "com.github.pwittchen:reactivenetwork-rx2:${Versions.ExtLibrary.reactiveNetworkRx2Version}"
-
-    //打印日志 https://github.com/orhanobut/logger
-    val logger = "com.orhanobut:logger:${Versions.ExtLibrary.loggerVersion}"
-
-    //工具类集合库 https://github.com/Blankj/AndroidUtilCode
-    val utilCodex = "com.blankj:utilcodex:${Versions.ExtLibrary.utilCodexVersion}"
-
-    //临时数据存储 https://github.com/Tencent/MMKV/blob/master/README_CN.md
-    val mmkv = "com.tencent:mmkv:${Versions.ExtLibrary.mmkvVersion}"
-
     //https://developer.android.google.cn/codelabs/android-hilt?hl=zh_cn#0
     val hiltDaggerAndroid =
         "com.google.dagger:hilt-android:${Versions.ExtLibrary.hiltDaggerVersion}"
@@ -233,9 +194,21 @@ object Deps {
     val arouterApi = "com.alibaba:arouter-api:${Versions.ExtLibrary.aRouterVersion}"
     val arouterCompiler = "com.alibaba:arouter-compiler:${Versions.ExtLibrary.aRouterVersion}"
 
-    val rxjava = "io.reactivex.rxjava2:rxjava:${Versions.ExtLibrary.rxjavaVersion}"
-    val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.ExtLibrary.rxAndroidVersion}"
-    val rxBinding = "com.jakewharton.rxbinding2:rxbinding:${Versions.ExtLibrary.rxBindingVersion}"
+    val rxjava = "io.reactivex.rxjava3:rxjava:${Versions.ExtLibrary.rxjavaVersion}"
+    val rxAndroid = "io.reactivex.rxjava3:rxandroid:${Versions.ExtLibrary.rxAndroidVersion}"
+    val rxBinding = "com.jakewharton.rxbinding4:rxbinding:${Versions.ExtLibrary.rxBindingVersion}"
+
+    /**
+    implementation 'com.jakewharton.rxbinding4:rxbinding-core:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-appcompat:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-drawerlayout:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-leanback:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-recyclerview:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-slidingpanelayout:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-swiperefreshlayout:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-viewpager:4.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding-viewpager2:4.0.0
+     */
 
     val rxLifecycle =
         "com.trello.rxlifecycle2:rxlifecycle:${Versions.ExtLibrary.rxLifecycleVersion}"
@@ -295,5 +268,44 @@ object Deps {
     //https://github.com/JakeWharton/retrofit2-kotlin-coroutines-adapter
     val retrofit2CoroutinesAdapterKtx =
         "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Versions.ExtLibrary.retrofit2CoroutinesAdapterKtxVersion}"
+
+    //图片展示 https://github.com/Baseflow/PhotoView
+    val photoView = "com.github.chrisbanes:PhotoView:${Versions.ExtLibrary.photoViewVersion}"
+
+    //裁剪圆形图片  https://github.com/hdodenhof/CircleImageView
+    val circleImageview =
+        "de.hdodenhof:circleimageview:${Versions.ExtLibrary.circleImageViewVersion}"
+
+    //导航栏  https://github.com/gyf-dev/ImmersionBar
+    val immersionBar =
+        "com.geyifeng.immersionbar:immersionbar:${Versions.ExtLibrary.immersionBarVersion}"
+
+    // 导航栏kotlin扩展
+    val immersionBarKtx =
+        "com.geyifeng.immersionbar:immersionbar-ktx:${Versions.ExtLibrary.immersionBarVersion}"
+
+    //状态栏 https://github.com/jgilfelt/SystemBarTint
+    val systemBarTint =
+        "com.readystatesoftware.systembartint:systembartint:${Versions.ExtLibrary.systemBarTintVersion}"
+
+    //面向切面
+    val aspectJrt = "org.aspectj:aspectjrt:${Versions.ExtLibrary.aspectJrtVersion}"
+
+    //动态申请权限 https://github.com/tbruyelle/RxPermissions
+    val rxPermissions =
+        "com.github.tbruyelle:rxpermissions:${Versions.ExtLibrary.rxPermissionsVersion}"
+
+    //监听网络 https://github.com/pwittchen/ReactiveNetwork
+    val reactiveNetwork =
+        "com.github.pwittchen:reactivenetwork-rx2:${Versions.ExtLibrary.reactiveNetworkRx2Version}"
+
+    //打印日志 https://github.com/orhanobut/logger
+    val logger = "com.orhanobut:logger:${Versions.ExtLibrary.loggerVersion}"
+
+    //工具类集合库 https://github.com/Blankj/AndroidUtilCode
+    val utilCodex = "com.blankj:utilcodex:${Versions.ExtLibrary.utilCodexVersion}"
+
+    //临时数据存储 https://github.com/Tencent/MMKV/blob/master/README_CN.md
+    val mmkv = "com.tencent:mmkv:${Versions.ExtLibrary.mmkvVersion}"
 
 }

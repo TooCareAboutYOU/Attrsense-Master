@@ -8,15 +8,50 @@
         android:layout_height="match_parent"
         tools:context=".ui.main.MainActivity">
 
-        <TextView
-            android:id="@+id/sample_text"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acBtn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="登 录"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acBtn_refresh_token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刷新Token"
+            app:layout_constraintTop_toBottomOf="@id/acBtn_login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acBtn_upload_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上传文件"
+            app:layout_constraintTop_toBottomOf="@id/acBtn_refresh_token"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acBtn_query_upload_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查询上传的文件"
+            app:layout_constraintTop_toBottomOf="@id/acBtn_upload_file"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/acBtn_delete_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除文件"
+            app:layout_constraintTop_toBottomOf="@id/acBtn_query_upload_file"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

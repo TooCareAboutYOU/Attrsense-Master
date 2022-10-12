@@ -1,4 +1,4 @@
-package com.attrsense.android.model
+package com.attrsense.android.test
 
 import com.google.gson.Gson
 

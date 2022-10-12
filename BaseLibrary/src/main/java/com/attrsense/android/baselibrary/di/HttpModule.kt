@@ -2,7 +2,7 @@ package com.attrsense.android.baselibrary.di
 
 import android.annotation.SuppressLint
 import com.attrsense.android.baselibrary.BuildConfig
-import com.attrsense.android.baselibrary.config.AppConfig
+import com.attrsense.android.baselibrary.config.BaseConfig
 import com.attrsense.android.baselibrary.http.HttpDns
 import com.attrsense.android.baselibrary.http.HttpEventListener
 import com.blankj.utilcode.util.JsonUtils
@@ -22,9 +22,7 @@ import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
+import javax.net.ssl.*
 
 
 /**
@@ -54,6 +52,7 @@ object HttpModule {
             .eventListenerFactory(HttpEventListener.FACTORY)
             .dns(HttpDns())
             .sslSocketFactory(createSSLSocketFactory()!!, trustManager)
+            .hostnameVerifier(hostnameVerifier)
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(OkHttpProfilerInterceptor())
         }
@@ -64,7 +63,7 @@ object HttpModule {
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(AppConfig.BASE_URL)
+            .baseUrl(BaseConfig.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
@@ -121,6 +120,7 @@ object HttpModule {
         }
 
         override fun getAcceptedIssuers(): Array<X509Certificate?> = arrayOfNulls(0)
-
     }
+
+    private val hostnameVerifier = HostnameVerifier { _, _ -> true }
 }

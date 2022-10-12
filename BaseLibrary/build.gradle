@@ -90,18 +90,6 @@ dependencies {
 //    testImplementation Deps.pagingCommon
 //    api Deps.pagingRxjava2
 
-    api Deps.photoView
-    api Deps.circleImageview
-    api Deps.immersionBar
-    api Deps.immersionBarKtx
-    api Deps.systemBarTint
-    api Deps.aspectJrt
-    api Deps.rxPermissions
-    api Deps.reactiveNetwork
-    api Deps.logger
-    api Deps.utilCodex
-    api Deps.mmkv
-
     //所有使用到的模块都要加上这两个依赖
     api Deps.hiltDaggerAndroid
     kapt Deps.hiltDaggerCompiler
@@ -138,4 +126,17 @@ dependencies {
     api Deps.retrofit2AdapterRxjava2
     api Deps.okhttp3LoggingInterceptor
     api Deps.retrofit2CoroutinesAdapterKtx
+
+
+    api Deps.photoView
+    api Deps.circleImageview
+    api Deps.immersionBar
+    api Deps.immersionBarKtx
+    api Deps.systemBarTint
+    api Deps.aspectJrt
+    api Deps.rxPermissions
+    api Deps.reactiveNetwork
+    api Deps.logger
+    api Deps.utilCodex
+    api Deps.mmkv
 }

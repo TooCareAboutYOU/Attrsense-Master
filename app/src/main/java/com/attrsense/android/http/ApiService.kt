@@ -2,7 +2,9 @@ package com.attrsense.android.http
 
 import com.attrsense.android.baselibrary.base.BaseResponse
 import com.attrsense.android.model.*
-import okhttp3.ResponseBody
+import com.attrsense.android.test.HPIImageBean
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 /**
@@ -24,57 +26,47 @@ interface ApiService {
 
     /**
      * 手机号+验证码登录注册
-     * @param mobile 手机号
-     * @param code 验证码, 默认为"111111"
      */
     @POST("v1/user/mobile_auth")
-    @Headers("Content-Type: application/json; charset=utf-8", "Accept: application/json")
-    @FormUrlEncoded
-    suspend fun login(
-        @Field("mobile") mobile: String,
-        @Field("code") code: String
-    ): BaseResponse<LoginBean?>
+    @Headers("Content-Type: application/json")
+    suspend fun login(@Body body: MutableMap<String, Any?>): BaseResponse<LoginBean?>
 
     /**
      * 刷新token
      */
-    @Headers("Authorization : Bearer refresh_token")
     @PUT("v1/user/mobile_auth")
-    suspend fun refreshToken(): BaseResponse<String>
+    suspend fun refreshToken(@Header("Authorization") refreshToken: String?): BaseResponse<LoginBean?>
 
 
     /**
      * 文件上传
      * @param Authorization "Bearer " + token
      * @param rate 压缩参数1
-     * @param roi_rate 压缩参数2
-     * @param image_file 图片文件
+     * @param roiRate 压缩参数2
+     * @param imageFile 图片文件
      */
     @POST("v1/upload_file")
-    @FormUrlEncoded
-    @Headers("Content-Type: multipart/form-data")
+    @Multipart
+//    @Headers("Content-Type : multipart/form-data")
     suspend fun uploadFile(
-        @Header("Authorization") Authorization: String,
-        @Field("rate") rate: String,
-        @Field("roi_rate") roi_rate: String,
-        @Field("image_file") image_file: String
-    ): BaseResponse<ImageInfoBean>
+        @Header("Authorization") token: String?,
+        @Part("rate") rate: RequestBody?,
+        @Part("roiRate") roiRate: RequestBody?,
+        @Part imageFile: MultipartBody.Part?
+    ): BaseResponse<ImagesBean?>
 
 
     /**
      * 查询上传的文件
      * @param Authorization "Bearer " + token
-     * @param page 查询的页号
-     * @param per_page 每页数目
+     * @param body: page 查询的页号, perPage 每页数目
      */
     @POST("v1/query_files")
-
-    @Headers("Content-Type : application/json")
+//    @Headers("Content-Type: application/json")
     suspend fun queryUploadFile(
-        @Header("Authorization") Authorization: String,
-        @Field("page") page: Int,
-        @Field("per_page") per_page: Int
-    ): BaseResponse<ImagesBean>
+        @Header("Authorization") token: String?,
+        @Body body: MutableMap<String, Any?>
+    ): BaseResponse<ImagesBean?>
 
 
     /**
@@ -82,7 +74,9 @@ interface ApiService {
      * @param url
      */
     @POST("v1/delete_file")
-    @FormUrlEncoded
-    @Headers("Content-Type : application/json")
-    suspend fun deleteFile(@Field("file_id") file_id: String): BaseResponse<Any>
+//    @Headers("Content-Type : application/json")
+    suspend fun deleteFile(
+        @Header("Authorization") token: String?,
+        @Body body: MutableMap<String, Any?>
+    ): BaseResponse<Any?>
 }

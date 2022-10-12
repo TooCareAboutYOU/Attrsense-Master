@@ -9,7 +9,7 @@ import javax.inject.Inject
 /**
  * 轻量级数据缓存
  */
-interface MMKVUtilsEvent {
+interface MMKVUtils {
     fun setValue(key: String, value: Any?)
 
     fun setStringSet(key: String, value: MutableSet<String>?)
@@ -37,11 +37,7 @@ interface MMKVUtilsEvent {
     fun clearAll()
 }
 
-class MMKVUtils @Inject constructor(private val _mmkv: MMKV) : MMKVUtilsEvent {
-
-    init {
-//        Logger.i("MMKVUtils::init success")
-    }
+class MMKVUtilsImpl @Inject constructor(private val _mmkv: MMKV) : MMKVUtils {
 
     override fun setValue(key: String, value: Any?) {
         when (value) {

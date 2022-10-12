@@ -10,11 +10,25 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 open class BaseResponse<T>(
-    val data: T,
-    val message: String,
-    val errorCode: String,
+    var data: T? = null,
+    var message: String = "",
+    var errorCode: String = "",
 ) {
     override fun toString(): String {
         return Gson().toJson(this)
+    }
+
+    companion object {
+        fun <T> isLoading(): BaseResponse<T> {
+            return BaseResponse()
+        }
+
+        fun <T> error(e: Throwable): BaseResponse<T> {
+            return BaseResponse(message = e.toString())
+        }
+
+        fun <T> success(): BaseResponse<T> {
+            return BaseResponse()
+        }
     }
 }

@@ -1,14 +1,11 @@
 package com.attrsense.android.ui.splash
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
-import com.attrsense.android.baselibrary.base.internal.BaseApplication
 import com.attrsense.android.baselibrary.test.Event
 import com.attrsense.android.http.ApiService
-import com.attrsense.android.model.HPIImageBean
+import com.attrsense.android.test.HPIImageBean
 import com.orhanobut.logger.Logger
-import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -22,7 +19,6 @@ class SplashViewModel @Inject constructor(
     private val apiService: ApiService,
     private val event: Event
 ) : ViewModel() {
-
 
     private val githubLiveData: MutableLiveData<String> = MutableLiveData()
 
@@ -44,9 +40,4 @@ class SplashViewModel @Inject constructor(
             emit(result)
         }
     }
-
-    override fun onCleared() {
-        super.onCleared()
-    }
-
 }

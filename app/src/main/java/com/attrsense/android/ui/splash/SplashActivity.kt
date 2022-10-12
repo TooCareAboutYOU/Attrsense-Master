@@ -6,13 +6,11 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.SkeletonDataBindingVMBaseActivity
-import com.attrsense.android.baselibrary.test.Event
 import com.attrsense.android.databinding.ActivitySplashBinding
 import com.attrsense.android.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import java.util.concurrent.atomic.AtomicBoolean
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, SplashViewModel>() {
@@ -29,15 +27,16 @@ class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, 
     }
 
     override fun initView() {
-
         mDataBinding.acTv.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
 //            mViewModel.load("js")
         }
         mViewModel.github().observe(this) {
-//            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
+    }
 
+    fun launch() {
         countDowntime()
 
         //展示完毕的监听
@@ -50,7 +49,6 @@ class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, 
 //            overridePendingTransition(0,0)
         }
     }
-
     //设置欢迎页展示时间
     fun countDowntime() {
         lifecycleScope.launchWhenResumed {

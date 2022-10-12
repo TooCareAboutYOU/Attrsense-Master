@@ -16,8 +16,11 @@ import kotlinx.serialization.Serializable
 data class ImageInfoBean(
     val create_time: String,
     val filename: String,
+    val rate: String,
+    val roiRate: String,
     val md5: String,
     val size: String,
     val type: String,
-    val url: String
+    val url: String,
+    val fileId: String
 )

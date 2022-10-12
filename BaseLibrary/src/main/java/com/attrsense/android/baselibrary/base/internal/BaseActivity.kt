@@ -2,10 +2,10 @@ package com.attrsense.android.baselibrary.base.internal
 
 import android.content.Intent
 import android.os.Bundle
-import com.attrsense.android.baselibrary.util.MMKVUtilsEvent
-import com.blankj.utilcode.util.ActivityUtils
+import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.orhanobut.logger.Logger
+import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -24,10 +24,13 @@ open class BaseActivity : RxAppCompatActivity() {
 //    @Inject
 //    lateinit var mmkv:MMKV
 
+    @Inject
+    lateinit var _mmkv: MMKVUtils
+
     private val mDisposables: CompositeDisposable = CompositeDisposable()
 
-    @Inject
-    lateinit var _mmkv: MMKVUtilsEvent
+    protected lateinit var rxPermissions: RxPermissions
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -35,6 +38,9 @@ open class BaseActivity : RxAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        rxPermissions = RxPermissions(this)
+//        rxPermissions.
+
         //临时监听网络状态
         val mDisposable = ReactiveNetwork.observeNetworkConnectivity(this)
             .subscribeOn(Schedulers.io())
