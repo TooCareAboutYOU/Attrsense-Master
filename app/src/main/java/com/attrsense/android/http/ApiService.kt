@@ -28,7 +28,6 @@ interface ApiService {
      * 手机号+验证码登录注册
      */
     @POST("v1/user/mobile_auth")
-    @Headers("Content-Type: application/json")
     suspend fun login(@Body body: MutableMap<String, Any?>): BaseResponse<LoginBean?>
 
     /**
@@ -47,7 +46,6 @@ interface ApiService {
      */
     @POST("v1/upload_file")
     @Multipart
-//    @Headers("Content-Type : multipart/form-data")
     suspend fun uploadFile(
         @Header("Authorization") token: String?,
         @Part("rate") rate: RequestBody?,
@@ -62,7 +60,6 @@ interface ApiService {
      * @param body: page 查询的页号, perPage 每页数目
      */
     @POST("v1/query_files")
-//    @Headers("Content-Type: application/json")
     suspend fun queryUploadFile(
         @Header("Authorization") token: String?,
         @Body body: MutableMap<String, Any?>
@@ -74,7 +71,6 @@ interface ApiService {
      * @param url
      */
     @POST("v1/delete_file")
-//    @Headers("Content-Type : application/json")
     suspend fun deleteFile(
         @Header("Authorization") token: String?,
         @Body body: MutableMap<String, Any?>
