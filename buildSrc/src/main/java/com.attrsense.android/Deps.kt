@@ -52,7 +52,7 @@ object Versions {
         const val coroutinesKtxRx2Version = "1.6.1"
         const val serializationJsonKtxVersion = "1.3.2"
         const val reflectKtx = "1.7.10"
-        const val roomVersion = "2.4.2"
+        const val roomVersion = "2.4.3"
         const val navigationVersion = "2.4.2"
         const val pagingVersion = "3.1.1"
     }
@@ -154,8 +154,9 @@ object Deps {
     //room - https://developer.android.google.cn/jetpack/androidx/releases/room
     val roomKtx = "androidx.room:room-ktx:${Versions.BaseLibrary.roomVersion}"
     val roomRuntime = "androidx.room:room-runtime:${Versions.BaseLibrary.roomVersion}"
-    val roomPaging = "androidx.room:room-paging:${Versions.BaseLibrary.roomVersion}"
     val roomCompiler = "androidx.room:room-compiler:${Versions.BaseLibrary.roomVersion}"
+
+    val roomPaging = "androidx.room:room-paging:${Versions.BaseLibrary.roomVersion}"
 
     //navigation - https://developer.android.google.cn/jetpack/androidx/releases/navigation
     val navigationFragmentKtx =

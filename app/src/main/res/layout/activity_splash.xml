@@ -9,14 +9,15 @@
         tools:context=".ui.splash.SplashActivity">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/acTv"
+            android:id="@+id/acTv_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SplashActivity"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="20dp"
+            android:text="3s"
+            android:textColor="@color/black"
+            android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

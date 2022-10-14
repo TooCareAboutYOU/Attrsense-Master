@@ -42,13 +42,13 @@ open class BaseActivity : RxAppCompatActivity() {
 //        rxPermissions.
 
         //临时监听网络状态
-        val mDisposable = ReactiveNetwork.observeNetworkConnectivity(this)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                Logger.i("网络状态：${it.state()}")
-            }
-        mDisposables.add(mDisposable)
+//        val mDisposable = ReactiveNetwork.observeNetworkConnectivity(this)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe {
+//                Logger.i("网络状态：${it.state()}")
+//            }
+//        mDisposables.add(mDisposable)
     }
 
     override fun onRestart() {

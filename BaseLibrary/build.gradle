@@ -11,6 +11,7 @@ plugins {
     id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
 }
+
 kapt {
     correctErrorTypes = true
 }
@@ -78,10 +79,7 @@ dependencies {
     api Deps.serializationJsonKtx
     api Deps.reflectKtx
 
-//    api Deps.roomKtx
-//    api Deps.roomRuntime
-//    api Deps.roomPaging
-//    kapt Deps.roomCompiler
+
 //    api Deps.navigationFragmentKtx
 //    api Deps.navigationUiKtx
 //    api Deps.navigationDynamicFeaturesFragment

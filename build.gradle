@@ -37,8 +37,6 @@ plugins {
     id 'com.google.dagger.hilt.android' version '2.44' apply false
 }
 
-//apply from: "config.gradle"
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

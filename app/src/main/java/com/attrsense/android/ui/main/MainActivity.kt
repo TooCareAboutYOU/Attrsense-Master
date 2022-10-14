@@ -45,7 +45,12 @@ class MainActivity : SkeletonDataBindingVMBaseActivity<ActivityMainBinding, Main
 //            transparentNavigationBar()
 //        }
 
-        mDataBinding.acBtnLogin.setOnClickListener {
+        mDataBinding.acBtnLogin.clicks().compose(
+            rxPermissions.ensure(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        ).subscribe {
             mViewModel.login("18874443157", "111111")
         }
         mViewModel.loginLiveData.observe(this) {

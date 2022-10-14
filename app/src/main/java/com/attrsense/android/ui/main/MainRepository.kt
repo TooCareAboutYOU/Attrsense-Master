@@ -3,6 +3,9 @@ package com.attrsense.android.ui.main
 import android.util.Log
 import com.attrsense.android.baselibrary.base.open.repository.BaseRepository
 import com.attrsense.android.http.ApiService
+import com.attrsense.database.db.AttrSenseRoomDatabase
+import com.attrsense.database.db.dao.UserDao
+import com.attrsense.database.db.entity.UserEntity
 import kotlinx.coroutines.flow.flow
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
@@ -17,7 +20,13 @@ import javax.inject.Inject
  * date : 2022/10/9 16:51
  * mark : custom something
  */
-class MainRepository @Inject constructor(private val apiService: ApiService) : BaseRepository() {
+class MainRepository @Inject constructor(
+    private val apiService: ApiService,
+    private val userDao: UserDao
+) :
+    BaseRepository() {
+
+    fun getUserDao(): UserDao = userDao
 
     /**
      * 登录获取 token
@@ -27,9 +36,7 @@ class MainRepository @Inject constructor(private val apiService: ApiService) : B
             this["mobile"] = mobile
             this["code"] = code
         }
-        RequestBody
-        val result = apiService.login(body)
-        emit(result)
+        emit(apiService.login(body))
     }.flowOnIO()
 
 

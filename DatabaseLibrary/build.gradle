@@ -1,0 +1,59 @@
+import com.attrsense.android.Deps
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
+    id 'kotlin-kapt'
+    id 'kotlin-android'
+    //https://www.jianshu.com/p/a69694b5be7e
+    id 'kotlin-parcelize'
+    id 'kotlinx-serialization'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    namespace 'com.attrsense.database'
+    compileSdk Deps.compileSdk
+
+    defaultConfig {
+        minSdk Deps.minSdk
+        targetSdk Deps.targetSdk
+        multiDexEnabled = Deps.multiDexEnabled
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        kapt {
+//            includeCompileClasspath = false
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.getName())
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility Deps.sourceCompatibility
+        targetCompatibility Deps.targetCompatibility
+    }
+    kotlinOptions {
+        jvmTarget = Deps.jvmTarget
+    }
+}
+
+dependencies {
+    implementation Deps.hiltDaggerAndroid
+    kapt Deps.hiltDaggerCompiler
+
+    implementation Deps.roomKtx
+    implementation Deps.roomRuntime
+    kapt Deps.roomCompiler
+//    api Deps.roomPaging
+
+    implementation project(":BaseLibrary")
+}

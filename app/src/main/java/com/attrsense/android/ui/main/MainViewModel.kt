@@ -1,15 +1,17 @@
 package com.attrsense.android.ui.main
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.attrsense.android.base.AppConfig
 import com.attrsense.android.baselibrary.base.BaseResponse
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.baselibrary.util.MMKVUtils
-import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
 import com.attrsense.android.model.LoginBean
+import com.attrsense.database.db.entity.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -23,7 +25,7 @@ class MainViewModel @Inject constructor(
     private val mmkv: MMKVUtils
 ) : BaseViewModel() {
 
-    private val token: String? by lazy { mmkv.getString(AppConfig.KEY_ACCOUNT_TOKEN) }
+    private val localToken: String? by lazy { mmkv.getString(AppConfig.KEY_ACCOUNT_TOKEN) }
 
     /**
      * 登录
@@ -35,10 +37,20 @@ class MainViewModel @Inject constructor(
     fun login(mobile: String?, code: String?) {
         repository.login(mobile, code).collectInLaunch {
             _loginLiveData.value = it.apply {
-                mmkv.setValue(AppConfig.KEY_ACCOUNT_TOKEN, this.data?.token)
-                mmkv.setValue(AppConfig.KEY_ACCOUNT_REFRESH_TOKEN, this.data?.refresh_token)
+                mmkv.setValue(AppConfig.KEY_ACCOUNT_TOKEN, data?.token)
+                mmkv.setValue(AppConfig.KEY_ACCOUNT_REFRESH_TOKEN, data?.refresh_token)
+
+                withContext(Dispatchers.IO) {
+                    saveUser(mobile, data?.token)
+                }
             }
         }
+    }
+
+    private suspend fun saveUser(mobile: String?, token: String?) {
+        repository.getUserDao().add(UserEntity(mobile = mobile, token = token))
+        val user = repository.getUserDao().queryByMobile(mobile)
+        Log.i("printInfo", "MainViewModel::getUser: ${user.toString()}")
     }
 
 
@@ -65,7 +77,7 @@ class MainViewModel @Inject constructor(
         get() = _uploadFileLiveData
 
     fun uploadFile(rate: String?, roiRate: String?, imageFilePath: String) {
-        repository.uploadFile(token, rate, roiRate, imageFilePath).collectInLaunch {
+        repository.uploadFile(localToken, rate, roiRate, imageFilePath).collectInLaunch {
             _uploadFileLiveData.value = it
         }
     }
@@ -80,7 +92,7 @@ class MainViewModel @Inject constructor(
         get() = _queryUploadFileLiveData
 
     fun queryUploadFile(page: Int?, perPage: Int?) {
-        repository.getUploadFile(token, page, perPage).collectInLaunch {
+        repository.getUploadFile(localToken, page, perPage).collectInLaunch {
             _queryUploadFileLiveData.value = it
         }
     }
@@ -95,7 +107,7 @@ class MainViewModel @Inject constructor(
         get() = _deleteFileLiveData
 
     fun deleteFile(fileId: String) {
-        repository.deleteFile(token, fileId).collectInLaunch {
+        repository.deleteFile(localToken, fileId).collectInLaunch {
             _deleteFileLiveData.value = it
         }
     }

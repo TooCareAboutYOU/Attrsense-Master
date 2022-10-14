@@ -1,6 +1,8 @@
 package com.attrsense.android.ui.splash
 
 import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -9,7 +11,8 @@ import com.attrsense.android.baselibrary.base.open.SkeletonDataBindingVMBaseActi
 import com.attrsense.android.databinding.ActivitySplashBinding
 import com.attrsense.android.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
@@ -17,6 +20,7 @@ class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, 
 
     private var keepScreen = AtomicBoolean(true)
     private lateinit var splashScreen: SplashScreen
+    private var mJob: Job? = null
 
     override fun setLayoutResId(): Int = R.layout.activity_splash
 
@@ -27,7 +31,8 @@ class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, 
     }
 
     override fun initView() {
-        mDataBinding.acTv.setOnClickListener {
+        launch()
+        mDataBinding.acTvNumber.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
 //            mViewModel.load("js")
         }
@@ -36,11 +41,17 @@ class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, 
         }
     }
 
-    fun launch() {
-        countDowntime()
+    private fun launch() {
+        lifecycleScope.launch {
+            delay(100L)
+            keepScreen.compareAndSet(true, false)
+        }
+        //绑定数据
+        splashScreen.setKeepVisibleCondition { keepScreen.get() }
 
         //展示完毕的监听
         splashScreen.setOnExitAnimationListener { provider ->
+            Log.i("printInfo", "SplashActivity::setOnExitAnimationListener: 启动进程才会回调！")
             //移除监听
             provider.remove()
             //跳转到下个页面
@@ -49,14 +60,54 @@ class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, 
 //            overridePendingTransition(0,0)
         }
     }
-    //设置欢迎页展示时间
-    fun countDowntime() {
-        lifecycleScope.launchWhenResumed {
-            delay(1000)
-            keepScreen.compareAndSet(true, false)
+
+    private var max = 3
+    override fun onResume() {
+        super.onResume()
+        // TODO: 如果是登录用户直接跳转到首页
+        max.setTimerText()
+        loadTimer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // TODO: 如果是登录用户直接跳转到首页
+        max = 3
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mJob?.apply {
+            if (isActive) {
+                cancel()
+            }
         }
-        //绑定数据
-        splashScreen.setKeepVisibleCondition { keepScreen.get() }
+    }
+
+    /**
+     * 三秒倒计时
+     */
+    private fun loadTimer() {
+        mJob = (max downTo 0).asFlow()
+            .onEach { delay(1000L) }
+            .flowOn(Dispatchers.Default)
+            .onStart { Log.i("printInfo", "flow onStart") }
+            .onEach {
+                it.setTimerText()
+                if (it == 0) {
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+            }
+            .onCompletion {
+                Log.i("printInfo", "flow onCompletion")
+            } //在发送数据收集完之后添加数据
+            .launchIn(lifecycleScope) //在单独的协程中启动流的收集
+    }
+
+    private fun Int.setTimerText() {
+        val result = "${this}s"
+        mDataBinding.acTvNumber.text = result
     }
 
 //    override fun onBackPressed() {

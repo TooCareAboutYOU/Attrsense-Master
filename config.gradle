@@ -1,6 +1,0 @@
-//配置方式一
-ext {
-    android = [
-            cmakeVersion: "3.18.1"
-    ]
-}
