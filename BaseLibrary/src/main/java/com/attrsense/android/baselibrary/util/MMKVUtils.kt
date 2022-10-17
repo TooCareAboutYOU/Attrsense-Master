@@ -66,7 +66,7 @@ class MMKVUtilsImpl @Inject constructor(private val _mmkv: MMKV) : MMKVUtils {
                 _mmkv.encode(key, value)
             }
             else -> {
-                Logger.i("Save Failed！！！")
+                Logger.e("Save Failed！！！")
                 return
             }
         }

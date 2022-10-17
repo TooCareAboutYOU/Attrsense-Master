@@ -1,3 +1,4 @@
+    #ViewModel初始化及其异常#
     方式一
     private val splash2ViewModel:Splash2ViewModel by viewModels()
     注：此方法不适用于带参构造，新版会提示异常：Caused by: java.lang.IllegalArgumentException: CreationExtras must have a value by `SAVED_STATE_REGISTRY_OWNER_KEY`

@@ -1,20 +1,19 @@
-package com.attrsense.android.baselibrary.base.open
+package com.attrsense.android.baselibrary.base.open.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 
 /**
  * author : zhangshuai@attrsense.com
  * date : 2022/10/8 10:07
  * mark : 包含视图的基类-样式一
  */
-abstract class SkeletonDataBindingBaseActivity<DB : ViewDataBinding> :
-    SkeletonBaseActivity() {
+abstract class BaseDataBindingActivity<DB : ViewDataBinding> :
+    BaseActivity() {
 
     lateinit var mDataBinding: DB
 

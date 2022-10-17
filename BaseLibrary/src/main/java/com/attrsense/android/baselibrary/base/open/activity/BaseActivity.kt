@@ -1,18 +1,17 @@
-package com.attrsense.android.baselibrary.base.open
+package com.attrsense.android.baselibrary.base.open.activity
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.attrsense.android.baselibrary.base.internal.BaseActivity
-import kotlin.reflect.KClass
+import com.attrsense.android.baselibrary.base.internal.SkeletonActivity
 
 /**
  * author : zhangshuai@attrsense.com
  * date : 2022/10/8 10:07
  * mark : 不包含视图的基类
  */
-open class SkeletonBaseActivity : BaseActivity() {
+open class BaseActivity : SkeletonActivity() {
 
     /**
      * 子类需添加注释：@AndroidEntryPoint

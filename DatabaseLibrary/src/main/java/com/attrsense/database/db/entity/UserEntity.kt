@@ -23,4 +23,5 @@ data class UserEntity(
     //密码
     @ColumnInfo(name = "token", typeAffinity = ColumnInfo.TEXT)
     var token: String? = ""
+
 ) : BaseEntity()

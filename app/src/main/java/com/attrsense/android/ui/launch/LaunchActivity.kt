@@ -1,14 +1,13 @@
-package com.attrsense.android.ui.splash
+package com.attrsense.android.ui.launch
 
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
-import com.attrsense.android.baselibrary.base.open.SkeletonDataBindingVMBaseActivity
-import com.attrsense.android.databinding.ActivitySplashBinding
+import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
+import com.attrsense.android.databinding.ActivityLaunchBinding
 import com.attrsense.android.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -16,27 +15,28 @@ import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
-class SplashActivity : SkeletonDataBindingVMBaseActivity<ActivitySplashBinding, SplashViewModel>() {
+class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchViewModel>() {
 
     private var keepScreen = AtomicBoolean(true)
     private lateinit var splashScreen: SplashScreen
     private var mJob: Job? = null
 
-    override fun setLayoutResId(): Int = R.layout.activity_splash
+    override fun setLayoutResId(): Int = R.layout.activity_launch
 
-    override fun setViewModel(): Class<SplashViewModel> = SplashViewModel::class.java
+    override fun setViewModel(): Class<LaunchViewModel> = LaunchViewModel::class.java
 
     override fun initViewBefore() {
         splashScreen = installSplashScreen()
     }
 
     override fun initView() {
+        super.initView()
+
+
         launch()
+
+
         mDataBinding.acTvNumber.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-//            mViewModel.load("js")
-        }
-        mViewModel.github().observe(this) {
             startActivity(Intent(this, MainActivity::class.java))
         }
     }

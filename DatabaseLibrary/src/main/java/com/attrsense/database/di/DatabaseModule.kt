@@ -17,7 +17,7 @@ import javax.inject.Singleton
 /**
  * author : zhangshuai@attrsense.com
  * date : 2022/10/14 11:34
- * mark : custom something
+ * mark : 数据库模块实例化对象
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -51,9 +51,7 @@ class DatabaseModule {
             context.applicationContext,
             AttrSenseRoomDatabase::class.java,
             "attrSense.db"
-        )
-            .addCallback(RoomCallBack)
-            .build()
+        ).addCallback(RoomCallBack).build()
     }
 
     @Singleton

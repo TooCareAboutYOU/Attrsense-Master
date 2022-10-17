@@ -1,18 +1,22 @@
-package com.attrsense.android.baselibrary.base.internal
+package com.attrsense.android.baselibrary.base.open.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
-import com.trello.rxlifecycle2.components.support.RxFragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.attrsense.android.baselibrary.base.internal.SkeletonFragment
 
 /**
  * author : zhangshuai@attrsense.com
  * date : 2022/10/8 10:07
  * mark : custom something
  */
-internal class BaseFragment : RxFragment() {
+open class BaseFragment : SkeletonFragment() {
+
+    protected fun <VM : ViewModel> loadViewModel(vm: Class<VM>): VM {
+        return ViewModelProvider(this)[vm]
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

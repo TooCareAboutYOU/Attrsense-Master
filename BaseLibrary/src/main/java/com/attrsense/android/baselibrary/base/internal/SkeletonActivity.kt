@@ -3,14 +3,10 @@ package com.attrsense.android.baselibrary.base.internal
 import android.content.Intent
 import android.os.Bundle
 import com.attrsense.android.baselibrary.util.MMKVUtils
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
-import com.orhanobut.logger.Logger
 import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -18,7 +14,7 @@ import javax.inject.Inject
  * date : 2022/10/8
  * mark : custom something
  */
-open class BaseActivity : RxAppCompatActivity() {
+open class SkeletonActivity : RxAppCompatActivity() {
 
     //也可自定义存储类型
 //    @Inject

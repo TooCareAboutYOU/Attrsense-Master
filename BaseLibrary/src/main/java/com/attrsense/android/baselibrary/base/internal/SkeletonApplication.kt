@@ -1,15 +1,11 @@
 package com.attrsense.android.baselibrary.base.internal
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.attrsense.android.baselibrary.BuildConfig
-import com.attrsense.android.baselibrary.service.AppInitIntentService
-import com.blankj.utilcode.util.Utils
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.FormatStrategy
 import com.orhanobut.logger.Logger
@@ -20,7 +16,7 @@ import com.orhanobut.logger.PrettyFormatStrategy
  * date : 2022/10/8
  * mark : custom something
  */
-open class BaseApplication : Application() {
+open class SkeletonApplication : Application() {
 
     companion object {
         private lateinit var instance: Application
@@ -36,7 +32,7 @@ open class BaseApplication : Application() {
         super.onCreate()
         instance = this
 
-        ProcessLifecycleOwner.get().lifecycle.addObserver(BaseApplicationObserver())
+        ProcessLifecycleOwner.get().lifecycle.addObserver(SkeletonApplicationObserver())
 
         Looper.myQueue().addIdleHandler {
             try {

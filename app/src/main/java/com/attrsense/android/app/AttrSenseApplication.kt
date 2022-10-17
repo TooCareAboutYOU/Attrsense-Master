@@ -1,7 +1,6 @@
 package com.attrsense.android.app
 
-import android.app.Application
-import com.attrsense.android.baselibrary.base.internal.BaseApplication
+import com.attrsense.android.baselibrary.base.internal.SkeletonApplication
 import dagger.hilt.android.HiltAndroidApp
 
 /**
@@ -10,6 +9,6 @@ import dagger.hilt.android.HiltAndroidApp
  * mark : custom something
  */
 @HiltAndroidApp
-class AttrSenseApplication : BaseApplication() {
+class AttrSenseApplication : SkeletonApplication() {
 
 }

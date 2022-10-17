@@ -25,9 +25,9 @@ interface ApiService {
 
 
     /**
-     * 手机号+验证码登录注册
+     * 手机号+验证码登录
      */
-    @POST("v1/user/mobile_auth")
+    @POST("/v1/user/login_mobile")
     suspend fun login(@Body body: MutableMap<String, Any?>): BaseResponse<LoginBean?>
 
     /**

@@ -1,4 +1,4 @@
-package com.attrsense.android.base
+package com.attrsense.android.config
 
 object AppConfig {
 

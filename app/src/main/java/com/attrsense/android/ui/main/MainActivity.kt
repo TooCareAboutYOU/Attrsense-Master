@@ -1,30 +1,24 @@
 package com.attrsense.android.ui.main
 
 import android.Manifest
-import android.content.ContentResolver
 import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
-import com.attrsense.android.baselibrary.base.open.SkeletonDataBindingVMBaseActivity
+import com.attrsense.android.baselibrary.base.BaseResponse
+import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.databinding.ActivityMainBinding
 import com.blankj.utilcode.util.ToastUtils
-import com.blankj.utilcode.util.ZipUtils
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
 
 
+/**
+ *
+ */
 @AndroidEntryPoint
-class MainActivity : SkeletonDataBindingVMBaseActivity<ActivityMainBinding, MainViewModel>() {
+class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewModel>() {
 
     external fun stringFromJNI(): String
 
@@ -39,6 +33,7 @@ class MainActivity : SkeletonDataBindingVMBaseActivity<ActivityMainBinding, Main
     override fun setLayoutResId(): Int = R.layout.activity_main
 
     override fun initView() {
+        super.initView()
         //设置状态栏/导航栏样式
 //        immersionBar {
 //            transparentStatusBar()
@@ -54,7 +49,15 @@ class MainActivity : SkeletonDataBindingVMBaseActivity<ActivityMainBinding, Main
             mViewModel.login("18874443157", "111111")
         }
         mViewModel.loginLiveData.observe(this) {
-            ToastUtils.showShort("登录成功")
+            if (it.message?.isNotEmpty() == true) {
+                Log.e("printInfo", "MainActivity::initView: $it")
+            }
+
+//            if (it.errorCode == BaseResponse.CODE_LOGIN_INVALID) {
+//                ToastUtils.showShort(it.message)
+//            }else{
+//                ToastUtils.showShort("登录成功")
+//            }
         }
 
 

@@ -24,11 +24,6 @@ android {
         versionName Deps.versionName
         multiDexEnabled = Deps.multiDexEnabled
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                arguments = [AROUTER_MODULE_NAME: project.getName()]
-//            }
-//        }
     }
 
     buildTypes {
@@ -58,9 +53,6 @@ android {
 
 dependencies {
     implementation Deps.hiltDaggerAndroid
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.4.+'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     kapt Deps.hiltDaggerCompiler
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")

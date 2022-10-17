@@ -8,7 +8,7 @@ import androidx.lifecycle.*
  * date : 2022/10/10 15:17
  * mark : custom something
  */
-internal class BaseApplicationObserver : DefaultLifecycleObserver, LifecycleEventObserver {
+internal class SkeletonApplicationObserver : DefaultLifecycleObserver, LifecycleEventObserver {
 
     private val TAG = "TAG_ApplicationObserver"
 
