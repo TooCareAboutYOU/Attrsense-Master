@@ -1,6 +1,8 @@
 package com.attrsense.android.di
 
+import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.android.http.ApiService
+import com.attrsense.android.util.UserManger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +23,12 @@ class SingletonModule {
     @Provides
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideUserManager(mmkvUtils: MMKVUtils): UserManger {
+        return UserManger(mmkvUtils)
     }
 
 }

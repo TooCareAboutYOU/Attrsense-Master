@@ -17,7 +17,7 @@ import com.attrsense.database.db.entity.UserEntity
         UserEntity::class
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
 @TypeConverters(Converter::class)
 abstract class AttrSenseRoomDatabase : RoomDatabase() {

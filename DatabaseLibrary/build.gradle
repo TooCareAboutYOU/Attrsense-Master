@@ -1,4 +1,3 @@
-import com.attrsense.android.Deps
 
 plugins {
     id 'com.android.library'
@@ -14,12 +13,12 @@ plugins {
 
 android {
     namespace 'com.attrsense.database'
-    compileSdk Deps.compileSdk
+    compileSdk rootProject.ext.android["compileSdkVersion"]
 
     defaultConfig {
-        minSdk Deps.minSdk
-        targetSdk Deps.targetSdk
-        multiDexEnabled = Deps.multiDexEnabled
+        minSdk rootProject.ext.android["minSdkVersion"]
+        targetSdk rootProject.ext.android["targetSdkVersion"]
+        multiDexEnabled = rootProject.ext.android["multiDexEnabled"]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
@@ -38,22 +37,22 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility Deps.sourceCompatibility
-        targetCompatibility Deps.targetCompatibility
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = Deps.jvmTarget
+        jvmTarget = rootProject.ext.android["jvmTarget"]
     }
 }
 
 dependencies {
-    implementation Deps.hiltDaggerAndroid
-    kapt Deps.hiltDaggerCompiler
+    implementation rootProject.ext.dependencies["hiltDaggerAndroid"]
+    kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
 
-    implementation Deps.roomKtx
-    implementation Deps.roomRuntime
-    kapt Deps.roomCompiler
-//    api Deps.roomPaging
+    implementation rootProject.ext.dependencies["roomKtx"]
+    implementation rootProject.ext.dependencies["roomRuntime"]
+    kapt rootProject.ext.dependencies["roomCompiler"]
+//    api rootProject.ext.dependencies["roomPaging"]
 
     implementation project(":BaseLibrary")
 }

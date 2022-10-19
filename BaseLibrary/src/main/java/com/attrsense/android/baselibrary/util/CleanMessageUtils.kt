@@ -68,7 +68,7 @@ class CleanMessageUtils {
         var size: Long = 0
         try {
             val fileList = file!!.listFiles()
-            var size2 = 0
+            var size2: Int
             if (fileList != null) {
                 size2 = fileList.size
                 for (i in 0 until size2) {

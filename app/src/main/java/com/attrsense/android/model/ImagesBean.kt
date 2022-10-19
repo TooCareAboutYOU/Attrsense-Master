@@ -9,6 +9,3 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class ImagesBean(val images: List<ImageInfoBean>)
-
-//@Serializable
-//data class ImagesBean(val image: ImageInfoBean)

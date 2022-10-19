@@ -8,4 +8,4 @@ import kotlinx.serialization.Serializable
  * mark : custom something
  */
 @Serializable
-data class ImageBean(val image: ImageInfoBean)
+data class ImageBean(val image: ImageInfoBean?)

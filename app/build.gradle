@@ -1,5 +1,3 @@
-import com.attrsense.android.Deps
-
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -14,15 +12,15 @@ kapt {
 }
 android {
     namespace 'com.attrsense.android'
-    compileSdk Deps.compileSdk
+    compileSdk rootProject.ext.android["compileSdkVersion"]
 
     defaultConfig {
-        applicationId Deps.applicationId
-        minSdk Deps.minSdk
-        targetSdk Deps.targetSdk
-        versionCode Deps.versionCode
-        versionName Deps.versionName
-        multiDexEnabled = Deps.multiDexEnabled
+        applicationId rootProject.ext.android["applicationId"]
+        minSdk rootProject.ext.android["minSdkVersion"]
+        targetSdk rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        multiDexEnabled = rootProject.ext.android["multiDexEnabled"]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,27 +31,37 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility Deps.sourceCompatibility
-        targetCompatibility Deps.targetCompatibility
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = Deps.jvmTarget
+        jvmTarget = rootProject.ext.android["jvmTarget"]
     }
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
-            version Deps.cmakeVersion
+            version rootProject.ext.android["cmakeVersion"]
         }
     }
     buildFeatures {
         viewBinding true
         dataBinding true
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+        }
+    }
 }
 
 dependencies {
-    implementation Deps.hiltDaggerAndroid
-    kapt Deps.hiltDaggerCompiler
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+
+    implementation rootProject.ext.dependencies["hiltDaggerAndroid"]
+    kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
+//    kapt rootProject.ext.dependencies["glideCompiler"]
+
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")
 }

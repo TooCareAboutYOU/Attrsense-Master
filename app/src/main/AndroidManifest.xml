@@ -69,9 +69,9 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity> <!-- 我的页 -->
+        </activity>
         <activity
-            android:name=".ui.my.MyActivity"
+            android:name=".ui.detail.DetailActivity"
             android:exported="false"
             android:screenOrientation="portrait">
             <meta-data
@@ -79,29 +79,25 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.detail.DetailActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ui.apply.ApplyActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ui.about.AboutUsActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ui.contact.ContactUsActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

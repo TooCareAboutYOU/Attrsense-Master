@@ -13,13 +13,13 @@ import com.attrsense.database.db.entity.UserEntity
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(userEntity: UserEntity)
+    suspend fun add(userEntity: UserEntity)
 
     @Delete
-    fun delete(userEntity: UserEntity)
+    suspend fun delete(userEntity: UserEntity)
 
     @Update
-    fun update(userEntity: UserEntity)
+    suspend fun update(userEntity: UserEntity)
 
     @Query("SELECT * FROM USER WHERE mobile =:mobile")
     suspend fun queryByMobile(mobile: String?): List<UserEntity>?
@@ -28,5 +28,5 @@ interface UserDao {
     suspend fun queryByToken(token: String?): List<UserEntity>?
 
     @Query("DELETE FROM USER")
-    fun clear()
+    suspend fun clear()
 }

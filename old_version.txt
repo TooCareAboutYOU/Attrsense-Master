@@ -1,0 +1,88 @@
+//测试库
+    testApi Deps.junit
+    androidTestApi Deps.jUnitExt
+    androidTestApi Deps.espressoCore
+    testImplementation Deps.mockk
+    debugImplementation Deps.leakcanaryAndroid
+    implementation Deps.okHttpProfiler
+//    debugImplementation Deps.debugDB //debug 数据库
+//    api Deps.legacySupportV4
+
+    api Deps.multidex
+    api Deps.coreKtx
+    api Deps.appcompat
+    api Deps.material
+    api Deps.constraintLayout
+    api Deps.swipeRefreshLayout
+    api Deps.recyclerview
+    api Deps.baseRecyclerViewAdapterHelper
+    api Deps.cardView
+    api Deps.viewpager2
+    api Deps.splashscreen
+    api Deps.coroutinesCoreKtx
+    api Deps.coroutinesAndroidKtx
+    api Deps.coroutinesRx2Ktx
+    api Deps.serializationJsonKtx
+    api Deps.reflectKtx
+
+    //所有使用到的模块都要加上这两个依赖
+    api Deps.hiltDaggerAndroid
+    kapt Deps.hiltDaggerCompiler
+//    api Deps.hiltWork
+//    kapt Deps.hiltCompiler
+//    api Deps.hiltNavigationFragment
+
+//    api Deps.navigationFragmentKtx
+//    api Deps.navigationUiKtx
+//    api Deps.navigationDynamicFeaturesFragment
+//
+//    api Deps.pagingRuntime
+//    testImplementation Deps.pagingCommon
+//    api Deps.pagingRxjava2
+
+
+//    api Deps.arouterApi
+//    kapt Deps.arouterCompiler
+
+//    api Deps.rxjava
+    api Deps.rxAndroid
+    api Deps.rxBinding
+
+
+    api Deps.rxLifecycle
+    api Deps.rxLifecycleAndroid
+    api Deps.rxLifecycleComponents
+
+    api Deps.lifecycleRuntimeKtx
+    api Deps.lifecycleViewModelKtx
+    api Deps.lifecycleViewModelSavedState
+    api Deps.lifecycleLivedataKtx
+    api Deps.lifecycleLivedataCoreKtx
+    kapt Deps.lifecycleCompiler
+    api Deps.lifecycleService
+    api Deps.lifecycleProcess
+    api Deps.lifecycleReactivestreamsKtx
+
+    api Deps.activityKtx
+    api Deps.fragmentKtx
+
+    api Deps.retrofit2
+    api Deps.retrofit2ConverterGson
+    api Deps.retrofit2AdapterRxjava2
+    api Deps.okhttp3LoggingInterceptor
+    api Deps.retrofit2CoroutinesAdapterKtx
+
+    api Deps.circleImageview
+    api Deps.immersionBar
+    api Deps.immersionBarKtx
+    api Deps.systemBarTint
+    api Deps.aspectJrt
+    api Deps.rxPermissions
+    api Deps.reactiveNetwork
+    api Deps.logger
+    api Deps.utilCodex
+    api Deps.mmkv
+    api Deps.photoView
+    api Deps.imageSelector
+    api Deps.glide
+    kapt Deps.glideCompiler

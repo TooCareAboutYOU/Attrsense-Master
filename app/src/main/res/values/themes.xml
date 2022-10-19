@@ -25,20 +25,20 @@
 
     <!--    启动页Style -->
     <style name="Theme.SplashScreen.Starting" parent="Theme.SplashScreen">
-        <!--展示背景色-->
+        <!--以特定的单色填充背景-->
         <item name="windowSplashScreenBackground">@color/white</item>
-        <!-- 启动页展示的图片-->
+        <!-- 启动页展示的图片,替换起始窗口中心的图标-->
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-        <!-- 展示时常(低版本不生效需要代码设置)-->
-        <item name="windowSplashScreenAnimationDuration">100</item>
+        <!-- 展示时常(低版本不生效需要代码设置) 以在显示起始窗口的同时播放动画-->
+        <item name="windowSplashScreenAnimationDuration">1000</item>
         <!-- 启动画面退出后 Activity 的主题-->
         <item name="postSplashScreenTheme">@style/Launcher</item>
-
+        <!-- 全屏-->
         <!--        <item name="android:windowFullscreen">true</item>-->
     </style>
 
     <!--    启动页下一页的Style-->
-    <style name="Launcher" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Launcher" parent="Theme.AttrSenseMaster">
         <!--        <item name="android:windowTranslucentStatus">true</item>-->
         <!--        <item name="android:windowTranslucentNavigation">true</item>-->
     </style>

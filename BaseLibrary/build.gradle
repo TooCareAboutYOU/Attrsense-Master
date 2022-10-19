@@ -1,4 +1,3 @@
-import com.attrsense.android.Deps
 
 plugins {
     id 'com.android.library'
@@ -17,12 +16,12 @@ kapt {
 }
 android {
     namespace 'com.attrsense.android.baselibrary'
-    compileSdk Deps.compileSdk
+    compileSdk rootProject.ext.android["compileSdkVersion"]
 
     defaultConfig {
-        minSdk Deps.minSdk
-        targetSdk Deps.targetSdk
-        multiDexEnabled = Deps.multiDexEnabled
+        minSdk rootProject.ext.android["minSdkVersion"]
+        targetSdk rootProject.ext.android["targetSdkVersion"]
+        multiDexEnabled = rootProject.ext.android["multiDexEnabled"]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 //        javaCompileOptions {
@@ -39,11 +38,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility Deps.sourceCompatibility
-        targetCompatibility Deps.targetCompatibility
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = Deps.jvmTarget
+        jvmTarget = rootProject.ext.android["jvmTarget"]
     }
     buildFeatures {
         viewBinding true
@@ -53,88 +52,91 @@ android {
 
 dependencies {
     //测试库
-    testApi Deps.junit
-    androidTestApi Deps.jUnitExt
-    androidTestApi Deps.espressoCore
-    testImplementation Deps.mockk
-    debugImplementation Deps.leakcanaryAndroid
-    implementation Deps.okHttpProfiler
-//    debugImplementation Deps.debugDB //debug 数据库
-//    api Deps.legacySupportV4
+    testApi rootProject.ext.dependencies["junit"]
+    androidTestApi rootProject.ext.dependencies["jUnitExt"]
+    androidTestApi rootProject.ext.dependencies["espressoCore"]
+    testImplementation rootProject.ext.dependencies["mockk"]
+    debugImplementation rootProject.ext.dependencies["leakcanaryAndroid"]
+    implementation rootProject.ext.dependencies["okHttpProfiler"]
+//    debugImplementation rootProject.ext.dependencies["debugDB"] //debug 数据库
+//    api rootProject.ext.dependencies["legacySupportV4"]
 
-    api Deps.multidex
-    api Deps.coreKtx
-    api Deps.appcompat
-    api Deps.material
-    api Deps.constraintLayout
-    api Deps.swipeRefreshLayout
-    api Deps.recyclerview
-    api Deps.baseRecyclerViewAdapterHelper
-    api Deps.cardView
-    api Deps.viewpager2
-    api Deps.splashscreen
-    api Deps.coroutinesCoreKtx
-    api Deps.coroutinesAndroidKtx
-    api Deps.coroutinesRx2Ktx
-    api Deps.serializationJsonKtx
-    api Deps.reflectKtx
-
-
-//    api Deps.navigationFragmentKtx
-//    api Deps.navigationUiKtx
-//    api Deps.navigationDynamicFeaturesFragment
-//
-//    api Deps.pagingRuntime
-//    testImplementation Deps.pagingCommon
-//    api Deps.pagingRxjava2
+    api rootProject.ext.dependencies["multidex"]
+    api rootProject.ext.dependencies["coreKtx"]
+    api rootProject.ext.dependencies["appcompat"]
+    api rootProject.ext.dependencies["material"]
+    api rootProject.ext.dependencies["constraintLayout"]
+    api rootProject.ext.dependencies["swipeRefreshLayout"]
+    api rootProject.ext.dependencies["recyclerview"]
+    api rootProject.ext.dependencies["baseRecyclerViewAdapterHelper"]
+    api rootProject.ext.dependencies["cardView"]
+    api rootProject.ext.dependencies["viewpager2"]
+    api rootProject.ext.dependencies["splashscreen"]
+    api rootProject.ext.dependencies["coroutinesCoreKtx"]
+    api rootProject.ext.dependencies["coroutinesAndroidKtx"]
+    api rootProject.ext.dependencies["coroutinesRx2Ktx"]
+    api rootProject.ext.dependencies["serializationJsonKtx"]
+    api rootProject.ext.dependencies["reflectKtx"]
 
     //所有使用到的模块都要加上这两个依赖
-    api Deps.hiltDaggerAndroid
-    kapt Deps.hiltDaggerCompiler
-//    api Deps.hiltWork
-//    kapt Deps.hiltCompiler
-//    api Deps.hiltNavigationFragment
+    api rootProject.ext.dependencies["hiltDaggerAndroid"]
+    kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
+//    api rootProject.ext.dependencies["hiltWork"]
+//    kapt rootProject.ext.dependencies["hiltCompiler"]
+//    api rootProject.ext.dependencies["hiltNavigationFragment"]
 
-//    api Deps.arouterApi
-//    kapt Deps.arouterCompiler
-
-//    api Deps.rxjava
-    api Deps.rxAndroid
-    api Deps.rxBinding
-
-    api Deps.rxLifecycle
-    api Deps.rxLifecycleAndroid
-    api Deps.rxLifecycleComponents
-
-    api Deps.lifecycleRuntimeKtx
-    api Deps.lifecycleViewModelKtx
-    api Deps.lifecycleViewModelSavedState
-    api Deps.lifecycleLivedataKtx
-    api Deps.lifecycleLivedataCoreKtx
-    kapt Deps.lifecycleCompiler
-    api Deps.lifecycleService
-    api Deps.lifecycleProcess
-    api Deps.lifecycleReactivestreamsKtx
-
-    api Deps.activityKtx
-    api Deps.fragmentKtx
-
-    api Deps.retrofit2
-    api Deps.retrofit2ConverterGson
-    api Deps.retrofit2AdapterRxjava2
-    api Deps.okhttp3LoggingInterceptor
-    api Deps.retrofit2CoroutinesAdapterKtx
+//    api rootProject.ext.dependencies["navigationFragmentKtx"]
+//    api rootProject.ext.dependencies["navigationUiKtx"]
+//    api rootProject.ext.dependencies["navigationDynamicFeaturesFragment"]
+//
+//    api rootProject.ext.dependencies["pagingRuntime"]
+//    testImplementation rootProject.ext.dependencies["pagingCommon"]
+//    api rootProject.ext.dependencies["pagingRxjava2"]
 
 
-    api Deps.photoView
-    api Deps.circleImageview
-    api Deps.immersionBar
-    api Deps.immersionBarKtx
-    api Deps.systemBarTint
-    api Deps.aspectJrt
-    api Deps.rxPermissions
-    api Deps.reactiveNetwork
-    api Deps.logger
-    api Deps.utilCodex
-    api Deps.mmkv
+//    api rootProject.ext.dependencies["arouterApi"]
+//    kapt rootProject.ext.dependencies["arouterCompiler"]
+
+//    api rootProject.ext.dependencies["rxjava"]
+    api rootProject.ext.dependencies["rxAndroid"]
+    api rootProject.ext.dependencies["rxBinding"]
+
+
+    api rootProject.ext.dependencies["rxLifecycle"]
+    api rootProject.ext.dependencies["rxLifecycleAndroid"]
+    api rootProject.ext.dependencies["rxLifecycleComponents"]
+
+    api rootProject.ext.dependencies["lifecycleRuntimeKtx"]
+    api rootProject.ext.dependencies["lifecycleViewModelKtx"]
+    api rootProject.ext.dependencies["lifecycleViewModelSavedState"]
+    api rootProject.ext.dependencies["lifecycleLivedataKtx"]
+    api rootProject.ext.dependencies["lifecycleLivedataCoreKtx"]
+    kapt rootProject.ext.dependencies["lifecycleCompiler"]
+    api rootProject.ext.dependencies["lifecycleService"]
+    api rootProject.ext.dependencies["lifecycleProcess"]
+    api rootProject.ext.dependencies["lifecycleReactivestreamsKtx"]
+
+    api rootProject.ext.dependencies["activityKtx"]
+    api rootProject.ext.dependencies["fragmentKtx"]
+
+    api rootProject.ext.dependencies["retrofit2"]
+    api rootProject.ext.dependencies["retrofit2ConverterGson"]
+    api rootProject.ext.dependencies["retrofit2AdapterRxjava2"]
+    api rootProject.ext.dependencies["okhttp3LoggingInterceptor"]
+    api rootProject.ext.dependencies["retrofit2CoroutinesAdapterKtx"]
+
+    api rootProject.ext.dependencies["circleImageview"]
+    api rootProject.ext.dependencies["immersionBar"]
+    api rootProject.ext.dependencies["immersionBarKtx"]
+    api rootProject.ext.dependencies["systemBarTint"]
+    api rootProject.ext.dependencies["aspectJrt"]
+    api rootProject.ext.dependencies["rxPermissions"]
+    api rootProject.ext.dependencies["reactiveNetwork"]
+    api rootProject.ext.dependencies["logger"]
+    api rootProject.ext.dependencies["utilCodex"]
+    api rootProject.ext.dependencies["mmkv"]
+    api rootProject.ext.dependencies["photoView"]
+    api rootProject.ext.dependencies["imageSelector"]
+    api rootProject.ext.dependencies["glide"]
+    kapt rootProject.ext.dependencies["glideCompiler"]
 }

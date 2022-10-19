@@ -1,7 +1,8 @@
 package com.attrsense.android.baselibrary.base.open.repository
 
 import android.util.Log
-import com.attrsense.android.baselibrary.base.BaseResponse
+import com.attrsense.android.baselibrary.base.open.model.BaseResponse
+import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -22,11 +23,11 @@ open class SkeletonRepository {
     }
 
     //收集异常信息，并切换到子线程做网络请求
-    protected fun <T> Flow<BaseResponse<T>>.flowOnIO(): Flow<BaseResponse<T>> {
+    protected fun <T : Any> Flow<ResponseData<T>>.flowOnIO(): Flow<ResponseData<T>> {
         return this.catch { e ->
             Log.e("printInfo", "BaseRepository::flowOnIO: $e")
             //处理异常状态
-            emit(BaseResponse.error(e))
+            emit(ResponseData.onFailed(e))
         }.flowOn(Dispatchers.Default)
     }
 }

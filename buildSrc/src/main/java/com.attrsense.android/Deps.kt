@@ -72,7 +72,6 @@ object Versions {
         const val retrofit2Version = "2.9.0"
         const val okhttpLoggingInterceptorVersion = "4.9.3"
         const val retrofit2CoroutinesAdapterKtxVersion = "0.9.2"
-        const val photoViewVersion = "2.3.0"
         const val circleImageViewVersion = "3.0.1"
         const val immersionBarVersion = "3.2.2"
         const val systemBarTintVersion = "1.0.3"
@@ -82,6 +81,9 @@ object Versions {
         const val loggerVersion = "2.2.0"
         const val utilCodexVersion = "1.31.0"
         const val mmkvVersion = "1.2.14"
+        const val photoViewVersion = "2.3.0"
+        const val imageSelectorVersion = "3.0"
+        const val glideVersion = "4.11.0"
     }
 }
 
@@ -270,9 +272,6 @@ object Deps {
     val retrofit2CoroutinesAdapterKtx =
         "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:${Versions.ExtLibrary.retrofit2CoroutinesAdapterKtxVersion}"
 
-    //图片展示 https://github.com/Baseflow/PhotoView
-    val photoView = "com.github.chrisbanes:PhotoView:${Versions.ExtLibrary.photoViewVersion}"
-
     //裁剪圆形图片  https://github.com/hdodenhof/CircleImageView
     val circleImageview =
         "de.hdodenhof:circleimageview:${Versions.ExtLibrary.circleImageViewVersion}"
@@ -309,4 +308,13 @@ object Deps {
     //临时数据存储 https://github.com/Tencent/MMKV/blob/master/README_CN.md
     val mmkv = "com.tencent:mmkv:${Versions.ExtLibrary.mmkvVersion}"
 
+    //图片展示 https://github.com/Baseflow/PhotoView
+    val photoView = "com.github.chrisbanes:PhotoView:${Versions.ExtLibrary.photoViewVersion}"
+
+    //图片选择器 https://github.com/smuyyh/ImageSelector
+//    val imageSelector="com.github.smuyyh:ImageSelector:${Versions.ExtLibrary.imageSelectorVersion}"
+
+    //图片展示 https://muyangmin.github.io/glide-docs-cn/doc/download-setup.html
+//    val glide="com.github.bumptech.glide:glide:${Versions.ExtLibrary.glideVersion}"
+//    val glideCompiler="com.github.bumptech.glide:compiler:${Versions.ExtLibrary.glideVersion}"
 }

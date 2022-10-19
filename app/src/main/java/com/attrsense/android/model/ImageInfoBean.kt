@@ -14,13 +14,18 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ImageInfoBean(
-    val create_time: String,
-    val filename: String,
-    val rate: String,
-    val roiRate: String,
-    val md5: String,
-    val size: String,
-    val type: String,
-    val url: String,
-    val fileId: String
+    var createTime: String? = "",         //图片上传时间(UTC时间).
+    var srcFilename: String? = "",        //原始图片的文件名.
+    var srcType: String? = "",            //原始图片的类型.
+    var srcSize: Int = 0,                 //原始图片的大小, 类型int, 单位字节.
+    var rate: Int = 0,                    //压缩参数1.
+    var roiRate: Int = 0,                 //压缩参数2.
+    var fileId: String? = "",             //压缩图片的文件ID(用于删除图片).
+    var size: Int = 0,                    //压缩图片的大小, 类型int, 单位字节.
+    var url: String? = "",                //压缩图片的URL.
+    var width: Int = 0,                   //原始图片的宽.
+    var height: Int = 0,                  //原始图片的高.
+    var thumbnailFileId: String? = "",    //缩略图的文件ID.
+    var thumbnailUrl: String? = "",       //缩略图的URL.
+
 )

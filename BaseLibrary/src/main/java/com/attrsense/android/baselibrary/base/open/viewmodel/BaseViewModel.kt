@@ -1,12 +1,9 @@
 package com.attrsense.android.baselibrary.base.open.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.attrsense.android.baselibrary.base.BaseResponse
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 /**
@@ -16,13 +13,19 @@ import kotlinx.coroutines.launch
  */
 open class BaseViewModel : ViewModel() {
 
+    private val map: MutableMap<String, Any?> by lazy { mutableMapOf() }
+
+    protected fun getBody(): MutableMap<String, Any?> {
+        map.clear()
+        return map
+    }
+
     protected inline fun <T> Flow<T>.collectInLaunch(crossinline action: suspend (value: T) -> Unit) =
         viewModelScope.launch {
             collect {
                 action.invoke(it)
             }
         }
-
 
     override fun onCleared() {
         super.onCleared()

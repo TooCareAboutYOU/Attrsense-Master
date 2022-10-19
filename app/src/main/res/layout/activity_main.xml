@@ -3,55 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.MainActivity">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acBtn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="登 录"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpager2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/tab_bottom_navigation"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@color/blue" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acBtn_refresh_token"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="刷新Token"
-            app:layout_constraintTop_toBottomOf="@id/acBtn_login"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acBtn_upload_file"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="上传文件"
-            app:layout_constraintTop_toBottomOf="@id/acBtn_refresh_token"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/tab_bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"
+            app:menu="@menu/menu_main_tab_navigation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acBtn_query_upload_file"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="查询上传的文件"
-            app:layout_constraintTop_toBottomOf="@id/acBtn_upload_file"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/acBtn_delete_file"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="删除文件"
-            app:layout_constraintTop_toBottomOf="@id/acBtn_query_upload_file"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
