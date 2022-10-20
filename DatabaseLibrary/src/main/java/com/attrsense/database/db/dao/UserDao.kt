@@ -21,12 +21,12 @@ interface UserDao {
     @Update
     suspend fun update(userEntity: UserEntity)
 
-    @Query("SELECT * FROM USER WHERE mobile =:mobile")
+    @Query("SELECT * FROM USER_TABLE WHERE mobile =:mobile")
     suspend fun queryByMobile(mobile: String?): List<UserEntity>?
 
-    @Query("SELECT * FROM USER WHERE token =:token")
+    @Query("SELECT * FROM USER_TABLE WHERE token =:token")
     suspend fun queryByToken(token: String?): List<UserEntity>?
 
-    @Query("DELETE FROM USER")
+    @Query("DELETE FROM USER_TABLE")
     suspend fun clear()
 }

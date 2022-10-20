@@ -24,7 +24,6 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
         super.onStart()
         isCancelable = false
 
-
         dialog?.let {
             // 点击外面允许取消
             it.setCanceledOnTouchOutside(true)

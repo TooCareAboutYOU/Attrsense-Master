@@ -1,7 +1,5 @@
 package com.attrsense.android.ui.main
 
-import android.content.Intent
-import android.util.Log
 import androidx.viewpager2.widget.ViewPager2
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
@@ -9,7 +7,6 @@ import com.attrsense.android.databinding.ActivityMainBinding
 import com.attrsense.android.ui.main.local.MainLocalFragment
 import com.attrsense.android.ui.main.remote.MainRemoteFragment
 import com.attrsense.android.widget.FragmentAdapter
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -33,7 +30,6 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
 
     override fun initView() {
         super.initView()
-
         mDataBinding.tabBottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.item_local -> {

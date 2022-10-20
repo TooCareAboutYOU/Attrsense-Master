@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.attrsense.database.base.BaseEntity
 
-@Entity(tableName = "user")
+@Entity(tableName = "user_table")
 data class UserEntity(
     //索引，自增
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id", typeAffinity = ColumnInfo.INTEGER)
-    var id: Int? = 0,
+    var id: Int = 0,
 
     //用户名
     @ColumnInfo(name = "name", typeAffinity = ColumnInfo.TEXT)

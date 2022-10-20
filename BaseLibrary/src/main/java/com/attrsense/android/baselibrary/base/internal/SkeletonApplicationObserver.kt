@@ -14,38 +14,35 @@ internal class SkeletonApplicationObserver : DefaultLifecycleObserver, Lifecycle
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
-        Log.i(TAG, "BaseApplicationObserver::onCreate: ")
+//        Log.i(TAG, "BaseApplicationObserver::onCreate: ")
     }
 
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        Log.i(TAG, "BaseApplicationObserver::onStart: ")
+//        Log.i(TAG, "BaseApplicationObserver::onStart: ")
     }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
-        Log.i(TAG, "BaseApplicationObserver::onResume: ")
+//        Log.i(TAG, "BaseApplicationObserver::onResume: ")
     }
 
     override fun onPause(owner: LifecycleOwner) {
         super.onPause(owner)
-        Log.i(TAG, "BaseApplicationObserver::onPause: ")
+//        Log.i(TAG, "BaseApplicationObserver::onPause: ")
     }
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
-        Log.i(TAG, "BaseApplicationObserver::onStop: ")
+//        Log.i(TAG, "BaseApplicationObserver::onStop: ")
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        Log.i(TAG, "BaseApplicationObserver::onDestroy: ")
+//        Log.i(TAG, "BaseApplicationObserver::onDestroy: ")
     }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-        Log.d(
-            TAG,
-            "BaseApplicationObserver::onStateChanged: ${source.lifecycle.currentState}, event= $event"
-        )
+//        Log.d(TAG, "BaseApplicationObserver::onStateChanged: ${source.lifecycle.currentState}, event= $event")
     }
 }

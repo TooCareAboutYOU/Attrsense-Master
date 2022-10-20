@@ -3,6 +3,7 @@ package com.attrsense.android.di
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.android.http.ApiService
 import com.attrsense.android.util.UserManger
+import com.example.snpetest.JNI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,6 +30,12 @@ class SingletonModule {
     @Provides
     fun provideUserManager(mmkvUtils: MMKVUtils): UserManger {
         return UserManger(mmkvUtils)
+    }
+
+    @Singleton
+    @Provides
+    fun provideJNI(): JNI {
+        return JNI()
     }
 
 }

@@ -15,4 +15,6 @@ class DatabaseRepository @Inject constructor(
     SkeletonRepository() {
 
     fun getUserDao() = db.getUserDao()
+
+    fun getAnfDao() = db.getAnfImageDao()
 }

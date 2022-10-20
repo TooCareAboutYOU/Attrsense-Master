@@ -1,39 +1,70 @@
 package com.attrsense.android.ui.main.remote
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.databinding.FragmentMainRemoteBinding
-import com.attrsense.android.ui.main.local.MainLocalViewModel
 import com.attrsense.android.view.SelectorBottomDialog
-import com.blankj.utilcode.util.ToastUtils
+import com.attrsense.database.db.entity.AnfImageEntity
+import com.example.snpetest.JNI
 import com.jakewharton.rxbinding4.view.clicks
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
-import com.yuyh.library.imgsel.ISNav
-import com.yuyh.library.imgsel.config.ISCameraConfig
-import com.yuyh.library.imgsel.config.ISListConfig
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import java.util.ArrayList
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainRemoteFragment :
     BaseDataBindingVMFragment<FragmentMainRemoteBinding, MainRemoteViewModel>() {
 
+    @Inject
+    lateinit var jni: JNI
+
+    private lateinit var loadingView: ProgressDialog
+    private lateinit var mAdapter: RemoteImageAdapter
+    private val localList: ArrayList<AnfImageEntity> by lazy { arrayListOf() }
+
     override fun setLayoutResId(): Int = R.layout.fragment_main_remote
 
     override fun setViewModel(): Class<MainRemoteViewModel> = MainRemoteViewModel::class.java
 
-
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         super.onCreateFragment(savedInstanceState)
+
+        loadingView = ProgressDialog(requireActivity())
+            .apply {
+                setMessage("压缩中...")
+                setCanceledOnTouchOutside(false)
+            }
+
+        loadingView.setOnDismissListener {
+            Log.i(
+                "printInfo",
+                "MainLocalFragment::onCreateFragment: Dialog is setOnDismissListener "
+            )
+//            mViewModel.getAll()
+        }
     }
 
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
+        context?.let {
+            mAdapter = RemoteImageAdapter(it)
+            mDataBinding.recyclerview.apply {
+                layoutManager = GridLayoutManager(it, 3, RecyclerView.VERTICAL, false)
+                adapter = mAdapter
+            }
+        }
+
         mDataBinding.acImgAdd.clicks().compose(
             rxPermissions.ensure(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -42,63 +73,60 @@ class MainRemoteFragment :
             )
         ).subscribe {
             try {
-                SelectorBottomDialog.show(requireActivity(), clickEventListener)
+                SelectorBottomDialog.show(this)
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
             }
         }
+
+        liveDataObserves()
     }
 
-    private val clickEventListener = object : SelectorBottomDialog.onClickEventListener {
-        override fun onClickPhotos() {
-            val config = ISListConfig.Builder()
-                // 是否多选, 默认true
-                .multiSelect(true)
-                // 是否记住上次选中记录, 仅当multiSelect为true的时候配置，默认为true
-                .rememberSelected(false)
-                // “确定”按钮背景色
-                .btnBgColor(Color.GRAY)
-                // “确定”按钮文字颜色
-                .btnTextColor(Color.BLUE)
-                // 使用沉浸式状态栏
-                .statusBarColor(Color.parseColor("#3F51B5"))
-                // 返回图标ResId
-                .backResId(androidx.appcompat.R.drawable.abc_ic_ab_back_material) // 标题
-                .title("图片")
-                // 标题文字颜色
-                .titleColor(Color.WHITE)
-                // TitleBar背景色
-                .titleBgColor(Color.parseColor("#3F51B5"))
-                // 裁剪大小。needCrop为true的时候配置
-                .cropSize(1, 1, 200, 200)
-                .needCrop(false)
-                // 第一个是否显示相机，默认true
-                .needCamera(false)
-                // 最大选择图片数量，默认9
-                .maxNum(9)
-                .build()
-            ISNav.getInstance().toListActivity(this@MainRemoteFragment, config, 10)
-        }
+    /**
+     * 拍照单张图片的编解码操作
+     */
+    private fun liveDataObserves() {
 
-        override fun onClickCamera() {
-            val config = ISCameraConfig.Builder().build()
-            ISNav.getInstance().toCameraActivity(this@MainRemoteFragment, config, 100)
-        }
-
-        override fun onClickFolder() {
-
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        loadingView.show()
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RxAppCompatActivity.RESULT_OK && data != null) {
-            if (requestCode == 10) {
-                val path = data.getStringArrayListExtra("result") // 图片集合地址
-                Log.i("printInfo", "MainRemoteFragment::onActivityResult: $path")
+        lifecycleScope.launchWhenResumed {
+            Log.i("printInfo", "MainLocalFragment::onActivityResult: $resultCode")
+            if (resultCode == RxAppCompatActivity.RESULT_OK && data != null) {
+                if (requestCode == SelectorBottomDialog.CAMERA_REQUEST_CODE) {
+                    val path = data.getStringExtra("result") // 图片地址
+                    lifecycleScope.launchWhenResumed {
+                        val anf_path = jni.encoderCommit(path)
+
+                        delay(1000L)
+
+                        if (anf_path.isNotEmpty()) {
+                            val entity = AnfImageEntity(originalImage = path, anfImage = anf_path)
+//                            mViewModel.addEntity(entity)
+                            loadingView.dismiss()
+                        }
+                    }
+
+                } else {
+                    val path = data.getStringArrayListExtra("result") as ArrayList // 图片集合地址
+                    val anfPaths = jni.encoderCommitList(path.toTypedArray())
+                    delay(1000L)
+                    if (anfPaths.isNotEmpty()) {
+                        localList.clear()
+                        anfPaths.forEachIndexed { index, s ->
+                            val entity =
+                                AnfImageEntity(originalImage = path[index], anfImage = s)
+                            localList.add(entity)
+                        }
+//                        mViewModel.addEntities(localList)
+                        loadingView.dismiss()
+                    }
+                }
+
             } else {
-                val path = data.getStringExtra("result") // 图片地址
-                Log.i("printInfo", "MainRemoteFragment::onActivityResult: $path")
+                loadingView.dismiss()
             }
         }
     }

@@ -56,11 +56,13 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation rootProject.ext.dependencies["hiltDaggerAndroid"]
     kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
 //    kapt rootProject.ext.dependencies["glideCompiler"]
+    implementation files("libs/JniLibs-release.aar")
+
 
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")
