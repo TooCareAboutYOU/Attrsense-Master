@@ -1,6 +1,5 @@
 package com.attrsense.android.ui.main.my
 
-import com.attrsense.android.app.AttrSenseApplication
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
@@ -9,7 +8,6 @@ import com.attrsense.android.http.ApiService
 import com.attrsense.android.util.UserManger
 import com.attrsense.database.DatabaseRepository
 import com.attrsense.database.db.dao.UserDao
-import com.attrsense.database.db.entity.UserEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

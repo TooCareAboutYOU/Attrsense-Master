@@ -2,7 +2,7 @@ package com.attrsense.android.app
 
 import android.os.Environment
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.os.EnvironmentCompat
 import com.attrsense.android.baselibrary.base.internal.SkeletonApplication
 import com.bumptech.glide.Glide
 import com.example.snpetest.FileUtils
@@ -57,8 +57,10 @@ class AttrSenseApplication : SkeletonApplication() {
                     FileUtils.getModelFilePath(applicationContext, "engine/decode.dlc")
                 val encode_model_path =
                     FileUtils.getModelFilePath(applicationContext, "engine/encode.dlc")
-                val decode_out_path = externalCacheDir?.absolutePath + File.separator + "anf"
-                val encode_out_path = externalCacheDir?.absolutePath + File.separator + "image"
+                val base_path =
+                    getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath + File.separator
+                val encode_out_path = base_path + "anf" + File.separator
+                val decode_out_path = base_path + "image" + File.separator
                 val so_path = applicationContext.applicationInfo.nativeLibraryDir
 
                 setAdspLibraryPath(so_path)

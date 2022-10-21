@@ -43,7 +43,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         mDataBinding.acEtMobile.setText("18874701235")
 
         mDataBinding.acBtnRequestCode.setOnClickListener {
-            ToastUtils.showShort("验证码发送成功！")
+//            ToastUtils.showShort("验证码发送成功！")
             mDataBinding.acEtCode.setText("111111")
         }
 
@@ -57,10 +57,10 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         mViewModel.loginLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-                    ToastUtils.showShort(it.throwable.toString())
+//                    ToastUtils.showShort(it.throwable.toString())
                 }
                 is ResponseData.onSuccess -> {
-                    ToastUtils.showShort("登录成功!")
+//                    ToastUtils.showShort("登录成功!")
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }

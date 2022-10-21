@@ -30,17 +30,17 @@ class DatabaseModule {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             //在新装app时会调用，调用时机为数据库build()之后，数据库升级时不调用此函数
-            Logger.d("RoomCallBack is onCreated")
+//            Logger.d("RoomCallBack is onCreated")
         }
 
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
-            Logger.d("RoomCallBack is onOpened")
+//            Logger.d("RoomCallBack is onOpened")
         }
 
         override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
             super.onDestructiveMigration(db)
-            Logger.d("RoomCallBack is onDestructiveMigration")
+//            Logger.d("RoomCallBack is onDestructiveMigration")
         }
     }
 

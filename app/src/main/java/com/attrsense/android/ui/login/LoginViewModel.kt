@@ -30,10 +30,10 @@ class LoginViewModel @Inject constructor(
             when (it) {
                 is ResponseData.onSuccess -> {
                     withContext(Dispatchers.IO) {
-                        saveUser(mobile, it.value.data?.token)
+                        saveUser(mobile, it.value?.data?.token)
                     }
                     loginLivedata.value = it.apply {
-                        userManger.setToken(value.data?.token, value.data?.refresh_token)
+                        userManger.setToken(value?.data?.token, value?.data?.refresh_token)
                     }
                 }
                 else -> {

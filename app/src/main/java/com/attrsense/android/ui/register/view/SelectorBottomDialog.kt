@@ -1,4 +1,4 @@
-package com.attrsense.android.view
+package com.attrsense.android.ui.register.view
 
 import android.app.Dialog
 import android.content.Context

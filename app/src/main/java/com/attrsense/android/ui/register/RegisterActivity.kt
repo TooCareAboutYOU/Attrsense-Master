@@ -45,7 +45,7 @@ class RegisterActivity :
         }
 
         mDataBinding.acBtnRequestCode.setOnClickListener {
-            ToastUtils.showShort("验证码发送成功！")
+//            ToastUtils.showShort("验证码发送成功！")
             mDataBinding.acEtCode.setText("111111")
         }
 
@@ -59,10 +59,10 @@ class RegisterActivity :
         mViewModel.registerLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-                    ToastUtils.showShort(it.throwable.toString())
+//                    ToastUtils.showShort(it.throwable.toString())
                 }
                 is ResponseData.onSuccess -> {
-                    ToastUtils.showShort("注册成功!")
+//                    ToastUtils.showShort("注册成功!")
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }

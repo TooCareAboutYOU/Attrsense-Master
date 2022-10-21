@@ -37,7 +37,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
 //            if (AttrSenseApplication.userManger.isLogin()) {
 //                toActivity(FeedbackActivity::class.java)
 //            }else{
-            ToastUtils.showShort("未登录！")
+//            ToastUtils.showShort("未登录！")
             toActivity(LoginActivity::class.java)
 //            }
         }
@@ -61,7 +61,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
         mViewModel.logoutLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-                    ToastUtils.showShort(it.throwable.toString())
+//                    ToastUtils.showShort(it.throwable.toString())
                 }
                 is ResponseData.onSuccess -> {
                     toActivity(LoginActivity::class.java)

@@ -16,33 +16,55 @@ import com.attrsense.database.db.entity.AnfImageEntity
  */
 @Dao
 interface AnfImageDao {
+    /**
+     * 查询
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(vararg anfImageEntity: AnfImageEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addList(anfImageEntity: List<AnfImageEntity>)
+
+
+    /**
+     * 删除
+     */
     @Delete
     suspend fun delete(vararg anfImageEntity: AnfImageEntity)
 
-    @Update
-    suspend fun update(vararg anfImageEntity: AnfImageEntity)
+    @Delete
+    suspend fun deleteList(anfImageEntity: List<AnfImageEntity>)
 
-    @Transaction
-    suspend fun addList(list: List<AnfImageEntity>) {
-        if (list.isNotEmpty()) {
-            list.forEach {
-                add(it)
-            }
-        }
-    }
+    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE anfImage=:anfImage")
+    suspend fun deleteByAnfPath(vararg anfImage: String?): Int
 
-    @Query("SELECT * FROM ANF_IMAGE_TABLE")
-    suspend fun getAll(): List<AnfImageEntity?>
+    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE anfImage=:anfImage")
+    suspend fun deleteByAnfPaths(anfImage: List<String?>)
 
-    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE anfImage=:anfPath")
-    suspend fun queryByOriginal(anfPath: String?): AnfImageEntity?
-
-    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE originalImage=:originalPath")
-    suspend fun queryByAnf(originalPath: String?): AnfImageEntity?
+    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE userToken=:token AND isLocal=:isLocal")
+    suspend fun clearRemote(token: String?, isLocal: Boolean? = false)
 
     @Query("DELETE FROM ANF_IMAGE_TABLE")
     suspend fun clear()
+
+    /**
+     * 更新
+     */
+    @Update
+    suspend fun update(vararg anfImageEntity: AnfImageEntity)
+
+    @Update
+    suspend fun updateList(anfImageEntity: List<AnfImageEntity>)
+
+    /**
+     * 查询
+     */
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE isLocal=:isLocal")
+    suspend fun getAll(isLocal: Boolean? = true): List<AnfImageEntity?>
+
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE anfImage=:anfPath")
+    suspend fun getByAnf(anfPath: String?): AnfImageEntity?
+
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE originalImage=:originalPath")
+    suspend fun getByOriginal(originalPath: String?): AnfImageEntity?
 }

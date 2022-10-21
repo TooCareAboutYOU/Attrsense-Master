@@ -1,21 +1,12 @@
 package com.attrsense.android.ui.register
 
-import android.util.Log
-import androidx.lifecycle.flowWithLifecycle
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.http.ApiService
-import com.attrsense.android.model.LoginBean
-import com.attrsense.database.DatabaseRepository
-import com.attrsense.database.db.dao.UserDao
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody

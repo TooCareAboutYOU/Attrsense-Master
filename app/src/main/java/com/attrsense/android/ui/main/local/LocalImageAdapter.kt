@@ -10,12 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.view.BaseBindingViewHolder
 import com.attrsense.android.databinding.LayoutLocalItemBinding
+import com.attrsense.android.ui.main.OnItemClickListener
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.view.longClicks
 import com.orhanobut.logger.Logger
 
 /**
@@ -25,14 +28,18 @@ import com.orhanobut.logger.Logger
  */
 class LocalImageAdapter constructor(
     private val context: Context,
+    private val listener: OnItemClickListener? = null
 ) : RecyclerView.Adapter<BaseBindingViewHolder>() {
 
     private val mList: MutableList<AnfImageEntity?> = mutableListOf()
 
+
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(list: List<AnfImageEntity?>) {
+    fun setData(list: List<AnfImageEntity?>?) {
         mList.clear()
-        mList.addAll(list)
+        list?.let {
+            mList.addAll(it)
+        }
         notifyDataSetChanged()
         Log.i("printInfo", "LocalImageAdapter::setData: 刷新列表 ${mList.size}")
     }
@@ -49,6 +56,15 @@ class LocalImageAdapter constructor(
     override fun onBindViewHolder(holder: BaseBindingViewHolder, position: Int) {
         val entity = mList[position]
         (holder.binding as LayoutLocalItemBinding).apply {
+
+            acIvImg.clicks().subscribe {
+                listener?.onLocalClickEvent(entity)
+            }
+
+            acIvImg.longClicks().subscribe {
+                listener?.onLongClickEvent(position, entity?.anfImage)
+            }
+
             Glide.with(context).load(entity?.originalImage)
                 .error(R.mipmap.ic_launcher)
                 .listener(object : RequestListener<Drawable> {
@@ -58,7 +74,7 @@ class LocalImageAdapter constructor(
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        Logger.i("local image is load failed!!! $e")
+                        Logger.e("local image is load failed!!! $e")
                         return false
                     }
 

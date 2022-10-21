@@ -16,12 +16,17 @@ data class AnfImageEntity(
     @ColumnInfo(name = "id")
     var id: Int = 0,
 
+    @ColumnInfo(name = "userToken")
+    var token: String? = "",
+
+    //本地使用原图，云端使用https网络图
     @ColumnInfo(name = "originalImage")
     var originalImage: String? = "",
 
     @ColumnInfo(name = "anfImage")
     var anfImage: String? = "",
 
+    //云端anf文件解码后jpg图片
     @ColumnInfo(name = "cache_Image")
     var cacheImage: String? = "",
 

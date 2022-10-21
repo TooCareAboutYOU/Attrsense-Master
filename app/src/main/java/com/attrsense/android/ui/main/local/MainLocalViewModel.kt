@@ -18,31 +18,17 @@ class MainLocalViewModel @Inject constructor(
     private val mainLocalRepository: MainLocalRepository
 ) : BaseViewModel() {
 
-    val addSingleLiveData: MutableLiveData<ResponseData<Boolean>> = MutableLiveData()
-    val addListLiveData: MutableLiveData<ResponseData<Boolean>> = MutableLiveData()
+    val addEntityLiveData: MutableLiveData<ResponseData<Boolean>> = MutableLiveData()
     val getAllLiveData: MutableLiveData<ResponseData<List<AnfImageEntity?>>> = MutableLiveData()
-
-    fun addEntity(entity: AnfImageEntity) =
-        mainLocalRepository.add(entity).collectInLaunch {
-            addSingleLiveData.value = it.also { data ->
-                when (data) {
-                    is ResponseData.onFailed -> {
-                        Log.i("printInfo", "MainLocalViewModel::addEntity: 添加失败！${data.throwable}")
-                    }
-                    is ResponseData.onSuccess -> {
-                        Log.i("printInfo", "MainLocalViewModel::addEntity: 添加成功！${data.value}")
-                    }
-                }
-            }
-        }
-
+    val deleteLiveData: MutableLiveData<Int> = MutableLiveData()
+    val getAnfLivedata: MutableLiveData<ResponseData<AnfImageEntity?>> = MutableLiveData()
 
     fun addEntities(entityList: List<AnfImageEntity>) =
         mainLocalRepository.addEntities(entityList).collectInLaunch {
-            addListLiveData.value = it.also { data ->
+            addEntityLiveData.value = it.also { data ->
                 when (data) {
                     is ResponseData.onFailed -> {
-                        Log.i(
+                        Log.e(
                             "printInfo",
                             "MainLocalViewModel::addEntities: 添加失败！${data.throwable}"
                         )
@@ -54,9 +40,27 @@ class MainLocalViewModel @Inject constructor(
             }
         }
 
+    fun getByAnf(anfPath: String?) =
+        mainLocalRepository.getByAnf(anfPath).collectInLaunch {
+            getAnfLivedata.value = it
+        }
+
     fun getAll() =
         mainLocalRepository.getAll().collectInLaunch {
             getAllLiveData.value = it
+        }
+
+    fun deleteByAnfPath(position: Int, anfImage: String?) =
+        mainLocalRepository.deleteByAnfPath(anfImage).collectInLaunch {
+            when (it) {
+                is ResponseData.onFailed -> {
+                    Log.e("printInfo", "MainLocalViewModel::deleteByAnfPath: ${it.throwable}")
+                }
+                is ResponseData.onSuccess -> {
+                    Log.i("printInfo", "MainLocalViewModel::deleteByAnfPath: ${it.value}")
+                    deleteLiveData.value = position
+                }
+            }
         }
 
 }

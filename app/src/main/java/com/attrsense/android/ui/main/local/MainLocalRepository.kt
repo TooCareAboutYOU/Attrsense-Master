@@ -33,10 +33,22 @@ class MainLocalRepository @Inject constructor(
     }.flowOnIO()
 
 
+    fun getByAnf(anfPath: String?) = flow {
+        emit(ResponseData.onSuccess(databaseRepository.getAnfDao().getByAnf(anfPath)))
+    }.flowOnIO()
+
+
     /**
      * 获取列表中的所有图片
      */
     fun getAll() = flow {
         emit(ResponseData.onSuccess(databaseRepository.getAnfDao().getAll()))
+    }.flowOnIO()
+
+    /**
+     * 删除
+     */
+    fun deleteByAnfPath(anfImage: String?) = flow {
+        emit(ResponseData.onSuccess(databaseRepository.getAnfDao().deleteByAnfPath(anfImage)))
     }.flowOnIO()
 }

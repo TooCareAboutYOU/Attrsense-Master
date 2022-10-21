@@ -1,5 +1,6 @@
 package com.attrsense.android.model
 
+import com.google.gson.Gson
 import kotlinx.serialization.Serializable
 
 /**
@@ -27,5 +28,9 @@ data class ImageInfoBean(
     var height: Int = 0,                  //原始图片的高.
     var thumbnailFileId: String? = "",    //缩略图的文件ID.
     var thumbnailUrl: String? = "",       //缩略图的URL.
-
-)
+    var cacheImage: String? = ""//当本地下载anf图片后
+) {
+    override fun toString(): String {
+        return Gson().toJson(this)
+    }
+}

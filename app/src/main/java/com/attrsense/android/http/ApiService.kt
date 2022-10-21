@@ -65,7 +65,7 @@ interface ApiService {
      * @param body: page 查询的页号, perPage 每页数目
      */
     @POST("v1/query_files")
-    suspend fun queryUploadFile(
+    suspend fun getUploadFiles(
         @Header("Authorization") token: String?,
         @Body body: MutableMap<String, Any?>
     ): BaseResponse<ImagesBean?>
