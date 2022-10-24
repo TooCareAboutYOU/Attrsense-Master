@@ -4,12 +4,9 @@ import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.http.ApiService
+import com.attrsense.android.api.ApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 /**

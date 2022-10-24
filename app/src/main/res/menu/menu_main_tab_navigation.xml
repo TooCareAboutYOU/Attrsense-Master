@@ -9,8 +9,8 @@
         android:id="@+id/item_remote"
         android:icon="@drawable/icon_main_bottom_tab_remote"
         android:title="云端" />
-    <!--    <item-->
-    <!--        android:id="@+id/item_my"-->
-    <!--        android:icon="@drawable/icon_main_bottom_tab_user"-->
-    <!--        android:title="我的" />-->
+    <item
+        android:id="@+id/item_my"
+        android:icon="@drawable/icon_main_bottom_tab_user"
+        android:title="我的" />
 </menu>

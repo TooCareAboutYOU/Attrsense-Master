@@ -81,7 +81,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/color_4A90E2"
             android:gravity="center"
-            android:text="联系我了解更多"
+            android:text="联系我们了解更多"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"

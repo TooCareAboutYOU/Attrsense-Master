@@ -44,24 +44,18 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
                 R.id.item_remote -> {
                     selectedItem(1)
                 }
-//                R.id.item_my -> {
-//                    selectedItem(2)
-//                }
+                R.id.item_my -> {
+                    selectedItem(2)
+                }
                 else -> {}
             }
             false
         }
 
-        mDataBinding.viewpager2.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                mDataBinding.tabBottomNavigation.menu.getItem(position).isChecked = true
-            }
-        })
+        mDataBinding.viewpager2.registerOnPageChangeCallback(viewPager2PageChangeCallback)
 
         val fragmentList =
-            arrayListOf(MainLocalFragment(), MainRemoteFragment()) //, MainMyFragment()
+            arrayListOf(MainLocalFragment(), MainRemoteFragment(), MainMyFragment())
 
         mDataBinding.viewpager2.adapter = FragmentAdapter(this, fragmentList)
     }
@@ -69,6 +63,19 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
     private fun selectedItem(position: Int) {
         mDataBinding.viewpager2.currentItem = position
         mDataBinding.tabBottomNavigation.menu.getItem(position).isChecked = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mDataBinding.viewpager2.unregisterOnPageChangeCallback(viewPager2PageChangeCallback)
+    }
+
+    private val viewPager2PageChangeCallback = object :
+        ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            mDataBinding.tabBottomNavigation.menu.getItem(position).isChecked = true
+        }
     }
 
     //设置状态栏/导航栏样式

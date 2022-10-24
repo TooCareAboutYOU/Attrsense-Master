@@ -6,7 +6,7 @@ import com.attrsense.android.databinding.ActivityAboutUsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- *
+ * 关于我们
  */
 @AndroidEntryPoint
 class AboutUsActivity :
@@ -18,5 +18,9 @@ class AboutUsActivity :
 
     override fun initView() {
         super.initView()
+
+        mDataBinding.acIvBack.setOnClickListener {
+            finish()
+        }
     }
 }

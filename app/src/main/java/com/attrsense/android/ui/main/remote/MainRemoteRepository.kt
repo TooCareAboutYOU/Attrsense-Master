@@ -2,7 +2,7 @@ package com.attrsense.android.ui.main.remote
 
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.http.ApiService
+import com.attrsense.android.api.ApiService
 import com.attrsense.android.util.UserManger
 import com.attrsense.database.DatabaseRepository
 import com.attrsense.database.db.entity.AnfImageEntity

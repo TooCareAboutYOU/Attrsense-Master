@@ -3,6 +3,7 @@ package com.attrsense.android.ui.main.my
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.attrsense.android.R
 import com.attrsense.android.app.AttrSenseApplication
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
@@ -61,7 +62,8 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
         mViewModel.logoutLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-//                    ToastUtils.showShort(it.throwable.toString())
+                    ToastUtils.showShort("退出异常！")
+                    Log.e("printInfo", "MainMyFragment::jumpActivity: ${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
                     toActivity(LoginActivity::class.java)

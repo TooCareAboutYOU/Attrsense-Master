@@ -1,7 +1,7 @@
 package com.attrsense.android.ui.detail
 
 import com.attrsense.android.base.BaseRepository
-import com.attrsense.android.http.ApiService
+import com.attrsense.android.api.ApiService
 import javax.inject.Inject
 
 /**

@@ -5,6 +5,9 @@ import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMAct
 import com.attrsense.android.databinding.ActivityContactUsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 联系我们
+ */
 @AndroidEntryPoint
 class ContactUsActivity :
     BaseDataBindingVMActivity<ActivityContactUsBinding, ContactUsViewModel>() {
@@ -14,6 +17,10 @@ class ContactUsActivity :
 
     override fun initView() {
         super.initView()
+
+        mDataBinding.acIvBack.setOnClickListener {
+            finish()
+        }
 
     }
 

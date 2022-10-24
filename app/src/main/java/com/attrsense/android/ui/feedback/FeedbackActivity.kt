@@ -5,6 +5,9 @@ import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMAct
 import com.attrsense.android.databinding.ActivityFeedbackBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 意见反馈
+ */
 @AndroidEntryPoint
 class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, FeedbackViewModel>() {
 

@@ -3,7 +3,7 @@ package com.attrsense.android.ui.login
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.http.ApiService
+import com.attrsense.android.api.ApiService
 import com.attrsense.android.model.LoginBean
 import com.attrsense.database.DatabaseRepository
 import com.attrsense.database.db.dao.UserDao

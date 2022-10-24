@@ -16,5 +16,6 @@
     <color name="color_999999">#999999</color>
     <color name="color_4A90E2">#4A90E2</color>
     <color name="translucent">#50000000</color>
+    <color name="default_gray">#EBEBEB</color>
 
 </resources>

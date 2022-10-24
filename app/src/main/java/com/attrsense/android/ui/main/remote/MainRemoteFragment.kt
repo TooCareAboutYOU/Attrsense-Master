@@ -123,7 +123,8 @@ class MainRemoteFragment :
     private fun reloadAdapter(it: ResponseData<BaseResponse<ImagesBean?>>) {
         when (it) {
             is ResponseData.onFailed -> {
-//                ToastUtils.showShort(it.throwable.toString())
+                ToastUtils.showShort("解压失败！")
+                Log.e("printInfo", "MainRemoteFragment::reloadAdapter: ${it.throwable}")
             }
             is ResponseData.onSuccess -> {
                 it.value?.data?.images?.apply {
@@ -137,7 +138,6 @@ class MainRemoteFragment :
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RxAppCompatActivity.RESULT_OK && data != null) {
                 if (requestCode == SelectorBottomDialog.CAMERA_REQUEST_CODE) {

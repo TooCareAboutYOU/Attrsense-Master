@@ -43,7 +43,6 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         mDataBinding.acEtMobile.setText("18874701235")
 
         mDataBinding.acBtnRequestCode.setOnClickListener {
-//            ToastUtils.showShort("验证码发送成功！")
             mDataBinding.acEtCode.setText("111111")
         }
 

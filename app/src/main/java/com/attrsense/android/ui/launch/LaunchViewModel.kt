@@ -3,7 +3,7 @@ package com.attrsense.android.ui.launch
 import androidx.lifecycle.*
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.baselibrary.test.Event
-import com.attrsense.android.http.ApiService
+import com.attrsense.android.api.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
