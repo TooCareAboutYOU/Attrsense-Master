@@ -29,10 +29,6 @@
                 tools:replace="android:name,android:resource"
                 android:resource="@xml/camera_temp_file_path" />
         </provider>
-
-        <service
-            android:name=".service.AppInitIntentService"
-            android:exported="false" />
     </application>
 
 </manifest>

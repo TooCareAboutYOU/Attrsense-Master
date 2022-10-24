@@ -6,6 +6,7 @@ import com.attrsense.android.config.AppConfig
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.test.Event
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.android.model.ImagesBean
 import com.attrsense.android.model.LoginBean
@@ -21,8 +22,13 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: MainRepository,
-    private val mmkv: MMKVUtils
+    private val mmkv: MMKVUtils,
+    private val event: Event
 ) : BaseViewModel() {
+
+    init {
+        event.load()
+    }
 
 //    /**
 //     * 登录

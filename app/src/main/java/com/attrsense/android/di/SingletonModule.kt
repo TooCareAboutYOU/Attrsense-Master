@@ -32,10 +32,10 @@ class SingletonModule {
         return UserManger(mmkvUtils)
     }
 
-    @Singleton
-    @Provides
-    fun provideJNI(): JNI {
-        return JNI()
-    }
+//    @Singleton
+//    @Provides
+//    fun provideJNI(): JNI {
+//        return JNI()
+//    }
 
 }

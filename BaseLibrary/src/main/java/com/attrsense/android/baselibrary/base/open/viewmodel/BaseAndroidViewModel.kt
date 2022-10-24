@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
  * date : 2022/10/12 10:17
  * mark : custom something
  */
-open class BaseAndroidViewModel : AndroidViewModel(SkeletonApplication.instance()) {
+open class BaseAndroidViewModel : AndroidViewModel(SkeletonApplication.getInstance()) {
 
     protected inline fun <T> Flow<T>.collectInLaunch(crossinline action: suspend (value: T) -> Unit) =
         viewModelScope.launch {

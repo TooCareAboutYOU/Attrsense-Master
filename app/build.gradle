@@ -11,6 +11,14 @@ kapt {
     correctErrorTypes = true
 }
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\Android_project\\attr\\Attrsense-Master\\attrsense.jks')
+            storePassword 'attrsense'
+            keyAlias 'attrsense'
+            keyPassword 'attrsense'
+        }
+    }
     namespace 'com.attrsense.android'
     compileSdk rootProject.ext.android["compileSdkVersion"]
 
@@ -28,6 +36,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -66,5 +80,7 @@ dependencies {
 
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")
+
+    implementation 'com.byc:ImageWatcher:1.1.0'
 }
 

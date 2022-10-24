@@ -6,12 +6,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/acIv_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:background="@mipmap/ic_launcher"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitCenter" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/acTv_info"

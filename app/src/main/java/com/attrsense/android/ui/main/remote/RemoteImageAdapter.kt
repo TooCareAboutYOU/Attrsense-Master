@@ -38,7 +38,6 @@ class RemoteImageAdapter constructor(
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(list: List<ImageInfoBean?>?, isClear: Boolean? = false) {
-        Log.i("printInfo", "LocalImageAdapter::setData: 刷新列表before_ ${mList.size}")
         list?.let {
             isClear?.let { state ->
                 if (state) {
@@ -47,7 +46,6 @@ class RemoteImageAdapter constructor(
             }
             mList.addAll(it)
             notifyDataSetChanged()
-            Log.i("printInfo", "LocalImageAdapter::setData: 刷新列表after_ ${mList.size}")
         }
     }
 

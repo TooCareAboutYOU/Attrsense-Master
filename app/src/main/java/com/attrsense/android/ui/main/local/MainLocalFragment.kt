@@ -34,6 +34,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.snpetest.JNI
+import com.example.snpetest.JniInterface
 import com.jakewharton.rxbinding4.view.clicks
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,8 +51,7 @@ import javax.inject.Inject
 class MainLocalFragment :
     BaseDataBindingVMFragment<FragmentMainLocalBinding, MainLocalViewModel>(), OnItemClickListener {
 
-    @Inject
-    lateinit var jni: JNI
+
 
     private lateinit var loadingView: ProgressDialog
     private lateinit var loading2View: ProgressDialog
@@ -104,20 +104,6 @@ class MainLocalFragment :
                 Manifest.permission.CAMERA
             )
         ).subscribe {
-            val base_path =
-                requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
-
-            val decodeFile = File(base_path, "anf")
-
-            if (!decodeFile.exists()) {
-                decodeFile.mkdirs()
-            }
-
-            val encodeFile = File(base_path, "image")
-            if (!encodeFile.exists()) {
-                encodeFile.mkdirs()
-            }
-
             try {
                 SelectorBottomDialog.show(this)
             } catch (e: IllegalStateException) {
@@ -171,14 +157,14 @@ class MainLocalFragment :
             lifecycleScope.launch(Dispatchers.IO) {
                 if (requestCode == SelectorBottomDialog.CAMERA_REQUEST_CODE) {
                     val path = data.getStringExtra("result") // 图片地址
-                    val anf_path = jni.encoderCommit(path)
+                    val anf_path = JniInterface.encoderCommit(path)
                     if (anf_path.isNotEmpty()) {
                         val entity = AnfImageEntity(originalImage = path, anfImage = anf_path)
                         mViewModel.addEntities(arrayListOf(entity))
                     }
                 } else {
                     val paths = data.getStringArrayListExtra("result") as ArrayList // 图片集合地址
-                    val anfPaths = jni.encoderCommitList(paths.toTypedArray())
+                    val anfPaths = JniInterface.encoderCommitList(paths)
                     if (anfPaths.isNotEmpty()) {
                         localList.clear()
                         anfPaths.forEachIndexed { index, path ->
@@ -210,7 +196,7 @@ class MainLocalFragment :
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) {
                     val path =
-                        jni.decoderCommit(it.anfImage) //("/storage/emulated/0/Android/data/com.attrsense.android/files/Pictures/anf/hahaha-1.anf")
+                        JniInterface.decoderCommit(it.anfImage)
                     it.cacheImage = path
                     mViewModel.addEntities(arrayListOf(it))
                     path

@@ -6,10 +6,12 @@ import android.os.Looper
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.attrsense.android.baselibrary.BuildConfig
+import com.bumptech.glide.Glide
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.FormatStrategy
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
+import com.yuyh.library.imgsel.ISNav
 
 /**
  * author : zhangshuai@attrsense.com
@@ -20,7 +22,7 @@ open class SkeletonApplication : Application() {
 
     companion object {
         private lateinit var instance: Application
-        fun instance() = instance
+        fun getInstance() = instance
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -37,6 +39,11 @@ open class SkeletonApplication : Application() {
         Looper.myQueue().addIdleHandler {
             try {
                 initLogger()
+
+                ISNav.getInstance().init { context, path, imageView ->
+                    Glide.with(context).load(path).into(imageView)
+                }
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -39,6 +39,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.snpetest.JNI
+import com.example.snpetest.JniInterface
 import com.jakewharton.rxbinding4.view.clicks
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,9 +54,6 @@ import javax.inject.Inject
 class MainRemoteFragment :
     BaseDataBindingVMFragment<FragmentMainRemoteBinding, MainRemoteViewModel>(),
     OnItemClickListener {
-
-    @Inject
-    lateinit var jni: JNI
 
     private lateinit var loadingView: ProgressDialog
     private lateinit var loading2View: ProgressDialog
@@ -98,20 +96,6 @@ class MainRemoteFragment :
                 Manifest.permission.CAMERA
             )
         ).subscribe {
-            val base_path =
-                requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
-
-            val decodeFile = File(base_path, "anf")
-
-            if (!decodeFile.exists()) {
-                decodeFile.mkdirs()
-            }
-
-            val encodeFile = File(base_path, "image")
-            if (!encodeFile.exists()) {
-                encodeFile.mkdirs()
-            }
-
             try {
                 SelectorBottomDialog.show(this)
             } catch (e: IllegalStateException) {
@@ -153,32 +137,27 @@ class MainRemoteFragment :
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loadingView.show()
+//
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == RxAppCompatActivity.RESULT_OK && data != null) {
-            lifecycleScope.launch(Dispatchers.IO) {
                 if (requestCode == SelectorBottomDialog.CAMERA_REQUEST_CODE) {
-                    // 图片地址
                     data.getStringExtra("result")?.apply {
-                        Log.i("printInfo", "MainRemoteFragment::onActivityResult: $this")
                         upload(arrayListOf(this))
                     }
                 } else {
                     (data.getStringArrayListExtra("result") as ArrayList).let {
-                        Log.i("printInfo", "MainRemoteFragment::onActivityResult: ${it.size}")
                         if (it.isNotEmpty()) {
                             upload(it)
                         }
                     }
                 }
-            }
         } else {
             loadingView.dismiss()
         }
     }
 
     private fun upload(list: List<String>) {
+        loadingView.show()
         mViewModel.uploadFile("1", "2", list)
     }
 
@@ -196,6 +175,8 @@ class MainRemoteFragment :
     var downloadId: Long = 0
 
     private fun download(anfPath: String) {
+
+        loading2View.show()
         downManager =
             requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
@@ -213,7 +194,7 @@ class MainRemoteFragment :
         request.setDestinationInExternalFilesDir(
             requireActivity(),
             "Pictures/anf",
-            "hahaha.anf"
+            "${anfPath.substringAfterLast("/")}"
         )
 
         downloadId = downManager.enqueue(request)
@@ -231,6 +212,11 @@ class MainRemoteFragment :
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        requireActivity().unregisterReceiver(receiver)
+    }
+
     //检查下载状态
     @SuppressLint("Range")
     private fun checkStatus() {
@@ -240,10 +226,11 @@ class MainRemoteFragment :
         val cursor: Cursor = downManager.query(query)
         if (cursor.moveToFirst()) {
             val status: Int = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-
             when (status) {
                 DownloadManager.STATUS_PAUSED -> {}
-                DownloadManager.STATUS_PENDING -> {}
+                DownloadManager.STATUS_PENDING -> {
+
+                }
                 DownloadManager.STATUS_RUNNING -> {}
                 DownloadManager.STATUS_FAILED -> {
                     cursor.close()
@@ -254,25 +241,29 @@ class MainRemoteFragment :
                     val remoteAnfUri =
                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_URI))
                     Log.i("printInfo", "MainRemoteFragment::checkStatus:下载地址： $remoteAnfUri")
-                    val localAnfUri =
+                    var localAnfUri =
                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
                     Log.i("printInfo", "MainRemoteFragment::checkStatus:存储地址： $localAnfUri")
                     cursor.close()
 
-//                    loading2View.show()
-//
-//                    lifecycleScope.launch {
-//                        val imagePath=withContext(Dispatchers.IO) {
-//                    val imagePath=jni.decoderCommit(localAnfUri)
-//                        }
-//                        Log.i("printInfo", "MainRemoteFragment::checkStatus:存储地址: $imagePath")
-//                        showDialog(localAnfUri,imagePath)
-//                    }
-                    try {
-                        val imagePath = jni.decoderCommit(localAnfUri)
-                        Log.i("printInfo", "MainRemoteFragment::checkStatus:存储地址: $imagePath")
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+
+                    lifecycleScope.launch {
+                        val imagePath = withContext(Dispatchers.IO) {
+                            val TAG_PATH = "file://"
+                            if (localAnfUri.contains(TAG_PATH)) {
+                                localAnfUri =
+                                    localAnfUri.substring(TAG_PATH.length, localAnfUri.length)
+                                Log.i(
+                                    "printInfo",
+                                    "MainRemoteFragment::checkStatus地址: $localAnfUri"
+                                )
+                                JniInterface.decoderCommit(localAnfUri)
+                            } else {
+                                JniInterface.decoderCommit(localAnfUri)
+                            }
+                        }
+                        Log.i("printInfo", "MainRemoteFragment::checkStatus: $imagePath")
+                        showDialog(localAnfUri, imagePath)
                     }
                 }
             }

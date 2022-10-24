@@ -41,7 +41,6 @@ class LocalImageAdapter constructor(
             mList.addAll(it)
         }
         notifyDataSetChanged()
-        Log.i("printInfo", "LocalImageAdapter::setData: 刷新列表 ${mList.size}")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder =
