@@ -89,15 +89,7 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
                     t3.isNotEmpty() &&
                     t4.isNotEmpty()
         }.subscribe {
-            Log.i("printInfo", "ApplyActivity::textListener: $it")
-            mDataBinding.acBtnCommit.isClickable = it
-            mDataBinding.acBtnCommit.setBackgroundColor(
-                if (it) {
-                    ContextCompat.getColor(this, R.color.color_4A90E2)
-                } else {
-                    ContextCompat.getColor(this, R.color.color_999999)
-                }
-            )
+            mDataBinding.acBtnCommit.isEnabled = it
         }
 
     }

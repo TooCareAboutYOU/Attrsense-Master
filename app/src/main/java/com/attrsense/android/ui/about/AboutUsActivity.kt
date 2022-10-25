@@ -18,9 +18,6 @@ class AboutUsActivity :
 
     override fun initView() {
         super.initView()
-
-        mDataBinding.acIvBack.setOnClickListener {
-            finish()
-        }
+        mDataBinding.acIvBack.setOnClickListener { finish() }
     }
 }

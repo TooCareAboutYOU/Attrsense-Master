@@ -19,7 +19,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/default_gray</item>
 
     </style>
 
@@ -62,11 +62,11 @@
     <style name="CommitButtonTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:clickable">false</item>
-        <item name="android:background">@color/default_gray</item>
+        <item name="android:background">@drawable/selector_commit_button_bg</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">18sp</item>
         <item name="android:text">@string/text_commit</item>
+        <item name="android:enabled">false</item>
     </style>
 
 </resources>

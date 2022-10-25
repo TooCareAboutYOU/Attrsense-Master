@@ -90,6 +90,7 @@ interface ApiService {
     @POST("v1/feedback/experience")
     @Multipart
     suspend fun feedback(
+        @Header("Authorization") token: String?,
         @Part("feedback") feedback: RequestBody,
         @Part additional: List<MultipartBody.Part>?
     ): BaseResponse<EmptyBean?>

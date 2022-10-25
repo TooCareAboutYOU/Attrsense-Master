@@ -55,7 +55,7 @@ dependencies {
     testApi rootProject.ext.dependencies["junit"]
     androidTestApi rootProject.ext.dependencies["jUnitExt"]
     androidTestApi rootProject.ext.dependencies["espressoCore"]
-    testImplementation rootProject.ext.dependencies["mockk"]
+//    testImplementation rootProject.ext.dependencies["mockk"]
     debugImplementation rootProject.ext.dependencies["leakcanaryAndroid"]
     implementation rootProject.ext.dependencies["okHttpProfiler"]
 //    debugImplementation rootProject.ext.dependencies["debugDB"] //debug 数据库

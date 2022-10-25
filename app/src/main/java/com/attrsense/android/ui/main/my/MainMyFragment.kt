@@ -1,11 +1,11 @@
 package com.attrsense.android.ui.main.my
 
-import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import com.attrsense.android.R
-import com.attrsense.android.app.AttrSenseApplication
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.databinding.FragmentMainMyBinding
@@ -14,11 +14,16 @@ import com.attrsense.android.ui.apply.ApplyActivity
 import com.attrsense.android.ui.contact.ContactUsActivity
 import com.attrsense.android.ui.feedback.FeedbackActivity
 import com.attrsense.android.ui.login.LoginActivity
+import com.attrsense.android.util.UserManger
 import com.blankj.utilcode.util.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyViewModel>() {
+
+    @Inject
+    lateinit var userManger: UserManger
 
     override fun setLayoutResId(): Int = R.layout.fragment_main_my
 
@@ -31,20 +36,42 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         jumpActivity()
+
+        setLogoutButton()
+
+        mViewModel.logoutLivedata.observe(this) {
+            when (it) {
+                is ResponseData.onFailed -> {
+                    ToastUtils.showShort("退出异常！")
+                    Log.e("printInfo", "MainMyFragment::jumpActivity: ${it.throwable}")
+                }
+                is ResponseData.onSuccess -> {
+                    setLogoutButton()
+                    toActivity(LoginActivity::class.java)
+                    activity?.finish()
+                }
+            }
+        }
     }
 
     private fun jumpActivity() {
         mDataBinding.acTvGoFeedBack.setOnClickListener {
-//            if (AttrSenseApplication.userManger.isLogin()) {
-//                toActivity(FeedbackActivity::class.java)
-//            }else{
-//            ToastUtils.showShort("未登录！")
-            toActivity(LoginActivity::class.java)
+//            if (userManger.isLogin()) {
+                toActivity(FeedbackActivity::class.java)
+//            } else {
+//                ToastUtils.showShort("未登录！")
+//                toActivity(LoginActivity::class.java)
 //            }
+//            startActivity(Intent(requireActivity(),LoginActivity::class.java),ActivityOptions.makeSceneTransitionAnimation(requireActivity()).toBundle())
         }
 
         mDataBinding.acTvApply.setOnClickListener {
-            toActivity(ApplyActivity::class.java)
+            if (userManger.isLogin()) {
+                toActivity(ApplyActivity::class.java)
+            } else {
+                ToastUtils.showShort("未登录！")
+                toActivity(LoginActivity::class.java)
+            }
         }
 
         mDataBinding.acTvContact.setOnClickListener {
@@ -58,19 +85,11 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
         mDataBinding.acTvLogout.setOnClickListener {
             mViewModel.logout()
         }
+    }
 
-        mViewModel.logoutLivedata.observe(this) {
-            when (it) {
-                is ResponseData.onFailed -> {
-                    ToastUtils.showShort("退出异常！")
-                    Log.e("printInfo", "MainMyFragment::jumpActivity: ${it.throwable}")
-                }
-                is ResponseData.onSuccess -> {
-                    toActivity(LoginActivity::class.java)
-                    activity?.finish()
-                }
-            }
-        }
+    private fun setLogoutButton() {
+        mDataBinding.acTvLogout.visibility = if (userManger.isLogin()) View.VISIBLE else View.GONE
+
     }
 
     private fun toActivity(clz: Class<*>) {

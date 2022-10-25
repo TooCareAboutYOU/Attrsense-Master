@@ -13,7 +13,7 @@ kapt {
 android {
     signingConfigs {
         release {
-            storeFile file('..\\..\\attrsense.jks')
+            storeFile file('../../attrsense.jks')
             storePassword 'attrsense'
             keyAlias 'attrsense'
             keyPassword 'attrsense'
@@ -74,7 +74,7 @@ dependencies {
 
     implementation rootProject.ext.dependencies["hiltDaggerAndroid"]
     kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
-//    kapt rootProject.ext.dependencies["glideCompiler"]
+    kapt rootProject.ext.dependencies["glideCompiler"]
     implementation files("libs/JniLibs-release.aar")
 
 

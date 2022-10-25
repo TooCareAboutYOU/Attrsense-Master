@@ -68,6 +68,7 @@ ext {
             mmkvVersion                         : "1.2.14",
             photoViewVersion                    : "2.3.0",
             imageSelectorVersion                : "3.0",
+            easyAdapterVersion                  : "1.3.0",
             glideVersion                        : "4.11.0",
     ]
 
@@ -76,7 +77,7 @@ ext {
             "jUnitExt"                         : "androidx.test.ext:junit:${version["junitExtVersion"]}",
             "espressoCore"                     : "androidx.test.espresso:espresso-core:${version["espressoVersion"]}",
 
-            //https://github.com/mockk/mockk
+            //单元测试库： https://github.com/mockk/mockk
             "mockk"                            : "io.mockk:mockk:${version["mockkVersion"]}",
 
             //Debug数据库 https://github.com/amitshekhariitbhu/Android-Debug-Database
@@ -84,6 +85,7 @@ ext {
 
             //内存检测
             "leakcanaryAndroid"                : "com.squareup.leakcanary:leakcanary-android:${version["leakcanaryAndroidVersion"]}",
+            //监听okhttp请求 https://github.com/gektor650/OkHttpProfiler-AndroidStudio-Plugin
             "okHttpProfiler"                   : "com.localebro:okhttpprofiler:${version["okHttpProfiler"]}",
 
             "legacySupportV4"                  : "androidx.legacy:legacy-support-v4:${version["legacySupportVersion"]}",
@@ -127,7 +129,6 @@ ext {
             "roomKtx"                          : "androidx.room:room-ktx:${version["roomVersion"]}",
             "roomRuntime"                      : "androidx.room:room-runtime:${version["roomVersion"]}",
             "roomCompiler"                     : "androidx.room:room-compiler:${version["roomVersion"]}",
-
             "roomPaging"                       : "androidx.room:room-paging:${version["roomVersion"]}",
 
             //https://developer.android.google.cn/codelabs/android-hilt?hl:zh_cn#0
@@ -280,6 +281,7 @@ ext {
 
             //图片选择器 https://github.com/smuyyh/ImageSelector
             "imageSelector"                    : "com.github.smuyyh:ImageSelector:${version["imageSelectorVersion"]}",
+            "easyAdapter"                      : "com.github.smuyyh:EasyAdapter:${version["easyAdapterVersion"]}",
 
             //图片展示 https://muyangmin.github.io/glide-docs-cn/doc/download-setup.html
             "glide"                            : "com.github.bumptech.glide:glide:${version["glideVersion"]}",

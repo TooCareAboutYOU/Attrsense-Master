@@ -2,7 +2,12 @@ package com.attrsense.android.ui.login
 
 import android.content.Intent
 import android.text.TextUtils
+import android.transition.Explode
+import android.transition.Fade
+import android.transition.Slide
+import android.view.Window
 import androidx.core.content.ContextCompat
+import androidx.transition.Transition
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
@@ -10,6 +15,7 @@ import com.attrsense.android.databinding.ActivityLoginBinding
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.register.RegisterActivity
 import com.blankj.utilcode.util.ToastUtils
+import com.google.android.material.transition.platform.*
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -20,6 +26,21 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
     override fun setLayoutResId(): Int = R.layout.activity_login
 
     override fun setViewModel(): Class<LoginViewModel> = LoginViewModel::class.java
+
+    override fun initViewBefore() {
+        super.initViewBefore()
+        window.apply {
+            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+//            enterTransition = Explode()
+//            enterTransition = Slide()
+//            enterTransition = Fade()
+//            enterTransition = Hold()
+//            enterTransition = MaterialElevationScale(true)
+//            enterTransition = MaterialFade()
+//            enterTransition = MaterialFadeThrough()
+//            enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, true)
+        }
+    }
 
     override fun initView() {
         super.initView()
@@ -48,8 +69,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
 
         mDataBinding.acBtnLogin.setOnClickListener {
             mViewModel.login(
-                mDataBinding.acEtMobile.text.toString(),
-                mDataBinding.acEtCode.text.toString()
+                mDataBinding.acEtMobile.text.toString(), mDataBinding.acEtCode.text.toString()
             )
         }
 

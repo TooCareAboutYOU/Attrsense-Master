@@ -38,21 +38,26 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
     private var mActivity: FragmentActivity? = null
     private var mFragment: Fragment? = null
     private var mCallback: onClickEventListener? = null
+    private var maxCount: Int? = 9
 
     constructor(
         fragment: Fragment? = null,
+        maxCount: Int? = 9,
         callback: onClickEventListener? = null
     ) : this() {
         this.mFragment = fragment
+        this.maxCount = maxCount
         this.mCallback = callback
     }
 
     constructor(
         activity: FragmentActivity? = null,
+        maxCount: Int? = 9,
         callback: onClickEventListener? = null
     ) : this() {
         this.mActivity = activity
         this.mCallback = callback
+        this.maxCount = maxCount
     }
 
     /**
@@ -73,9 +78,10 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
 
         fun show(
             fragment: Fragment,
+            maxCount: Int? = 9,
             callback: onClickEventListener? = null
         ) {
-            SelectorBottomDialog(fragment, callback).show(
+            SelectorBottomDialog(fragment, maxCount, callback).show(
                 fragment.parentFragmentManager,//.supportFragmentManager,
                 SelectorBottomDialog::class.java.simpleName
             )
@@ -83,9 +89,10 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
 
         fun show(
             activity: FragmentActivity,
+            maxCount: Int? = 9,
             callback: onClickEventListener? = null
         ) {
-            SelectorBottomDialog(activity, callback).show(
+            SelectorBottomDialog(activity, maxCount, callback).show(
                 activity.supportFragmentManager,
                 SelectorBottomDialog::class.java.simpleName
             )
@@ -130,7 +137,7 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
                 // 第一个是否显示相机，默认true
                 .needCamera(false)
                 // 最大选择图片数量，默认9
-                .maxNum(9)
+                .maxNum(this.maxCount!!)
                 .build()
             if (mActivity != null) {
                 ISNav.getInstance().toListActivity(mActivity, config, SELECTOR_REQUEST_CODE)

@@ -5,7 +5,6 @@ plugins {
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
     id 'kotlin-android'
-    //https://www.jianshu.com/p/a69694b5be7e
     id 'kotlin-parcelize'
     id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
@@ -22,12 +21,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
-        kapt {
-//            includeCompileClasspath = false
-            arguments {
-                arg("AROUTER_MODULE_NAME", project.getName())
-            }
-        }
+//        kapt {
+////            includeCompileClasspath = false
+//            arguments {
+//                arg("AROUTER_MODULE_NAME", project.getName())
+//            }
+//        }
     }
 
     buildTypes {

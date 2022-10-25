@@ -1,25 +1,28 @@
 <resources>
     <string name="app_name">双深科技</string>
 
+    <!--    意见反馈-->
+    <string name="tab_main_user_feedback_title">意见反馈</string>
+    <string name="hint_tab_main_user_feedback_description">请输入反馈信息...</string>
+    <string name="tab_main_user_feedback_count">已输入%d/300</string>
+    <string name="hint_tab_main_user_feedback_contact">手机号/邮箱/QQ(选填)</string>
+    <string name="tab_main_user_feedback_sub_title">上传图片(最多6张)</string>
+
+
     <!--    申请SDK内测页面-->
     <string name="tab_main_user_apply_title">申请SDK内测</string>
     <string name="tab_main_user_apply_mark">留下您的联系方式，我们将尽快与您联系！</string>
     <string name="tab_main_user_apply_contact">联 系 人 <font color='#FF0000'>*</font> ：</string>
     <string name="hint_tab_main_user_apply_contact">请输入姓名(必填)</string>
-
     <string name="tab_main_user_apply_phone">联系电话<font color='#FF0000'>*</font>：</string>
     <string name="hint_tab_main_user_apply_phone">请输入手机号码(必填)</string>
-
     <string name="tab_main_user_apply_company">您的公司<font color='#ff0000'>*</font>：</string>
     <string name="hint_tab_main_user_apply_company">请输入公司名称(必填)</string>
-
     <string name="tab_main_user_apply_email">电子邮件<font color='#ff0000'>*</font>：</string>
     <string name="hint_tab_main_user_apply_email">请输入邮件地址(必填)</string>
-
     <string name="tab_main_user_apply_description">需求简述：</string>
     <string name="hint_tab_main_user_apply_description">请留下您的宝贵需求...</string>
 
-    <string name="text_commit">提 交</string>
 
     <!--    联系我们页面-->
     <string name="tab_main_user_contact_title">联系我们了解更多</string>
@@ -31,5 +34,7 @@
 
     <!--    关于我们页面-->
     <string name="tab_main_user_about_us_title">关于我们</string>
+
+    <string name="text_commit">提 交</string>
 
 </resources>
