@@ -1,5 +1,6 @@
 package com.attrsense.android.ui.about
 
+import android.os.Bundle
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.databinding.ActivityAboutUsBinding
@@ -16,8 +17,8 @@ class AboutUsActivity :
 
     override fun setViewModel(): Class<AboutUsViewModel> = AboutUsViewModel::class.java
 
-    override fun initView() {
-        super.initView()
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
         mDataBinding.acIvBack.setOnClickListener { finish() }
     }
 }

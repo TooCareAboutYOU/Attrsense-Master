@@ -1,5 +1,6 @@
 package com.attrsense.android.ui.contact
 
+import android.os.Bundle
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.databinding.ActivityContactUsBinding
@@ -15,8 +16,8 @@ class ContactUsActivity :
 
     override fun setViewModel(): Class<ContactUsViewModel> = ContactUsViewModel::class.java
 
-    override fun initView() {
-        super.initView()
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
 
         mDataBinding.acIvBack.setOnClickListener {
             finish()

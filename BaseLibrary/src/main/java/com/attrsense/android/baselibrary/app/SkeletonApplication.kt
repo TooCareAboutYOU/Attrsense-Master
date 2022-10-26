@@ -1,4 +1,4 @@
-package com.attrsense.android.baselibrary.base.internal
+package com.attrsense.android.baselibrary.app
 
 import android.app.Application
 import android.content.Context
@@ -6,6 +6,8 @@ import android.os.Looper
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.attrsense.android.baselibrary.BuildConfig
+import com.attrsense.android.baselibrary.base.internal.SkeletonApplicationObserver
+import com.attrsense.android.baselibrary.crash.CrashHandler
 import com.bumptech.glide.Glide
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.FormatStrategy
@@ -33,6 +35,7 @@ open class SkeletonApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        CrashHandler.init(this)
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(SkeletonApplicationObserver())
 

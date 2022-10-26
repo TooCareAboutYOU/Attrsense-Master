@@ -3,7 +3,7 @@ package com.attrsense.android.ui.main.remote
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.api.ApiService
-import com.attrsense.android.util.UserManger
+import com.attrsense.android.util.UserDataManager
 import com.attrsense.database.DatabaseRepository
 import com.attrsense.database.db.entity.AnfImageEntity
 import kotlinx.coroutines.flow.flow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class MainRemoteRepository @Inject constructor(
     private val apiService: ApiService,
     private val databaseRepository: DatabaseRepository,
-    val userManger: UserManger
+    val userManger: UserDataManager
 ) :
     BaseRepository() {
 

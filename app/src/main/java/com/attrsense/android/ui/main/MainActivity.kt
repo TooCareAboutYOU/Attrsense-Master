@@ -1,6 +1,7 @@
 package com.attrsense.android.ui.main
 
 import android.content.Intent
+import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,8 +35,8 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
 
     override fun setLayoutResId(): Int = R.layout.activity_main
 
-    override fun initView() {
-        super.initView()
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
         mDataBinding.tabBottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.item_local -> {

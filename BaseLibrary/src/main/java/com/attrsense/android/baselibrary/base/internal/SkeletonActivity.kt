@@ -1,12 +1,12 @@
 package com.attrsense.android.baselibrary.base.internal
 
-import android.content.Intent
 import android.os.Bundle
 import com.attrsense.android.baselibrary.util.MMKVUtils
+import com.attrsense.android.baselibrary.view.LoadingDialog
 import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 import javax.inject.Inject
 
 /**
@@ -23,19 +23,17 @@ open class SkeletonActivity : RxAppCompatActivity() {
     @Inject
     lateinit var _mmkv: MMKVUtils
 
+
+    private var loadingDialog: LoadingDialog? = null
+
     private val mDisposables: CompositeDisposable = CompositeDisposable()
 
     protected lateinit var rxPermissions: RxPermissions
 
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         rxPermissions = RxPermissions(this)
-//        rxPermissions.
 
         //临时监听网络状态
 //        val mDisposable = ReactiveNetwork.observeNetworkConnectivity(this)
@@ -70,6 +68,7 @@ open class SkeletonActivity : RxAppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mDisposables.dispose()
+        hideLoadingDialog()
     }
 
     /**
@@ -85,5 +84,15 @@ open class SkeletonActivity : RxAppCompatActivity() {
         mDisposables.remove(disposable)
     }
 
+    fun showLoadingDialog() {
+        if (!isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {
+            loadingDialog = LoadingDialog(this)
+        }
+    }
 
+    fun hideLoadingDialog() {
+        if (!isFinishing && !isDestroyed && loadingDialog != null && loadingDialog?.isShowing!!) {
+            loadingDialog?.dismiss()
+        }
+    }
 }

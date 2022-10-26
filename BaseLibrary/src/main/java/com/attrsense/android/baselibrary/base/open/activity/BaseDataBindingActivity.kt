@@ -20,15 +20,15 @@ abstract class BaseDataBindingActivity<DB : ViewDataBinding> :
     @LayoutRes
     protected abstract fun setLayoutResId(): Int
 
-    open fun initViewBefore() {}
+    open fun initViewBefore(savedInstanceState: Bundle?) {}
 
-    protected abstract fun initView()
+    protected abstract fun initView(savedInstanceState: Bundle?)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        initViewBefore()
+        initViewBefore(savedInstanceState)
         super.onCreate(savedInstanceState)
         this.mDataBinding = DataBindingUtil.setContentView(this, setLayoutResId())
-        initView()
+        initView(savedInstanceState)
     }
 
     override fun onNewIntent(intent: Intent?) {

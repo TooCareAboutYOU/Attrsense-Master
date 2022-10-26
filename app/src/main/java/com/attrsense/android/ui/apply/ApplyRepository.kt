@@ -3,7 +3,7 @@ package com.attrsense.android.ui.apply
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.api.ApiService
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.util.UserManger
+import com.attrsense.android.util.UserDataManager
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
  */
 class ApplyRepository @Inject constructor(
     private val apiService: ApiService,
-    private val userManger: UserManger
+    private val userManger: UserDataManager
 ) : BaseRepository() {
 
     fun apply(name: String, mobile: String, company: String, email: String, briefly: String?) =

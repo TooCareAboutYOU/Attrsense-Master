@@ -5,7 +5,7 @@ import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.model.LoginBean
-import com.attrsense.android.util.UserManger
+import com.attrsense.android.util.UserDataManager
 import com.attrsense.database.db.entity.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val repository: LoginRepository,
-    private val userManger: UserManger
+    private val userManger: UserDataManager
 ) : BaseViewModel() {
 
     val loginLivedata: MutableLiveData<ResponseData<BaseResponse<LoginBean?>>> = MutableLiveData()

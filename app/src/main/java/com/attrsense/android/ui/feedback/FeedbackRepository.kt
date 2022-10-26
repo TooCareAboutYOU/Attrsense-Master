@@ -3,7 +3,7 @@ package com.attrsense.android.ui.feedback
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.api.ApiService
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.util.UserManger
+import com.attrsense.android.util.UserDataManager
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
  */
 class FeedbackRepository @Inject constructor(
     private val apiService: ApiService,
-    private val userManger: UserManger
+    private val userManger: UserDataManager
 ) : BaseRepository() {
 
     fun feedback(description: String, pictures: List<String?>? = arrayListOf()) =

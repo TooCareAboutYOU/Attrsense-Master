@@ -1,5 +1,6 @@
 package com.attrsense.android.baselibrary.base.open.activity
 
+import android.os.Bundle
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 
@@ -18,7 +19,7 @@ abstract class BaseDataBindingVMActivity<DB : ViewDataBinding, VM : ViewModel> :
     /**
      * 子类需要重写该方法,且实现父类方法：super.initView()
      */
-    override fun initView() {
+    override fun initView(savedInstanceState: Bundle?) {
         mViewModel = loadViewModel(setViewModel())
     }
 }

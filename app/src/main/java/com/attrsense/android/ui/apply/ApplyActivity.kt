@@ -1,5 +1,6 @@
 package com.attrsense.android.ui.apply
 
+import android.os.Bundle
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
@@ -24,8 +25,8 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
 
     override fun setViewModel(): Class<ApplyViewModel> = ApplyViewModel::class.java
 
-    override fun initView() {
-        super.initView()
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
         mDataBinding.acTvContact.text = getContent(R.string.tab_main_user_apply_contact)
         mDataBinding.acTvPhone.text = getContent(R.string.tab_main_user_apply_phone)
         mDataBinding.acTvEmail.text = getContent(R.string.tab_main_user_apply_email)

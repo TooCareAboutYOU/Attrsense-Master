@@ -2,8 +2,7 @@ package com.attrsense.android.baselibrary.base.open.viewmodel
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.attrsense.android.baselibrary.base.internal.SkeletonApplication
-import com.blankj.utilcode.util.ToastUtils
+import com.attrsense.android.baselibrary.app.SkeletonApplication
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

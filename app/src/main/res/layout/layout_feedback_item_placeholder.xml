@@ -10,14 +10,13 @@
         android:id="@+id/cl_add">
         
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/icon_feedback_add"
-            android:scaleType="centerCrop"/>
+            android:src="@drawable/icon_feedback_add" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

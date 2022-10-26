@@ -1,10 +1,8 @@
 package com.attrsense.android.app
 
-import com.attrsense.android.baselibrary.base.internal.SkeletonApplication
-import com.attrsense.android.baselibrary.test.Event
+import com.attrsense.android.baselibrary.app.SkeletonApplication
 import com.example.snpetest.JniInterface
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
 
 /**
  * author : zhangshuai@attrsense.com

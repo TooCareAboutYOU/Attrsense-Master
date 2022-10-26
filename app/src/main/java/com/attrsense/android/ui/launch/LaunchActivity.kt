@@ -1,29 +1,29 @@
 package com.attrsense.android.ui.launch
 
 import android.content.Intent
-import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.attrsense.android.BuildConfig
 import com.attrsense.android.R
-import com.attrsense.android.app.AttrSenseApplication
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.databinding.ActivityLaunchBinding
 import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.ui.main.MainActivity
-import com.attrsense.android.ui.register.RegisterActivity
+import com.attrsense.android.util.UserDataManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
-
-
-private const val MAX_COUNT = 3
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchViewModel>() {
+
+
+    @Inject
+    lateinit var userDataManager: UserDataManager
 
     private var keepScreen = AtomicBoolean(true)
     private lateinit var splashScreen: SplashScreen
@@ -33,12 +33,13 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
 
     override fun setViewModel(): Class<LaunchViewModel> = LaunchViewModel::class.java
 
-    override fun initViewBefore() {
+    override fun initViewBefore(savedInstanceState: Bundle?) {
+        super.initViewBefore(savedInstanceState)
         splashScreen = installSplashScreen()
     }
 
-    override fun initView() {
-        super.initView()
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
         launch()
         //展示完毕的监听
         splashScreen.setOnExitAnimationListener { provider ->
@@ -74,6 +75,8 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
         mJob = null
     }
 
+    private val MAX_COUNT = 3
+
     /**
      * 三秒倒计时
      */
@@ -97,11 +100,11 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
     }
 
     private fun jumpActivity() {
-//        if (AttrSenseApplication.userManger.isLogin()) {
-        toActivity(MainActivity::class.java)
-//        } else {
-//            toActivity(LoginActivity::class.java)
-//        }
+        if (userDataManager.isLogin()) {
+            toActivity(MainActivity::class.java)
+        } else {
+            toActivity(LoginActivity::class.java)
+        }
     }
 
     private fun toActivity(clz: Class<*>) {

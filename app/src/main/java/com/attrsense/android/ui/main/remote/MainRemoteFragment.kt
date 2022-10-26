@@ -140,17 +140,17 @@ class MainRemoteFragment :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RxAppCompatActivity.RESULT_OK && data != null) {
-                if (requestCode == SelectorBottomDialog.CAMERA_REQUEST_CODE) {
-                    data.getStringExtra("result")?.apply {
-                        upload(arrayListOf(this))
-                    }
-                } else {
-                    (data.getStringArrayListExtra("result") as ArrayList).let {
-                        if (it.isNotEmpty()) {
-                            upload(it)
-                        }
+            if (requestCode == SelectorBottomDialog.CAMERA_REQUEST_CODE) {
+                data.getStringExtra("result")?.apply {
+                    upload(arrayListOf(this))
+                }
+            } else {
+                (data.getStringArrayListExtra("result") as ArrayList).let {
+                    if (it.isNotEmpty()) {
+                        upload(it)
                     }
                 }
+            }
         } else {
             loadingView.dismiss()
         }
@@ -171,6 +171,7 @@ class MainRemoteFragment :
         }
     }
 
+    private var downloadBroadcastReceiver: DownloadBroadcastReceiver? = null
     lateinit var downManager: DownloadManager
     var downloadId: Long = 0
 
@@ -199,22 +200,32 @@ class MainRemoteFragment :
 
         downloadId = downManager.enqueue(request)
 
+        downloadBroadcastReceiver = DownloadBroadcastReceiver()
         requireActivity().registerReceiver(
-            receiver,
+            downloadBroadcastReceiver,
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         )
     }
+//
+//    //广播监听下载的各个状态
+//    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(context: Context, intent: Intent) {
+//            checkStatus()
+//        }
+//    }
 
-    //广播监听下载的各个状态
-    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
+    private inner class DownloadBroadcastReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
             checkStatus()
         }
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        requireActivity().unregisterReceiver(receiver)
+        if (downloadBroadcastReceiver != null) {
+            requireActivity().unregisterReceiver(downloadBroadcastReceiver)
+        }
     }
 
     //检查下载状态

@@ -1,6 +1,5 @@
 package com.attrsense.android.ui.main.my
 
-import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +13,7 @@ import com.attrsense.android.ui.apply.ApplyActivity
 import com.attrsense.android.ui.contact.ContactUsActivity
 import com.attrsense.android.ui.feedback.FeedbackActivity
 import com.attrsense.android.ui.login.LoginActivity
-import com.attrsense.android.util.UserManger
+import com.attrsense.android.util.UserDataManager
 import com.blankj.utilcode.util.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,7 +22,7 @@ import javax.inject.Inject
 class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyViewModel>() {
 
     @Inject
-    lateinit var userManger: UserManger
+    lateinit var userManger: UserDataManager
 
     override fun setLayoutResId(): Int = R.layout.fragment_main_my
 
@@ -56,13 +55,12 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
 
     private fun jumpActivity() {
         mDataBinding.acTvGoFeedBack.setOnClickListener {
-//            if (userManger.isLogin()) {
+            if (userManger.isLogin()) {
                 toActivity(FeedbackActivity::class.java)
-//            } else {
-//                ToastUtils.showShort("未登录！")
-//                toActivity(LoginActivity::class.java)
-//            }
-//            startActivity(Intent(requireActivity(),LoginActivity::class.java),ActivityOptions.makeSceneTransitionAnimation(requireActivity()).toBundle())
+            } else {
+                ToastUtils.showShort("未登录！")
+                LoginActivity.jump(requireActivity())
+            }
         }
 
         mDataBinding.acTvApply.setOnClickListener {
@@ -70,7 +68,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
                 toActivity(ApplyActivity::class.java)
             } else {
                 ToastUtils.showShort("未登录！")
-                toActivity(LoginActivity::class.java)
+                LoginActivity.jump(requireActivity())
             }
         }
 

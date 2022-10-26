@@ -1,6 +1,7 @@
 package com.attrsense.android.ui.detail
 
 
+import android.os.Bundle
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingActivity
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
@@ -12,7 +13,7 @@ class DetailActivity : BaseDataBindingActivity<ActivityDetailBinding>() {
 
     override fun setLayoutResId(): Int = R.layout.activity_detail
 
-    override fun initView() {
+    override fun initView(savedInstanceState: Bundle?) {
 
     }
 

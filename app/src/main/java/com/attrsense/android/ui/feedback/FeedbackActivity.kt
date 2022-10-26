@@ -2,6 +2,7 @@ package com.attrsense.android.ui.feedback
 
 import android.Manifest
 import android.content.Intent
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
+import com.attrsense.android.baselibrary.view.GridLayoutDecoration
 import com.attrsense.android.databinding.ActivityFeedbackBinding
 import com.attrsense.android.ui.feedback.entity.ItemMultipleEntity
 import com.attrsense.android.ui.register.view.SelectorBottomDialog
@@ -23,6 +25,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemChildClickListener
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.example.snpetest.JniInterface
+import com.jakewharton.rxbinding4.widget.textChanges
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -48,15 +51,15 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
 
     //空占位
     private var isAddToList = true
-    private val maxCount = 10
+    private val maxCount = 6
     private var selectorCount = maxCount
 
     override fun setLayoutResId(): Int = R.layout.activity_feedback
 
     override fun setViewModel(): Class<FeedbackViewModel> = FeedbackViewModel::class.java
 
-    override fun initView() {
-        super.initView()
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
         mDataBinding.acIvBack.setOnClickListener { finish() }
 
         mAdapter = FeedbackPictureSelectorAdapter(mList)
@@ -64,28 +67,35 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
         mDataBinding.recyclerview.apply {
             layoutManager =
                 GridLayoutManager(this@FeedbackActivity, 3, RecyclerView.VERTICAL, false)
+            addItemDecoration(GridLayoutDecoration(10))
             adapter = mAdapter
         }
 
-        //提交
-        mDataBinding.acBtnCommit.setOnClickListener {
-
-            val pictures = arrayListOf<String?>()
-
-            if (mList.size > 0) {
-                mList.forEach { pictures.add(it.imageUrl) }
-            }
-
-            mViewModel.feedback(mDataBinding.acEtDescription.text.toString(), pictures)
-        }
-
-        setCount(0)
 
         setListener()
     }
 
     private fun setListener() {
-        mDataBinding.acEtDescription.addTextChangedListener(textListener)
+        addDisposable(mDataBinding.acEtDescription.textChanges().subscribe {
+            mDataBinding.acBtnCommit.isEnabled = it.isNotEmpty()
+            mDataBinding.acTvCount.text =
+                getString(R.string.tab_main_user_feedback_count).format(it.length)
+        })
+
+        //提交
+        mDataBinding.acBtnCommit.setOnClickListener {
+
+            showLoadingDialog()
+
+            val pictures = arrayListOf<String?>().apply {
+                if (mList.size > 0) {
+                    mList.forEach { this.add(it.imageUrl) }
+                }
+            }
+
+            mViewModel.feedback(mDataBinding.acEtDescription.text.toString(), pictures)
+        }
+
 
         //监听提交
         mViewModel.feedbackLivedata.observe(this) {
@@ -95,6 +105,7 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
             } else {
                 ToastUtils.showShort("提交失败,请重试！")
             }
+            hideLoadingDialog()
         }
 
 
@@ -136,24 +147,6 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
         }
     }
 
-    private val textListener = object : TextWatcher {
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-        }
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            setCount(s.length)
-        }
-
-        override fun afterTextChanged(s: Editable?) {
-            mDataBinding.acBtnCommit.isEnabled = s != null && s.isNotEmpty()
-        }
-    }
-
-    private fun setCount(size: Int) {
-        mDataBinding.acTvCount.text = getString(R.string.tab_main_user_feedback_count).format(size)
-    }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -199,11 +192,5 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
                 mAdapter.notifyDataSetChanged()
             }
         }
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mDataBinding.acEtDescription.removeTextChangedListener(textListener)
     }
 }

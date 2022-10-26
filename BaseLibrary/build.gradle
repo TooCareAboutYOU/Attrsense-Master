@@ -55,6 +55,7 @@ dependencies {
     testApi rootProject.ext.dependencies["junit"]
     androidTestApi rootProject.ext.dependencies["jUnitExt"]
     androidTestApi rootProject.ext.dependencies["espressoCore"]
+//    debugImplementation rootProject.ext.dependencies["toolargetool"]
 //    testImplementation rootProject.ext.dependencies["mockk"]
     debugImplementation rootProject.ext.dependencies["leakcanaryAndroid"]
     implementation rootProject.ext.dependencies["okHttpProfiler"]
@@ -137,6 +138,7 @@ dependencies {
     api rootProject.ext.dependencies["mmkv"]
     api rootProject.ext.dependencies["photoView"]
     api rootProject.ext.dependencies["imageSelector"]
+//    api rootProject.ext.dependencies["exifinterface"]
     api rootProject.ext.dependencies["glide"]
     kapt rootProject.ext.dependencies["glideCompiler"]
 }

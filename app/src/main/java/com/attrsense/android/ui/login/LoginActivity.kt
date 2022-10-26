@@ -1,12 +1,18 @@
 package com.attrsense.android.ui.login
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Bundle
 import android.text.TextUtils
 import android.transition.Explode
 import android.transition.Fade
 import android.transition.Slide
+import android.util.Log
+import android.view.View
 import android.view.Window
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.transition.Transition
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
@@ -17,21 +23,32 @@ import com.attrsense.android.ui.register.RegisterActivity
 import com.blankj.utilcode.util.ToastUtils
 import com.google.android.material.transition.platform.*
 import com.jakewharton.rxbinding4.widget.textChanges
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
 
 @AndroidEntryPoint
 class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewModel>() {
 
+
+    companion object {
+        fun jump(activity: FragmentActivity) {
+            activity.startActivity(
+                Intent(activity, LoginActivity::class.java),
+                ActivityOptions.makeSceneTransitionAnimation(activity).toBundle()
+            )
+        }
+    }
+
     override fun setLayoutResId(): Int = R.layout.activity_login
 
     override fun setViewModel(): Class<LoginViewModel> = LoginViewModel::class.java
 
-    override fun initViewBefore() {
-        super.initViewBefore()
+    override fun initViewBefore(savedInstanceState: Bundle?) {
+        super.initViewBefore(savedInstanceState)
         window.apply {
             requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-//            enterTransition = Explode()
+            enterTransition = Explode()
 //            enterTransition = Slide()
 //            enterTransition = Fade()
 //            enterTransition = Hold()
@@ -42,8 +59,8 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         }
     }
 
-    override fun initView() {
-        super.initView()
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
 
         val mobile: Observable<CharSequence> =
             mDataBinding.acEtMobile.textChanges().skipInitialValue()
@@ -51,7 +68,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         Observable.combineLatest(mobile, code) { t1, t2 ->
             !TextUtils.isEmpty(t1) && t1.length == 11 && !TextUtils.isEmpty(t2) && t2.length == 6
         }.subscribe {
-            mDataBinding.acBtnLogin.isClickable = it
+            mDataBinding.acBtnLogin.isEnabled = it
             mDataBinding.acBtnLogin.setBackgroundColor(
                 if (it) {
                     ContextCompat.getColor(this, R.color.color_4A90E2)
@@ -76,10 +93,9 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         mViewModel.loginLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-//                    ToastUtils.showShort(it.throwable.toString())
+                    ToastUtils.showShort("登录失败！${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
-//                    ToastUtils.showShort("登录成功!")
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
@@ -87,7 +103,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         }
 
         mDataBinding.acTvGoRegister.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+            RegisterActivity.jump(this)
         }
     }
 }

@@ -5,7 +5,7 @@ import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.api.ApiService
-import com.attrsense.android.util.UserManger
+import com.attrsense.android.util.UserDataManager
 import com.attrsense.database.DatabaseRepository
 import com.attrsense.database.db.dao.UserDao
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class MainMyRepository @Inject constructor(
     private val apiService: ApiService,
     private val databaseRepository: DatabaseRepository,
-    private val userManger: UserManger
+    private val userManger: UserDataManager
 ) : BaseRepository() {
 
     private val token: String? by lazy { userManger.getToken() }

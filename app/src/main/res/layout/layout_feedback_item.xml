@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/icon_right_top_delete"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
