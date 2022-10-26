@@ -54,7 +54,7 @@
             android:padding="15dp"
             android:text="@string/tab_main_user_apply_mark"
             android:textColor="@android:color/darker_gray"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="@string/tab_main_user_apply_contact" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -79,7 +79,7 @@
                 android:layout_height="match_parent"
                 android:hint="@string/hint_tab_main_user_apply_contact"
                 android:maxLines="1"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="@string/tab_main_user_apply_phone" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -107,7 +107,7 @@
                 android:inputType="phone"
                 android:maxLength="11"
                 android:maxLines="1"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="@string/tab_main_user_apply_company" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -132,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/hint_tab_main_user_apply_company"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -149,7 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="@string/tab_main_user_apply_email" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -158,7 +158,7 @@
                 android:layout_height="match_parent"
                 android:hint="@string/hint_tab_main_user_apply_email"
                 android:maxLines="1"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -176,7 +176,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:gravity="center"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="@string/tab_main_user_apply_description" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -187,7 +187,7 @@
                 android:gravity="start"
                 android:hint="@string/hint_tab_main_user_apply_description"
                 android:padding="5dp"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatButton

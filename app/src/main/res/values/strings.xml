@@ -12,13 +12,13 @@
     <!--    申请SDK内测页面-->
     <string name="tab_main_user_apply_title">申请SDK内测</string>
     <string name="tab_main_user_apply_mark">留下您的联系方式，我们将尽快与您联系！</string>
-    <string name="tab_main_user_apply_contact">联 系 人 <font color='#FF0000'>*</font> ：</string>
+    <string name="tab_main_user_apply_contact">联 系 人 ：</string>
     <string name="hint_tab_main_user_apply_contact">请输入姓名(必填)</string>
-    <string name="tab_main_user_apply_phone">联系电话<font color='#FF0000'>*</font>：</string>
+    <string name="tab_main_user_apply_phone">联系电话：</string>
     <string name="hint_tab_main_user_apply_phone">请输入手机号码(必填)</string>
-    <string name="tab_main_user_apply_company">您的公司<font color='#ff0000'>*</font>：</string>
+    <string name="tab_main_user_apply_company">您的公司：</string>
     <string name="hint_tab_main_user_apply_company">请输入公司名称(必填)</string>
-    <string name="tab_main_user_apply_email">电子邮件<font color='#ff0000'>*</font>：</string>
+    <string name="tab_main_user_apply_email">电子邮件：</string>
     <string name="hint_tab_main_user_apply_email">请输入邮件地址(必填)</string>
     <string name="tab_main_user_apply_description">需求简述：</string>
     <string name="hint_tab_main_user_apply_description">请留下您的宝贵需求...</string>

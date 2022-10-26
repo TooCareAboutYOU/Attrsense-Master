@@ -10,14 +10,15 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/white"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            tools:background="@android:color/holo_red_dark"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp">
+            android:paddingEnd="10dp"
+            android:background="@android:color/white">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/acImg_user_icon"
@@ -45,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="18874701235"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/acImg_user_icon"
                 app:layout_constraintStart_toEndOf="@id/acImg_user_icon" />
 
@@ -55,60 +56,50 @@
             android:id="@+id/acTv_go_feed_back"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_4A90E2"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/white"
             android:gravity="center"
             android:text="APP体验反馈"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp" />
+            android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/acTv_apply"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_4A90E2"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/white"
             android:gravity="center"
             android:text="申请SDK内测"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="1dp" />
+            android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/acTv_contact"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_4A90E2"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/white"
             android:gravity="center"
             android:text="联系我们了解更多"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="1dp" />
+            android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/acTv_about_us"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_4A90E2"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/white"
             android:gravity="center"
             android:text="关于我们"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="1dp" />
+            android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/acTv_logout"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_4A90E2"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/white"
             android:gravity="center"
             android:text="退出登录"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp" />
+            android:textSize="18sp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
