@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.register.RegisterActivity">
 
-        <com.attrsense.android.view.AttrToolBarView
+        <com.attrsense.android.view.toolbar.AttrToolBarView
             android:id="@+id/toolbar"
             style="@style/AttrToolbarTheme"
             app:layout_constraintEnd_toEndOf="parent"

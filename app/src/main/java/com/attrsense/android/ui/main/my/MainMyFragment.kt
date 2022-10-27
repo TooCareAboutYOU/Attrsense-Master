@@ -13,7 +13,7 @@ import com.attrsense.android.ui.apply.ApplyActivity
 import com.attrsense.android.ui.contact.ContactUsActivity
 import com.attrsense.android.ui.feedback.FeedbackActivity
 import com.attrsense.android.ui.login.LoginActivity
-import com.attrsense.android.util.UserDataManager
+import com.attrsense.android.manager.UserDataManager
 import com.blankj.utilcode.util.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -34,6 +34,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
+
         jumpActivity()
 
         setLogoutButton()

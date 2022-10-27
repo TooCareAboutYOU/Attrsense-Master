@@ -11,7 +11,7 @@ import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMAct
 import com.attrsense.android.databinding.ActivityLaunchBinding
 import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.ui.main.MainActivity
-import com.attrsense.android.util.UserDataManager
+import com.attrsense.android.manager.UserDataManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*

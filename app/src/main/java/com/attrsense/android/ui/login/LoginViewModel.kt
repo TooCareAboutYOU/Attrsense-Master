@@ -5,7 +5,7 @@ import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.model.LoginBean
-import com.attrsense.android.util.UserDataManager
+import com.attrsense.android.manager.UserDataManager
 import com.attrsense.database.db.entity.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

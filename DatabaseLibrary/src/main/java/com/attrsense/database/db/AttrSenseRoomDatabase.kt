@@ -3,7 +3,7 @@ package com.attrsense.database.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.attrsense.database.base.Converter
+import com.attrsense.database.converter.Converter
 import com.attrsense.database.db.dao.AnfImageDao
 import com.attrsense.database.db.dao.UserDao
 import com.attrsense.database.db.entity.AnfImageEntity

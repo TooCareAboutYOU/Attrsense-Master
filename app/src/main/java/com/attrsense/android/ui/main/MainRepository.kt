@@ -2,7 +2,7 @@ package com.attrsense.android.ui.main
 
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.api.ApiService
-import com.attrsense.database.DatabaseRepository
+import com.attrsense.database.repository.DatabaseRepository
 import javax.inject.Inject
 
 /**

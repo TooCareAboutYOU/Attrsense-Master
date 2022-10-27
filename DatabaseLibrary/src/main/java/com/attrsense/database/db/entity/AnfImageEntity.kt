@@ -19,9 +19,13 @@ data class AnfImageEntity(
     @ColumnInfo(name = "userToken")
     var token: String? = "",
 
-    //本地使用原图，云端使用https网络图
+    //本地原图
     @ColumnInfo(name = "originalImage")
     var originalImage: String? = "",
+
+    //本地缩略图，云端使用https网络图
+    @ColumnInfo(name = "thumbImage")
+    var thumbImage: String? = "",
 
     @ColumnInfo(name = "anfImage")
     var anfImage: String? = "",

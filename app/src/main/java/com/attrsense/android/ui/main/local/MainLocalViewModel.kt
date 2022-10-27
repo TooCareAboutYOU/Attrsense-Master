@@ -3,7 +3,9 @@ package com.attrsense.android.ui.main.local
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
+import com.attrsense.android.manager.UserDataManager
+import com.attrsense.database.repository.DatabaseRepository
 import com.attrsense.database.db.entity.AnfImageEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,16 +17,16 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainLocalViewModel @Inject constructor(
-    private val mainLocalRepository: MainLocalRepository
-) : BaseViewModel() {
+    private val userDataManager: UserDataManager,
+    private val databaseRepository: DatabaseRepository
+) : BaseAndroidViewModel() {
 
     val addEntityLiveData: MutableLiveData<ResponseData<Boolean>> = MutableLiveData()
     val getAllLiveData: MutableLiveData<ResponseData<List<AnfImageEntity?>>> = MutableLiveData()
     val deleteLiveData: MutableLiveData<Int> = MutableLiveData()
-    val getAnfLivedata: MutableLiveData<ResponseData<AnfImageEntity?>> = MutableLiveData()
 
     fun addEntities(entityList: List<AnfImageEntity>) =
-        mainLocalRepository.addEntities(entityList).collectInLaunch {
+        databaseRepository.addList(entityList).collectInLaunch {
             addEntityLiveData.value = it.also { data ->
                 when (data) {
                     is ResponseData.onFailed -> {
@@ -40,18 +42,13 @@ class MainLocalViewModel @Inject constructor(
             }
         }
 
-    fun getByAnf(anfPath: String?) =
-        mainLocalRepository.getByAnf(anfPath).collectInLaunch {
-            getAnfLivedata.value = it
-        }
-
     fun getAll() =
-        mainLocalRepository.getAll().collectInLaunch {
+        databaseRepository.getAll(userDataManager.getToken()).collectInLaunch {
             getAllLiveData.value = it
         }
 
     fun deleteByAnfPath(position: Int, anfImage: String?) =
-        mainLocalRepository.deleteByAnfPath(anfImage).collectInLaunch {
+        databaseRepository.deleteByAnf(userDataManager.getToken(),anfImage).collectInLaunch {
             when (it) {
                 is ResponseData.onFailed -> {
                     Log.e("printInfo", "MainLocalViewModel::deleteByAnfPath: ${it.throwable}")

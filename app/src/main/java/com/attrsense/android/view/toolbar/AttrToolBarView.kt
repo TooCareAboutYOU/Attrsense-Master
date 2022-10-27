@@ -1,4 +1,4 @@
-package com.attrsense.android.view
+package com.attrsense.android.view.toolbar
 
 import android.content.Context
 import android.util.AttributeSet

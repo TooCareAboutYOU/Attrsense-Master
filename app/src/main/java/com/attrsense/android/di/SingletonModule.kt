@@ -2,7 +2,7 @@ package com.attrsense.android.di
 
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.android.api.ApiService
-import com.attrsense.android.util.UserDataManager
+import com.attrsense.android.manager.UserDataManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

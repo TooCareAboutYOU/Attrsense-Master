@@ -35,13 +35,11 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
 
         textListener()
 
-
         mDataBinding.acIvBack.setOnClickListener {
             finish()
         }
 
         mDataBinding.acBtnCommit.setOnClickListener {
-            ToastUtils.showShort("调用了！")
             mViewModel.apply(
                 mDataBinding.acEtContact.text.toString(),
                 mDataBinding.acEtPhone.text.toString(),
@@ -57,12 +55,12 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
                     ToastUtils.showShort("提交失败：${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
-                    ToastUtils.showShort("提交成功！")
                     mDataBinding.acEtContact.text = null
                     mDataBinding.acEtPhone.text = null
                     mDataBinding.acEtCompany.text = null
                     mDataBinding.acEtEmail.text = null
                     mDataBinding.acEtDescription.text = null
+                    ToastUtils.showShort("提交成功！")
                 }
             }
         }

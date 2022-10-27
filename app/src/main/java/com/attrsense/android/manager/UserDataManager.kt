@@ -1,4 +1,4 @@
-package com.attrsense.android.util
+package com.attrsense.android.manager
 
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import javax.inject.Inject

@@ -3,7 +3,7 @@ package com.attrsense.android.ui.feedback
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.api.ApiService
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.util.UserDataManager
+import com.attrsense.android.manager.UserDataManager
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 

@@ -123,8 +123,8 @@ class LoadingDialog : AlertDialog {
         show()
         setContentView(R.layout.loading_dialog_view)
         clRootView = findViewById(R.id.cl_root)
+        textStatus = findViewById(R.id.loading_text_status)
 //        img = findViewById(R.id.loading_img)
-//        textStatus = findViewById(R.id.loading_text_status)
 //        mRrRoot = findViewById(R.id.rr_root)
 //        mViewBg = findViewById(R.id.view_bg)
 //        if (mLoadingResId == -1) {
@@ -141,9 +141,9 @@ class LoadingDialog : AlertDialog {
 //                }
 //            }
 //        }
-//        if (!TextUtils.isEmpty(textHint)) {
-//            textStatus!!.text = textHint
-//        }
+        if (!TextUtils.isEmpty(textHint)) {
+            textStatus!!.text = textHint
+        }
 //        if (mLoadingSize > 0) {
 //            val imgParams = img!!.layoutParams
 //            imgParams.width = SizeUtils.dp2px(mLoadingSize.toFloat())

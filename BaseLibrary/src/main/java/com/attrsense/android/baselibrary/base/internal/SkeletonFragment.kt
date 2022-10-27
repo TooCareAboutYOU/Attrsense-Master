@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.attrsense.android.baselibrary.util.MMKVUtils
+import com.attrsense.android.baselibrary.view.LoadingDialog
 import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxFragment
 import io.reactivex.disposables.CompositeDisposable
@@ -27,6 +28,8 @@ open class SkeletonFragment : RxFragment() {
     private val mDisposables: CompositeDisposable = CompositeDisposable()
 
     protected lateinit var rxPermissions: RxPermissions
+
+    private var loadingDialog: LoadingDialog? = null
 
 
     override fun onAttach(context: Context) {
@@ -82,5 +85,26 @@ open class SkeletonFragment : RxFragment() {
     //手动移除指定Disposable
     fun removeDisposable(disposable: Disposable) {
         mDisposables.remove(disposable)
+    }
+
+    fun showLoadingDialog(text:String?="") {
+        try {
+            if (!requireActivity().isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {
+                loadingDialog = LoadingDialog(requireActivity(),text)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    fun hideLoadingDialog() {
+        try {
+            if (!requireActivity().isFinishing && !requireActivity().isDestroyed && loadingDialog != null && loadingDialog?.isShowing!!) {
+                loadingDialog?.dismiss()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

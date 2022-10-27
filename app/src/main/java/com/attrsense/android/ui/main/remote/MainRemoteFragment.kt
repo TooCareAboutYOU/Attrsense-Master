@@ -3,18 +3,16 @@ package com.attrsense.android.ui.main.remote
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.DownloadManager
-import android.app.ProgressDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,18 +25,13 @@ import com.attrsense.android.databinding.FragmentMainRemoteBinding
 import com.attrsense.android.databinding.LayoutDialogItemShowBinding
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
-import com.attrsense.android.ui.main.OnItemClickListener
-import com.attrsense.android.ui.register.view.ImageShowDialog
-import com.attrsense.android.ui.register.view.SelectorBottomDialog
-import com.attrsense.database.db.entity.AnfImageEntity
+import com.attrsense.android.view.ImageShowDialog
+import com.attrsense.android.view.SelectorBottomDialog
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
-import com.example.snpetest.JNI
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.example.snpetest.JniInterface
 import com.jakewharton.rxbinding4.view.clicks
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
@@ -46,18 +39,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainRemoteFragment :
-    BaseDataBindingVMFragment<FragmentMainRemoteBinding, MainRemoteViewModel>(),
-    OnItemClickListener {
+class MainRemoteFragment : BaseDataBindingVMFragment<FragmentMainRemoteBinding, MainRemoteViewModel>(){
 
-    private lateinit var loadingView: ProgressDialog
-    private lateinit var loading2View: ProgressDialog
     private lateinit var mAdapter: RemoteImageAdapter
+
+    private val mList: MutableList<ImageInfoBean> = mutableListOf()
 
     override fun setLayoutResId(): Int = R.layout.fragment_main_remote
 
@@ -65,24 +54,13 @@ class MainRemoteFragment :
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         super.onCreateFragment(savedInstanceState)
-
-        loadingView = ProgressDialog(requireActivity())
-            .apply {
-                setMessage("压缩中...")
-                setCanceledOnTouchOutside(false)
-            }
-        loading2View = ProgressDialog(requireActivity())
-            .apply {
-                setMessage("解压中...")
-                setCanceledOnTouchOutside(false)
-            }
     }
 
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
         context?.let {
-            mAdapter = RemoteImageAdapter(it, this)
+            mAdapter = RemoteImageAdapter(mList)
             mDataBinding.recyclerview.apply {
                 layoutManager = GridLayoutManager(it, 3, RecyclerView.VERTICAL, false)
                 adapter = mAdapter
@@ -103,6 +81,13 @@ class MainRemoteFragment :
             }
         }
 
+        mAdapter.setOnItemClickListener { _, _, position ->
+            mList[position].url?.let {
+                download(it)
+            }
+        }
+
+
         liveDataObserves()
     }
 
@@ -116,25 +101,32 @@ class MainRemoteFragment :
         }
 
         mViewModel.uploadLiveData.observe(this) {
-            reloadAdapter(it)
+            reloadAdapter(it,true)
         }
     }
 
-    private fun reloadAdapter(it: ResponseData<BaseResponse<ImagesBean?>>) {
-        when (it) {
+    private fun reloadAdapter(response: ResponseData<BaseResponse<ImagesBean?>>,isNewAdd:Boolean?=false) {
+        when (response) {
             is ResponseData.onFailed -> {
                 ToastUtils.showShort("解压失败！")
-                Log.e("printInfo", "MainRemoteFragment::reloadAdapter: ${it.throwable}")
+                Log.e("printInfo", "MainRemoteFragment::reloadAdapter: ${response.throwable}")
             }
             is ResponseData.onSuccess -> {
-                it.value?.data?.images?.apply {
+                response.value?.data?.images?.apply {
                     if (this.isNotEmpty()) {
-                        mAdapter.setData(this)
+                        isNewAdd?.let {
+                            if (it) {
+                                mList.addAll(this)
+                                mAdapter.notifyItemInserted(mList.size-1)
+                            }else{
+                                mAdapter.setList(this)
+                            }
+                        }
                     }
                 }
             }
         }
-        loadingView.dismiss()
+        hideLoadingDialog()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -152,24 +144,18 @@ class MainRemoteFragment :
                 }
             }
         } else {
-            loadingView.dismiss()
+            hideLoadingDialog()
         }
     }
 
     private fun upload(list: List<String>) {
-        loadingView.show()
+        showLoadingDialog("压缩中...")
         mViewModel.uploadFile("1", "2", list)
     }
 
-    override fun onLongClickEvent(position: Int, anfPath: String?) {
+//    override fun onLongClickEvent(position: Int, anfPath: String?) {
 //        mViewModel.deleteByAnfPath(position,anfPath)
-    }
-
-    override fun onRemoteClickEvent(entity: ImageInfoBean?) {
-        entity?.url?.let {
-            download(it)
-        }
-    }
+//    }
 
     private var downloadBroadcastReceiver: DownloadBroadcastReceiver? = null
     lateinit var downManager: DownloadManager
@@ -177,9 +163,7 @@ class MainRemoteFragment :
 
     private fun download(anfPath: String) {
 
-        loading2View.show()
-        downManager =
-            requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        downManager = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
         val request = DownloadManager.Request(Uri.parse(anfPath))
         //设置在什么网络情况下进行下载
@@ -206,25 +190,18 @@ class MainRemoteFragment :
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         )
     }
-//
-//    //广播监听下载的各个状态
-//    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context, intent: Intent) {
-//            checkStatus()
-//        }
-//    }
 
     private inner class DownloadBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             checkStatus()
         }
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (downloadBroadcastReceiver != null) {
             requireActivity().unregisterReceiver(downloadBroadcastReceiver)
+            downloadBroadcastReceiver = null
         }
     }
 
@@ -236,14 +213,12 @@ class MainRemoteFragment :
         query.setFilterById(downloadId)
         val cursor: Cursor = downManager.query(query)
         if (cursor.moveToFirst()) {
-            val status: Int = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-            when (status) {
+            when (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))) {
                 DownloadManager.STATUS_PAUSED -> {}
-                DownloadManager.STATUS_PENDING -> {
-
-                }
+                DownloadManager.STATUS_PENDING -> {}
                 DownloadManager.STATUS_RUNNING -> {}
                 DownloadManager.STATUS_FAILED -> {
+                    ToastUtils.showShort("下载失败！请检查当前网络！")
                     cursor.close()
                 }
                 DownloadManager.STATUS_SUCCESSFUL -> {
@@ -252,26 +227,16 @@ class MainRemoteFragment :
                     val remoteAnfUri =
                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_URI))
                     Log.i("printInfo", "MainRemoteFragment::checkStatus:下载地址： $remoteAnfUri")
-                    var localAnfUri =
+                    val localAnfUri =
                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
                     Log.i("printInfo", "MainRemoteFragment::checkStatus:存储地址： $localAnfUri")
                     cursor.close()
 
 
                     lifecycleScope.launch {
+//                        showLoadingDialog("解压中...")
                         val imagePath = withContext(Dispatchers.IO) {
-                            val TAG_PATH = "file://"
-                            if (localAnfUri.contains(TAG_PATH)) {
-                                localAnfUri =
-                                    localAnfUri.substring(TAG_PATH.length, localAnfUri.length)
-                                Log.i(
-                                    "printInfo",
-                                    "MainRemoteFragment::checkStatus地址: $localAnfUri"
-                                )
-                                JniInterface.decoderCommit(localAnfUri)
-                            } else {
-                                JniInterface.decoderCommit(localAnfUri)
-                            }
+                            JniInterface.decoderCommit(localAnfUri)
                         }
                         Log.i("printInfo", "MainRemoteFragment::checkStatus: $imagePath")
                         showDialog(localAnfUri, imagePath)
@@ -297,27 +262,6 @@ class MainRemoteFragment :
 
         Glide.with(requireActivity()).load(jpgPath)
             .error(R.mipmap.ic_launcher)
-            .addListener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    loading2View.dismiss()
-                    return false
-                }
-            })
             .into(viewBinding.acIvImg)
 
         val dialog = ImageShowDialog(requireActivity()).apply {
@@ -332,6 +276,10 @@ class MainRemoteFragment :
 
         viewBinding.root.setOnClickListener {
             dialog.dismiss()
+        }
+
+        viewBinding.acTvSave.setOnClickListener {
+
         }
     }
 

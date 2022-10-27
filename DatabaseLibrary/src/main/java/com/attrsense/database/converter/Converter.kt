@@ -1,4 +1,4 @@
-package com.attrsense.database.base
+package com.attrsense.database.converter
 
 import androidx.room.TypeConverter
 import java.util.*

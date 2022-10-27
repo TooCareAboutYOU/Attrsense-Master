@@ -1,22 +1,14 @@
-package com.attrsense.android.ui.register.view
+package com.attrsense.android.view
 
-import android.app.Dialog
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.attrsense.android.R
 import com.attrsense.android.databinding.DialogSelectorBottomBinding
 import com.attrsense.android.widget.BaseBottomSheetDialogFragment
-import com.blankj.utilcode.util.ToastUtils
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.yuyh.library.imgsel.ISNav
 import com.yuyh.library.imgsel.config.ISCameraConfig
 import com.yuyh.library.imgsel.config.ISListConfig
