@@ -1,5 +1,6 @@
 package com.attrsense.android.app
 
+
 import com.attrsense.android.baselibrary.app.SkeletonApplication
 import com.example.snpetest.JniInterface
 import dagger.hilt.android.HiltAndroidApp

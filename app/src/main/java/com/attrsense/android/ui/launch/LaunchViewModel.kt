@@ -2,7 +2,6 @@ package com.attrsense.android.ui.launch
 
 import androidx.lifecycle.*
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
-import com.attrsense.android.baselibrary.test.Event
 import com.attrsense.android.api.ApiService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,13 +14,11 @@ import javax.inject.Inject
 @HiltViewModel
 class LaunchViewModel @Inject constructor(
     private val apiService: ApiService,
-    private val event: Event
 ) : BaseViewModel() {
 
     private val githubLiveData: MutableLiveData<String> = MutableLiveData()
 
 //    fun load(format: String) {
-//        event.load()
 //        githubLiveData.value = format
 //    }
 //

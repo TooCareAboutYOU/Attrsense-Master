@@ -19,10 +19,12 @@ class CrashHandler : Thread.UncaughtExceptionHandler {
         val l = System.currentTimeMillis()
         val file = File(dir, "$l.txt")
         try {
-            val printWriter = PrintWriter(FileWriter(file))
-            printWriter.println("time: ${System.currentTimeMillis()}")
-            printWriter.println("thread：${t.name}")
-            printWriter.close()
+            PrintWriter(FileWriter(file)).apply {
+                println("time: ${System.currentTimeMillis()}")
+                println("thread：${t.name}")
+                println("error：$e")
+                close()
+            }
             e.printStackTrace()
         } catch (ex: Exception) {
             ex.printStackTrace()

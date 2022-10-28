@@ -43,7 +43,7 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
         launch()
         //展示完毕的监听
         splashScreen.setOnExitAnimationListener { provider ->
-            Log.i("printInfo", "SplashActivity::setOnExitAnimationListener: 启动进程才会回调！")
+            Log.i("print_logs", "SplashActivity::setOnExitAnimationListener: 启动进程才会回调！")
             //移除监听
             provider.remove()
             //跳转到下个页面
@@ -83,13 +83,13 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
     private fun loadTimer() {
         mJob = (MAX_COUNT downTo 0).asFlow()
             .flowOn(Dispatchers.Default)
-            .onStart { Log.i("printInfo", "flow onStart") }
+            .onStart { Log.i("print_logs", "flow onStart") }
             .onEach {
                 it.setTimerText()
                 delay(1000L)
             }
             .onCompletion {
-                Log.i("printInfo", "flow onCompletion")
+                Log.i("print_logs", "flow onCompletion")
                 jumpActivity()
             } //在发送数据收集完之后添加数据
             .launchIn(lifecycleScope) //在单独的协程中启动流的收集

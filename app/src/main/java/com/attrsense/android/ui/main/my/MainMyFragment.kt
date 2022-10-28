@@ -43,7 +43,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
             when (it) {
                 is ResponseData.onFailed -> {
                     ToastUtils.showShort("退出异常！")
-                    Log.e("printInfo", "MainMyFragment::jumpActivity: ${it.throwable}")
+                    Log.e("print_logs", "MainMyFragment::jumpActivity: ${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
                     setLogoutButton()

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.media.ThumbnailUtils
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -99,6 +100,7 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
             when (it) {
                 is ResponseData.onFailed -> {
 //                    ToastUtils.showShort(it.throwable.toString())
+                    Log.i("print_logs", "MainLocalFragment::liveDataObserves: ${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
                     mAdapter.setData(it.value)
@@ -139,7 +141,8 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
                             token = userDataManager.getToken(),
                             originalImage = path,
                             thumbImage = FilesHelper.saveThumb(requireActivity(), path),
-                            anfImage = anf_path
+                            anfImage = anf_path,
+                            isLocal = true
                         )
                         mViewModel.addEntities(arrayListOf(entity))
                     }
@@ -153,7 +156,8 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
                                 token = userDataManager.getToken(),
                                 originalImage = paths[index],
                                 thumbImage = FilesHelper.saveThumb(requireActivity(), paths[index]),
-                                anfImage = anfPath
+                                anfImage = anfPath,
+                                isLocal = true
                             )
                             localList.add(entity)
                         }

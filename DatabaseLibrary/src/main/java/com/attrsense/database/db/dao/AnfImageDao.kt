@@ -1,5 +1,6 @@
 package com.attrsense.database.db.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -18,7 +19,7 @@ import com.blankj.utilcode.util.FileUtils
 @Dao
 interface AnfImageDao {
     /**
-     * 查询
+     * 添加
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun add(vararg anfImageEntity: AnfImageEntity)
@@ -47,16 +48,38 @@ interface AnfImageDao {
     @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE userToken=:token AND originalImage=:originalPath")
     suspend fun getByOriginal(token: String?, originalPath: String): AnfImageEntity?
 
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE userToken=:token AND thumbImage=:thumbImage")
+    suspend fun getByThumb(token: String?, thumbImage: String?): AnfImageEntity?
+
+
+    @Transaction
+    suspend fun getAddOrUpdateByThumb(token: String?, newData: AnfImageEntity) {
+        val entity = getByThumb(token, newData.thumbImage)
+        if (entity == null) {
+            add(newData)
+        } else {
+            entity.token = newData.token
+            entity.originalImage = newData.originalImage
+            entity.thumbImage = newData.thumbImage
+            if (!entity.isDownload) {
+                entity.anfImage = newData.anfImage
+            }
+            entity.isLocal = newData.isLocal
+            entity.cacheImage = newData.cacheImage
+            update(entity)
+        }
+    }
+
 
     /**
      * 删除
      * 使用需谨慎
      */
     @Delete
-    suspend fun delete(vararg anfImageEntity: AnfImageEntity):Int
+    suspend fun delete(vararg anfImageEntity: AnfImageEntity): Int
 
     @Delete
-    suspend fun deleteList(anfImageEntity: List<AnfImageEntity>):Int
+    suspend fun deleteList(anfImageEntity: List<AnfImageEntity>): Int
 
     @Query("DELETE FROM ANF_IMAGE_TABLE WHERE userToken=:token AND anfImage=:anfImage")
     suspend fun deleteAnf(token: String?, vararg anfImage: String?): Int
@@ -83,14 +106,14 @@ interface AnfImageDao {
 
     //单个删除
     @Transaction
-    suspend fun deleteEntity(entity: AnfImageEntity){
+    suspend fun deleteEntity(entity: AnfImageEntity) {
         removeFile(entity)
         delete(entity)
     }
 
     //多个删除
     @Transaction
-    suspend fun deleteEntities(entities: List<AnfImageEntity>){
+    suspend fun deleteEntities(entities: List<AnfImageEntity>) {
         if (entities.isNotEmpty()) {
             entities.forEach { entity ->
                 removeFile(entity)
@@ -104,8 +127,8 @@ interface AnfImageDao {
      * 通过单Anf路径单个删除
      */
     @Transaction
-    suspend fun deleteByAnfPath(token: String?,anfPath: String?){
-        getByAnf(token,anfPath)?.let {
+    suspend fun deleteByAnfPath(token: String?, anfPath: String?) {
+        getByAnf(token, anfPath)?.let {
             removeFile(it)
         }
         deleteAnf(token, anfPath)
@@ -115,37 +138,37 @@ interface AnfImageDao {
      * 通过单Anf路径多个删除
      */
     @Transaction
-    suspend fun deleteByAnfPaths(token: String?,anfPaths: List<String>){
+    suspend fun deleteByAnfPaths(token: String?, anfPaths: List<String>) {
         anfPaths.forEach {
-            getByAnf(token,it)?.let { entity->
+            getByAnf(token, it)?.let { entity ->
                 removeFile(entity)
             }
         }
-        deleteAnfs(token,anfPaths)
+        deleteAnfs(token, anfPaths)
     }
 
     /**
      * 通过token删除本地/云端的数据库数据和文件
      */
     @Transaction
-    suspend fun deleteByType(token: String?,isLocal: Boolean?=true){
+    suspend fun deleteByType(token: String?, isLocal: Boolean? = true) {
         getAll(token).let {
             if (it.isNotEmpty()) {
-                it.forEach { entity->
+                it.forEach { entity ->
                     if (entity != null) {
                         removeFile(entity)
                     }
                 }
-                deleteType(token,isLocal)
+                deleteType(token, isLocal)
             }
         }
     }
 
     @Transaction
-    suspend fun clearAll(token: String?){
+    suspend fun clearAll(token: String?) {
         getAll(token).let {
             if (it.isNotEmpty()) {
-                it.forEach { entity->
+                it.forEach { entity ->
                     if (entity != null) {
                         removeFile(entity)
                     }
@@ -155,7 +178,7 @@ interface AnfImageDao {
         }
     }
 
-    suspend fun removeFile(entity: AnfImageEntity){
+    suspend fun removeFile(entity: AnfImageEntity) {
         FileUtils.delete(entity.anfImage)
         FileUtils.delete(entity.cacheImage)
     }

@@ -59,6 +59,8 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
             arrayListOf(MainLocalFragment(), MainRemoteFragment(), MainMyFragment())
 
         mDataBinding.viewpager2.adapter = FragmentAdapter(this, fragmentList)
+
+        mDataBinding.viewpager2.offscreenPageLimit = 1
     }
 
     private fun selectedItem(position: Int) {

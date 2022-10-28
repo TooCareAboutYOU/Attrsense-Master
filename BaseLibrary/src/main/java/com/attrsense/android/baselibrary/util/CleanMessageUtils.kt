@@ -10,7 +10,7 @@ import java.math.BigDecimal
  * date : 2022/10/10 17:16
  * mark : custom something
  */
-class CleanMessageUtils {
+object CleanMessageUtils {
     /**
      * @param context
      * @return

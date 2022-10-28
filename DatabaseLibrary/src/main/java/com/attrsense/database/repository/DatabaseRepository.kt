@@ -6,6 +6,7 @@ import com.attrsense.database.db.AttrSenseRoomDatabase
 import com.attrsense.database.db.dao.UserDao
 import com.attrsense.database.db.entity.AnfImageEntity
 import kotlinx.coroutines.flow.flow
+import okhttp3.internal.notify
 import javax.inject.Inject
 
 /**
@@ -42,7 +43,9 @@ class DatabaseRepository @Inject constructor(
      * @return Flow<ResponseData<Boolean>>
      */
     fun addList(anfPaths: List<AnfImageEntity>) = flow {
-        anfDao.addList(anfPaths)
+        if (anfPaths.isNotEmpty()) {
+            anfDao.addList(anfPaths)
+        }
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
@@ -94,6 +97,26 @@ class DatabaseRepository @Inject constructor(
      */
     fun getByOriginal(token: String?, originalPath: String) = flow {
         emit(ResponseData.onSuccess(anfDao.getByOriginal(token, originalPath)))
+    }.flowOnIO()
+
+
+    /**
+     * 通过缩略图获取数据
+     * @param thumbImage String?
+     * @return Flow<ResponseData<AnfImageEntity>>
+     */
+    fun getByThumb(token: String?, thumbImage: String?)= flow {
+        emit(ResponseData.onSuccess(anfDao.getByThumb(token,thumbImage)))
+    }.flowOnIO()
+
+    /**
+     * 通过缩略图获取数据,有则修改，无则添加
+     * @param newData AnfImageEntity
+     * @return Flow<ResponseData<Boolean>>
+     */
+    fun getAddOrUpdateByThumb(token: String?, newData: AnfImageEntity)= flow {
+        anfDao.getAddOrUpdateByThumb(token,newData)
+        emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
     /**

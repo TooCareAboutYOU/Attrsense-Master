@@ -25,7 +25,7 @@ open class SkeletonRepository {
     //收集异常信息，并切换到子线程做网络请求
     protected fun <T : Any> Flow<ResponseData<T>>.flowOnIO(): Flow<ResponseData<T>> {
         return this.catch { e ->
-            Log.e("printInfo", "BaseRepository::flowOnIO: $e")
+            Log.e("print_logs", "BaseRepository::flowOnIO: $e")
             //处理异常状态
             emit(ResponseData.onFailed(e))
         }.flowOn(Dispatchers.Default)

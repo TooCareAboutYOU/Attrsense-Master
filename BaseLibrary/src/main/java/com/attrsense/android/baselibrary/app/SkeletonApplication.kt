@@ -1,6 +1,7 @@
 package com.attrsense.android.baselibrary.app
 
 import android.app.Application
+import android.app.DownloadManager
 import android.content.Context
 import android.os.Looper
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -52,8 +53,6 @@ open class SkeletonApplication : Application() {
             }
             false
         }
-
-//        AppInitIntentService.startService(this)
     }
 
     private fun initLogger() {

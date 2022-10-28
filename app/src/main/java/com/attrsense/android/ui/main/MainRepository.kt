@@ -32,7 +32,7 @@ class MainRepository @Inject constructor(
 //     */
 //    fun uploadFile(token: String?, rate: String?, roiRate: String?, imageFilePaths: List<String>?=null) = flow {
 //        if (!databaseRepository.isLoginByToken(token)) {
-//            Log.i("printInfo", "MainRepository::login: 验证登录状态->")
+//            Log.i("print_logs", "MainRepository::login: 验证登录状态->")
 //            emit(BaseResponse.loginInvalid(BaseResponse.CODE_LOGIN_INVALID, "登录失败！"))
 //        } else {
 //            emit(apiService.uploadFile(token, rate?.toRequestBody(), roiRate?.toRequestBody(), imageFilePaths?.toMultipartBody()))

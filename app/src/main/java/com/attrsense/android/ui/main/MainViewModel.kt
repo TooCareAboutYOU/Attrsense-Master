@@ -1,16 +1,7 @@
 package com.attrsense.android.ui.main
 
-import android.util.Log
-import androidx.lifecycle.*
-import com.attrsense.android.config.AppConfig
-import com.attrsense.android.baselibrary.base.open.model.BaseResponse
-import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
-import com.attrsense.android.baselibrary.test.Event
 import com.attrsense.android.baselibrary.util.MMKVUtils
-import com.attrsense.android.model.ImagesBean
-import com.attrsense.android.model.LoginBean
-import com.attrsense.database.db.entity.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -23,13 +14,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val repository: MainRepository,
     private val mmkv: MMKVUtils,
-    private val event: Event
 ) : BaseViewModel() {
-
-    init {
-        event.load()
-    }
-
 //    /**
 //     * 登录
 //     */
@@ -39,7 +24,7 @@ class MainViewModel @Inject constructor(
 //
 //    fun login(mobile: String?, code: String?) {
 //        repository.login(mobile, code).collectInLaunch {
-//            Log.e("printInfo", "MainViewModel::login: $it")
+//            Log.e("print_logs", "MainViewModel::login: $it")
 //            _loginLiveData.value = it.apply {
 //                if (it.errorCode != BaseResponse.CODE_LOGIN_INVALID) {
 ////                    mmkv.setValue(AppConfig.KEY_ACCOUNT_TOKEN, data?.token)

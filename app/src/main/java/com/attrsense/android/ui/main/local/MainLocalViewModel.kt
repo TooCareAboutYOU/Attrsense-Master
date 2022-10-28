@@ -31,30 +31,27 @@ class MainLocalViewModel @Inject constructor(
                 when (data) {
                     is ResponseData.onFailed -> {
                         Log.e(
-                            "printInfo",
+                            "print_logs",
                             "MainLocalViewModel::addEntities: 添加失败！${data.throwable}"
                         )
                     }
                     is ResponseData.onSuccess -> {
-                        Log.i("printInfo", "MainLocalViewModel::addEntities: 添加成功！${data.value}")
+
                     }
                 }
             }
         }
 
-    fun getAll() =
-        databaseRepository.getAll(userDataManager.getToken()).collectInLaunch {
-            getAllLiveData.value = it
-        }
+    fun getAll() = databaseRepository.getAll(userDataManager.getToken())
+        .collectInLaunch { getAllLiveData.value = it }
 
     fun deleteByAnfPath(position: Int, anfImage: String?) =
-        databaseRepository.deleteByAnf(userDataManager.getToken(),anfImage).collectInLaunch {
+        databaseRepository.deleteByAnf(userDataManager.getToken(), anfImage).collectInLaunch {
             when (it) {
                 is ResponseData.onFailed -> {
-                    Log.e("printInfo", "MainLocalViewModel::deleteByAnfPath: ${it.throwable}")
+                    Log.e("print_logs", "MainLocalViewModel::deleteByAnfPath: ${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
-                    Log.i("printInfo", "MainLocalViewModel::deleteByAnfPath: ${it.value}")
                     deleteLiveData.value = position
                 }
             }

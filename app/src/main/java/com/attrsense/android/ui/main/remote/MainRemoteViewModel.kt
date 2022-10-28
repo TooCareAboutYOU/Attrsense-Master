@@ -4,14 +4,13 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
+import com.attrsense.android.service.DownloadIntentService
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.database.repository.DatabaseRepository
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -23,10 +22,11 @@ import javax.inject.Inject
 class MainRemoteViewModel @Inject constructor(
     private val mainRemoteRepository: MainRemoteRepository,
     private val databaseRepository: DatabaseRepository
-) : BaseViewModel() {
+) : BaseAndroidViewModel() {
 
     val getAllLiveData: MutableLiveData<ResponseData<BaseResponse<ImagesBean?>>> = MutableLiveData()
     val uploadLiveData: MutableLiveData<ResponseData<BaseResponse<ImagesBean?>>> = MutableLiveData()
+    val getByThumbLiveData: MutableLiveData<ResponseData<AnfImageEntity?>> = MutableLiveData()
     val deleteLiveData: MutableLiveData<Int> = MutableLiveData()
 
     /**
@@ -42,14 +42,17 @@ class MainRemoteViewModel @Inject constructor(
         page,
         perPage
     ).collectInLaunch {
-        saveToDatabase(it)
         getAllLiveData.value = it.apply {
             when (this) {
                 is ResponseData.onFailed -> {
-                    Log.e("printInfo", "MainRemoteViewModel::getRemoteFiles: ${this.throwable}")
+                    Log.e("print_logs", "MainRemoteViewModel::getRemoteFiles: ${this.throwable}")
                 }
                 is ResponseData.onSuccess -> {
-                    Log.i("printInfo", "MainRemoteViewModel::getRemoteFiles: ${this.value}")
+                    value?.data?.images?.also { imgList ->
+                        if (imgList.isNotEmpty()) {
+                            saveToDatabase(imgList)
+                        }
+                    }
                 }
             }
         }
@@ -71,39 +74,16 @@ class MainRemoteViewModel @Inject constructor(
         roiRate,
         imageFilePaths
     ).collectInLaunch {
-        saveToDatabase(it)
-        uploadLiveData.value = it
-    }
-
-
-
-
-    /**
-     * 保存到数据库
-     */
-    private val entityList: ArrayList<AnfImageEntity> by lazy { arrayListOf() }
-    private fun saveToDatabase(it: ResponseData<BaseResponse<ImagesBean?>>) {
-        when (it) {
-            is ResponseData.onFailed -> {
-                Log.e(
-                    "printInfo",
-                    "MainRemoteViewModel::saveToDatabase: ${it.throwable}"
-                )
-            }
-            is ResponseData.onSuccess -> {
-                it.value?.data?.images?.apply {
-                    if (this.isNotEmpty()) {
-                        entityList.clear()
-                        this.forEach { item ->
-                            val entity = AnfImageEntity(
-                                token = mainRemoteRepository.userManger.getToken(),
-                                originalImage = item?.thumbnailUrl,
-                                anfImage = item?.url,
-                                isLocal = false
-                            )
-                            entityList.add(entity)
+        uploadLiveData.value = it.apply {
+            when (this) {
+                is ResponseData.onFailed -> {
+                    Log.e("print_logs", "MainRemoteViewModel::getRemoteFiles: ${this.throwable}")
+                }
+                is ResponseData.onSuccess -> {
+                    value?.data?.images?.also { imgList ->
+                        if (imgList.isNotEmpty()) {
+                            saveToDatabase(imgList)
                         }
-                        addEntities(entityList)
                     }
                 }
             }
@@ -111,21 +91,92 @@ class MainRemoteViewModel @Inject constructor(
     }
 
 
-    fun addEntities(entityList: List<AnfImageEntity>) =
-        databaseRepository.addList(entityList).collectInLaunch {
-            it.also { data ->
-                when (data) {
+    /**
+     * 保存到数据库
+     */
+    private fun saveToDatabase(images: MutableList<ImageInfoBean>) {
+        images.forEach { item ->
+            databaseRepository.getByThumb(
+                mainRemoteRepository.userManger.getToken(),
+                item.thumbnailUrl
+            ).collectInLaunch {
+                when (it) {
                     is ResponseData.onFailed -> {
                         Log.e(
-                            "printInfo",
-                            "MainRemoteViewModel::addEntities: 添加失败！${data.throwable}"
+                            "print_logs",
+                            "DownloadIntentService::onStartCommand: ${it.throwable}"
                         )
                     }
                     is ResponseData.onSuccess -> {
-                        Log.i("printInfo", "MainRemoteViewModel::addEntities: 添加成功！${data.value}")
+                        if (it.value == null || it.value?.isDownload == false) {
+                            val entity = AnfImageEntity(
+                                token = mainRemoteRepository.userManger.getToken(),
+                                originalImage = item.thumbnailUrl,
+                                thumbImage = item.thumbnailUrl,
+                                anfImage = item.url,
+                                isLocal = false
+                            )
+                            Log.i(
+                                "print_logs",
+                                "MainRemoteViewModel::saveToDatabase: $entity"
+                            )
+                            addEntity(entity)
+                        }
                     }
                 }
             }
+        }
+    }
+
+
+    private fun addEntity(entity: AnfImageEntity) =
+        databaseRepository.getAddOrUpdateByThumb(mainRemoteRepository.userManger.getToken(), entity)
+            .collectInLaunch {
+                it.also { data ->
+                    when (data) {
+                        is ResponseData.onFailed -> {
+                            Log.e(
+                                "print_logs",
+                                "MainRemoteViewModel::addEntities: 添加失败！${data.throwable}"
+                            )
+                        }
+                        is ResponseData.onSuccess -> {
+                            Log.i(
+                                "print_logs",
+                                "MainRemoteViewModel::addEntities: 添加成功！${data.value}"
+                            )
+                            DownloadIntentService.start(
+                                getApplication(),
+                                entity.thumbImage,
+                                entity.anfImage
+                            )
+                        }
+                    }
+                }
+            }
+
+    fun getByThumb(thumbImage: String?) =
+        databaseRepository.getByThumb(mainRemoteRepository.userManger.getToken(), thumbImage)
+            .collectInLaunch {
+                getByThumbLiveData.value=it
+            }
+
+
+    fun addEntities(entityList: List<AnfImageEntity>) =
+        databaseRepository.addList(entityList).collectInLaunch {
+//            addEntityLiveData.value = it.also { data ->
+//                when (data) {
+//                    is ResponseData.onFailed -> {
+//                        Log.e(
+//                            "print_logs",
+//                            "MainLocalViewModel::addEntities: 添加失败！${data.throwable}"
+//                        )
+//                    }
+//                    is ResponseData.onSuccess -> {
+//
+//                    }
+//                }
+//            }
         }
 
 
@@ -137,14 +188,10 @@ class MainRemoteViewModel @Inject constructor(
 
                     }
                     is ResponseData.onSuccess -> {
-                        Log.i("printInfo", "MainLocalViewModel::deleteByAnfPath: ${it.value}")
+                        Log.i("print_logs", "MainLocalViewModel::deleteByAnfPath: ${it.value}")
                         deleteLiveData.value = position
                     }
                 }
             }
 
-    override fun onCleared() {
-        super.onCleared()
-        entityList.clear()
-    }
 }

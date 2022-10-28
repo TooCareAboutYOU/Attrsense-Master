@@ -3,6 +3,7 @@ package com.attrsense.database.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.Gson
 
 /**
  * author : zhangshuai@attrsense.com
@@ -27,6 +28,7 @@ data class AnfImageEntity(
     @ColumnInfo(name = "thumbImage")
     var thumbImage: String? = "",
 
+    //anf文件存储地址
     @ColumnInfo(name = "anfImage")
     var anfImage: String? = "",
 
@@ -34,6 +36,18 @@ data class AnfImageEntity(
     @ColumnInfo(name = "cache_Image")
     var cacheImage: String? = "",
 
+    //是否本地数据，还是云端数据
     @ColumnInfo(name = "isLocal")
-    var isLocal: Boolean = true
-)
+    var isLocal: Boolean = true,
+
+    //针对远端anf文件是否已经下载
+    @ColumnInfo(name = "isDownload")
+    var isDownload: Boolean = false
+
+) {
+
+    override fun toString(): String {
+        return Gson().toJson(this)
+    }
+
+}
