@@ -6,6 +6,7 @@ import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,13 +17,13 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val registerRepository: RegisterRepository
+    private val appRepository: AppRepository
 ) : BaseViewModel() {
     val registerLivedata: MutableLiveData<ResponseData<BaseResponse<EmptyBean?>>> =
         MutableLiveData()
 
     fun register(mobile: String, code: String) {
-        registerRepository.register(mobile, code).collectInLaunch {
+        appRepository.register(mobile, code).collectInLaunch {
             registerLivedata.value = it
         }
     }

@@ -75,7 +75,7 @@ interface ApiService {
      * 删除文件
      * @param url
      */
-    @POST("v1/delete_file")
+    @HTTP(method = "DELETE", path = "v1/delete_file", hasBody = true)
     suspend fun deleteFile(
         @Header("Authorization") token: String?,
         @Body body: MutableMap<String, Any?>

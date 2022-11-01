@@ -1,19 +1,15 @@
 package com.attrsense.android.ui.login
 
-import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.transition.Explode
-import android.transition.Fade
-import android.transition.Slide
 import android.util.Log
-import android.view.View
 import android.view.Window
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import androidx.transition.Transition
+import com.attrsense.android.BuildConfig
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
@@ -21,9 +17,7 @@ import com.attrsense.android.databinding.ActivityLoginBinding
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.register.RegisterActivity
 import com.blankj.utilcode.util.ToastUtils
-import com.google.android.material.transition.platform.*
 import com.jakewharton.rxbinding4.widget.textChanges
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
 
@@ -46,6 +40,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
 
     override fun initViewBefore(savedInstanceState: Bundle?) {
         super.initViewBefore(savedInstanceState)
+
         window.apply {
             requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
             enterTransition = Explode()
@@ -61,6 +56,8 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
+
+        addBackPress(this)
 
         val mobile: Observable<CharSequence> =
             mDataBinding.acEtMobile.textChanges().skipInitialValue()
@@ -78,7 +75,9 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
             )
         }
 
-        mDataBinding.acEtMobile.setText("18874701235")
+        if (BuildConfig.DEBUG) {
+            mDataBinding.acEtMobile.setText("18874701235")
+        }
 
         mDataBinding.acBtnRequestCode.setOnClickListener {
             mDataBinding.acEtCode.setText("111111")
@@ -96,6 +95,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
                     ToastUtils.showShort("登录失败！${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
+                    ToastUtils.showShort("登录成功！")
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
@@ -106,4 +106,5 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
             RegisterActivity.jump(this)
         }
     }
+
 }

@@ -42,11 +42,11 @@ class MainLocalViewModel @Inject constructor(
             }
         }
 
-    fun getAll() = databaseRepository.getAll(userDataManager.getToken())
+    fun getAll() = databaseRepository.getAllByType(userDataManager.getMobile())
         .collectInLaunch { getAllLiveData.value = it }
 
     fun deleteByAnfPath(position: Int, anfImage: String?) =
-        databaseRepository.deleteByAnf(userDataManager.getToken(), anfImage).collectInLaunch {
+        databaseRepository.deleteByAnf(userDataManager.getMobile(), anfImage).collectInLaunch {
             when (it) {
                 is ResponseData.onFailed -> {
                     Log.e("print_logs", "MainLocalViewModel::deleteByAnfPath: ${it.throwable}")

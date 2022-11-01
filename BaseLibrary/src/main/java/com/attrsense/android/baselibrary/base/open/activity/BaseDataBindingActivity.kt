@@ -3,9 +3,14 @@ package com.attrsense.android.baselibrary.base.open.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
+import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LifecycleOwner
+import com.blankj.utilcode.util.ToastUtils
+import kotlin.system.exitProcess
 
 /**
  * author : zhangshuai@attrsense.com
@@ -59,4 +64,40 @@ abstract class BaseDataBindingActivity<DB : ViewDataBinding> :
         super.onDestroy()
         mDataBinding.unbind()
     }
+
+
+    protected fun addBackPress(owner: LifecycleOwner) {
+        onBackPressedDispatcher.addCallback(owner, onBackPress)
+    }
+
+    /**
+     * 上次点击返回键的时间
+     */
+    private var lastBackPressTime = -1L
+
+    /**
+     * 在需要退出APP的页面添加以下代码：
+     * onBackPressedDispatcher.addCallback(this, onBackPress)
+     */
+    private val onBackPress = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val currentTIme = System.currentTimeMillis()
+
+            if (lastBackPressTime == -1L || currentTIme - lastBackPressTime >= 2000L) {
+                showBackPressTip()
+                lastBackPressTime = currentTIme
+            } else {
+                //退出引用
+                finish()
+                android.os.Process.killProcess(android.os.Process.myPid())
+                exitProcess(0)
+//                moveTaskToBack(false)
+            }
+        }
+    }
+
+    protected fun showBackPressTip() {
+        ToastUtils.showShort("再按一次退出")
+    }
+
 }

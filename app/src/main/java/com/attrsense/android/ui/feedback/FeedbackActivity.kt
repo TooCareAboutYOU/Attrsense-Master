@@ -49,7 +49,13 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
-        mDataBinding.acIvBack.setOnClickListener { finish() }
+
+        mDataBinding.toolBarView.load(this).apply {
+            this.setCenterTitle(R.string.tab_main_user_feedback_title)
+            this.setLeftClick {
+                this@FeedbackActivity.finish()
+            }
+        }
 
         mAdapter = FeedbackPictureSelectorAdapter(mList)
 
@@ -65,6 +71,7 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
     }
 
     private fun setListener() {
+        mDataBinding.acEtDescription.requestFocus()
         addDisposable(mDataBinding.acEtDescription.textChanges().subscribe {
             mDataBinding.acBtnCommit.isEnabled = it.isNotEmpty()
             mDataBinding.acTvCount.text =
@@ -91,6 +98,9 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
             if (it) {
                 ToastUtils.showShort("提交成功！")
                 mDataBinding.acEtDescription.text = null
+                mList.clear()
+                mList.add(ItemMultipleEntity(ItemMultipleEntity.PLACE_HOLDER))
+                mAdapter.notifyDataSetChanged()
             } else {
                 ToastUtils.showShort("提交失败,请重试！")
             }

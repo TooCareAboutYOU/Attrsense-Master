@@ -1,12 +1,12 @@
 package com.attrsense.database.repository
 
+import android.util.Log
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.repository.SkeletonRepository
 import com.attrsense.database.db.AttrSenseRoomDatabase
 import com.attrsense.database.db.dao.UserDao
 import com.attrsense.database.db.entity.AnfImageEntity
 import kotlinx.coroutines.flow.flow
-import okhttp3.internal.notify
 import javax.inject.Inject
 
 /**
@@ -71,32 +71,41 @@ class DatabaseRepository @Inject constructor(
 
     /**
      * 获取所有(本地/云端)缓存数据
-     * @param token String?
+     * @param mobile String?
      * @param isLocal Boolean?
      * @return Flow<ResponseData<List<AnfImageEntity?>>>
      */
-    fun getAll(token: String?, isLocal: Boolean? = true) = flow {
-        emit(ResponseData.onSuccess(anfDao.getAll(token, isLocal)))
+    fun getAllByType(mobile: String?, isLocal: Boolean = true) = flow {
+        emit(ResponseData.onSuccess(anfDao.getAllByType(mobile, isLocal)))
+    }.flowOnIO()
+
+    /**
+     * 通过手机号查询
+     * @param mobile String?
+     * @return Flow<ResponseData<List<AnfImageEntity?>>>
+     */
+    fun getAll(mobile: String?) = flow {
+        emit(ResponseData.onSuccess(anfDao.getAll(mobile)))
     }.flowOnIO()
 
     /**
      * 根据anf获取数据
-     * @param token String?
+     * @param mobile String?
      * @param anfPath String?
      * @return Flow<ResponseData<AnfImageEntity>>
      */
-    fun getByAnf(token: String?, anfPath: String?) = flow {
-        emit(ResponseData.onSuccess(anfDao.getByAnf(token, anfPath)))
+    fun getByAnf(mobile: String?, anfPath: String?) = flow {
+        emit(ResponseData.onSuccess(anfDao.getByAnf(mobile, anfPath)))
     }.flowOnIO()
 
     /**
      * 根据缩略图获取数据
-     * @param token String?
+     * @param mobile String?
      * @param originalPath String
      * @return Flow<ResponseData<AnfImageEntity>>
      */
-    fun getByOriginal(token: String?, originalPath: String) = flow {
-        emit(ResponseData.onSuccess(anfDao.getByOriginal(token, originalPath)))
+    fun getByOriginal(mobile: String?, originalPath: String) = flow {
+        emit(ResponseData.onSuccess(anfDao.getByOriginal(mobile, originalPath)))
     }.flowOnIO()
 
 
@@ -105,8 +114,8 @@ class DatabaseRepository @Inject constructor(
      * @param thumbImage String?
      * @return Flow<ResponseData<AnfImageEntity>>
      */
-    fun getByThumb(token: String?, thumbImage: String?)= flow {
-        emit(ResponseData.onSuccess(anfDao.getByThumb(token,thumbImage)))
+    fun getByThumb(mobile: String?, thumbImage: String?) = flow {
+        emit(ResponseData.onSuccess(anfDao.getByThumb(mobile, thumbImage)))
     }.flowOnIO()
 
     /**
@@ -114,8 +123,8 @@ class DatabaseRepository @Inject constructor(
      * @param newData AnfImageEntity
      * @return Flow<ResponseData<Boolean>>
      */
-    fun getAddOrUpdateByThumb(token: String?, newData: AnfImageEntity)= flow {
-        anfDao.getAddOrUpdateByThumb(token,newData)
+    fun getAddOrUpdateByThumb(mobile: String?, newData: AnfImageEntity) = flow {
+        anfDao.getAddOrUpdateByThumb(mobile, newData)
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
@@ -126,6 +135,18 @@ class DatabaseRepository @Inject constructor(
      */
     fun delete(anfImageEntity: AnfImageEntity) = flow {
         anfDao.deleteEntity(anfImageEntity)
+        emit(ResponseData.onSuccess(true))
+    }.flowOnIO()
+
+
+    /**
+     * 通过缩略图删除数据文件
+     * @param mobile String?
+     * @param thumbImage String?
+     * @return Flow<ResponseData<Boolean>>
+     */
+    fun deleteByThumb(mobile: String?, thumbImage: String?) = flow {
+        anfDao.deleteByThumb(mobile, thumbImage)
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
@@ -141,44 +162,44 @@ class DatabaseRepository @Inject constructor(
 
     /**
      * 删除指定ANF数据和文件
-     * @param token String?
+     * @param mobile String?
      * @param anfImage String?
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteByAnf(token: String?, anfImage: String?) = flow {
-        anfDao.deleteByAnfPath(token, anfImage)
+    fun deleteByAnf(mobile: String?, anfImage: String?) = flow {
+        anfDao.deleteByAnfPath(mobile, anfImage)
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
     /**
      * 根据AND批量删除
-     * @param token String?
+     * @param mobile String?
      * @param anfImage List<String>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteAnfs(token: String?, anfImage: List<String>) = flow {
-        anfDao.deleteByAnfPaths(token, anfImage)
+    fun deleteAnfs(mobile: String?, anfImage: List<String>) = flow {
+        anfDao.deleteByAnfPaths(mobile, anfImage)
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
     /**
      * 删除本地或者云端缓存数据
-     * @param token String?
+     * @param mobile String?
      * @param isLocal Boolean?
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteType(token: String?, isLocal: Boolean?) = flow {
-        anfDao.deleteByType(token, isLocal)
+    fun deleteType(mobile: String?, isLocal: Boolean?) = flow {
+        anfDao.deleteByType(mobile, isLocal)
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
     /**
      * 清空指定用户的所有数据
-     * @param token String?
+     * @param mobile String?
      * @return Flow<ResponseData<Boolean>>
      */
-    fun clearByToken(token: String?) = flow {
-        anfDao.clearAll(token)
+    fun clearByToken(mobile: String?) = flow {
+        anfDao.clearAll(mobile)
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 

@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -66,25 +67,30 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
+        mDataBinding.toolBarView.load(requireActivity()).apply {
+            hideLeftIcon()
+            this.setRightClick {
+                rxPermissions.request(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ).subscribe {
+                    try {
+                        SelectorBottomDialog.show(this@MainLocalFragment)
+                    } catch (e: IllegalStateException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+            this.setCenterTitle("双深科技")
+            this.setRightIcon(R.drawable.icon_add)
+        }
+
         context?.let {
             mAdapter = LocalImageAdapter(it, this)
             mDataBinding.recyclerview.apply {
                 layoutManager = GridLayoutManager(it, 3, RecyclerView.VERTICAL, false)
                 adapter = mAdapter
-            }
-        }
-
-        mDataBinding.acImgAdd.clicks().compose(
-            rxPermissions.ensure(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            )
-        ).subscribe {
-            try {
-                SelectorBottomDialog.show(this)
-            } catch (e: IllegalStateException) {
-                e.printStackTrace()
             }
         }
 
@@ -139,6 +145,7 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
                     if (anf_path.isNotEmpty()) {
                         val entity = AnfImageEntity(
                             token = userDataManager.getToken(),
+                            mobile = userDataManager.getMobile(),
                             originalImage = path,
                             thumbImage = FilesHelper.saveThumb(requireActivity(), path),
                             anfImage = anf_path,
@@ -154,6 +161,7 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
                         anfPaths.forEachIndexed { index, anfPath ->
                             val entity = AnfImageEntity(
                                 token = userDataManager.getToken(),
+                                mobile = userDataManager.getMobile(),
                                 originalImage = paths[index],
                                 thumbImage = FilesHelper.saveThumb(requireActivity(), paths[index]),
                                 anfImage = anfPath,

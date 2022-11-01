@@ -7,7 +7,8 @@ import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
-import com.attrsense.android.service.DownloadIntentService
+import com.attrsense.android.repository.AppRepository
+import com.attrsense.android.service.DownloadService
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.database.repository.DatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +21,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainRemoteViewModel @Inject constructor(
-    private val mainRemoteRepository: MainRemoteRepository,
-    private val databaseRepository: DatabaseRepository
+    private val databaseRepository: DatabaseRepository,
+    private val appRepository: AppRepository
 ) : BaseAndroidViewModel() {
 
     val getAllLiveData: MutableLiveData<ResponseData<BaseResponse<ImagesBean?>>> = MutableLiveData()
@@ -38,7 +39,7 @@ class MainRemoteViewModel @Inject constructor(
     fun getRemoteFiles(
         page: Int,
         perPage: Int
-    ) = mainRemoteRepository.getRemoteFiles(
+    ) = appRepository.getRemoteFiles(
         page,
         perPage
     ).collectInLaunch {
@@ -69,7 +70,7 @@ class MainRemoteViewModel @Inject constructor(
         rate: String?,
         roiRate: String?,
         imageFilePaths: List<String>? = null
-    ) = mainRemoteRepository.uploadFile(
+    ) = appRepository.uploadFile(
         rate,
         roiRate,
         imageFilePaths
@@ -97,7 +98,7 @@ class MainRemoteViewModel @Inject constructor(
     private fun saveToDatabase(images: MutableList<ImageInfoBean>) {
         images.forEach { item ->
             databaseRepository.getByThumb(
-                mainRemoteRepository.userManger.getToken(),
+                appRepository.userManger.getMobile(),
                 item.thumbnailUrl
             ).collectInLaunch {
                 when (it) {
@@ -108,9 +109,20 @@ class MainRemoteViewModel @Inject constructor(
                         )
                     }
                     is ResponseData.onSuccess -> {
-                        if (it.value == null || it.value?.isDownload == false) {
+
+                        Log.i(
+                            "print_logs",
+                            "MainRemoteViewModel::saveToDatabase->已经存在: ${it.value?.thumbImage}"
+                        )
+                        Log.i(
+                            "print_logs",
+                            "MainRemoteViewModel::saveToDatabase->待存数据: ${item.thumbnailUrl}"
+                        )
+
+                        if (it.value == null) {
                             val entity = AnfImageEntity(
-                                token = mainRemoteRepository.userManger.getToken(),
+                                token = appRepository.userManger.getToken(),
+                                mobile = appRepository.userManger.getMobile(),
                                 originalImage = item.thumbnailUrl,
                                 thumbImage = item.thumbnailUrl,
                                 anfImage = item.url,
@@ -118,7 +130,7 @@ class MainRemoteViewModel @Inject constructor(
                             )
                             Log.i(
                                 "print_logs",
-                                "MainRemoteViewModel::saveToDatabase: $entity"
+                                "MainRemoteViewModel::添加到数据库: $entity"
                             )
                             addEntity(entity)
                         }
@@ -130,7 +142,7 @@ class MainRemoteViewModel @Inject constructor(
 
 
     private fun addEntity(entity: AnfImageEntity) =
-        databaseRepository.getAddOrUpdateByThumb(mainRemoteRepository.userManger.getToken(), entity)
+        databaseRepository.getAddOrUpdateByThumb(appRepository.userManger.getMobile(), entity)
             .collectInLaunch {
                 it.also { data ->
                     when (data) {
@@ -145,7 +157,7 @@ class MainRemoteViewModel @Inject constructor(
                                 "print_logs",
                                 "MainRemoteViewModel::addEntities: 添加成功！${data.value}"
                             )
-                            DownloadIntentService.start(
+                            DownloadService.start(
                                 getApplication(),
                                 entity.thumbImage,
                                 entity.anfImage
@@ -156,42 +168,54 @@ class MainRemoteViewModel @Inject constructor(
             }
 
     fun getByThumb(thumbImage: String?) =
-        databaseRepository.getByThumb(mainRemoteRepository.userManger.getToken(), thumbImage)
+        databaseRepository.getByThumb(appRepository.userManger.getMobile(), thumbImage)
             .collectInLaunch {
-                getByThumbLiveData.value=it
+                getByThumbLiveData.value = it
             }
 
 
     fun addEntities(entityList: List<AnfImageEntity>) =
         databaseRepository.addList(entityList).collectInLaunch {
-//            addEntityLiveData.value = it.also { data ->
-//                when (data) {
-//                    is ResponseData.onFailed -> {
-//                        Log.e(
-//                            "print_logs",
-//                            "MainLocalViewModel::addEntities: 添加失败！${data.throwable}"
-//                        )
-//                    }
-//                    is ResponseData.onSuccess -> {
-//
-//                    }
-//                }
-//            }
+            when (it) {
+                is ResponseData.onFailed -> {
+                    Log.e(
+                        "print_logs",
+                        "MainLocalViewModel::addEntities: 添加失败！${it.throwable}"
+                    )
+                }
+                is ResponseData.onSuccess -> {
+
+                }
+            }
         }
 
 
-    fun deleteByAnfPath(position: Int, anfImage: String?) =
-        databaseRepository.deleteByAnf(mainRemoteRepository.userManger.getToken(), anfImage)
-            .collectInLaunch {
-                when (it) {
-                    is ResponseData.onFailed -> {
+    fun deleteByThumb(position: Int, thumbImage: String?, fileId: String?) =
+        appRepository.deleteFile(fileId).collectInLaunch {
+            when (it) {
+                is ResponseData.onFailed -> {
+                    Log.e("print_logs", "MainLocalViewModel::deleteByThumb: 添加失败！${it.throwable}")
+                }
+                is ResponseData.onSuccess -> {
+                    databaseRepository.deleteByThumb(
+                        appRepository.userManger.getMobile(),
+                        thumbImage
+                    )
+                        .collectInLaunch { state ->
+                            when (state) {
+                                is ResponseData.onFailed -> {
+                                    Log.e(
+                                        "print_logs",
+                                        "MainRemoteViewModel::deleteByThumb: ${state.throwable}"
+                                    )
 
-                    }
-                    is ResponseData.onSuccess -> {
-                        Log.i("print_logs", "MainLocalViewModel::deleteByAnfPath: ${it.value}")
-                        deleteLiveData.value = position
-                    }
+                                }
+                                is ResponseData.onSuccess -> {
+                                    deleteLiveData.value = position
+                                }
+                            }
+                        }
                 }
             }
-
+        }
 }

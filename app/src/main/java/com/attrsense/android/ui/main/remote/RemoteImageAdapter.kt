@@ -11,18 +11,6 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
  * date : 2022/10/20 15:28
  * mark : custom something
  */
-//    fun setData(list: List<ImageInfoBean?>?, isClear: Boolean? = false) {
-//        list?.let {
-//            isClear?.let { state ->
-//                if (state) {
-//                    mList.clear()
-//                }
-//            }
-//            mList.addAll(it)
-//            notifyDataSetChanged()
-//        }
-//    }
-
 class RemoteImageAdapter constructor(list: MutableList<ImageInfoBean>) :
     BaseQuickAdapter<ImageInfoBean, BaseViewHolder>(R.layout.layout_remote_item, list) {
 

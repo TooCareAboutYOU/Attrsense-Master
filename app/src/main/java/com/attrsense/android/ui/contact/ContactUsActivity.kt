@@ -19,10 +19,12 @@ class ContactUsActivity :
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
 
-        mDataBinding.acIvBack.setOnClickListener {
-            finish()
+        mDataBinding.toolBarView.load(this).apply {
+            this.setCenterTitle(R.string.tab_main_user_contact_title)
+            this.setLeftClick {
+                this@ContactUsActivity.finish()
+            }
         }
-
     }
 
 }

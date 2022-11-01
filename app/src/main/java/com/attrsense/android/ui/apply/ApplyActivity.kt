@@ -27,6 +27,14 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
+        mDataBinding.toolBarView.load(this).apply {
+            this.setCenterTitle(R.string.tab_main_user_apply_title)
+            this.setLeftClick {
+                this@ApplyActivity.finish()
+            }
+        }
+
+
         mDataBinding.acTvContact.text = getContent(R.string.tab_main_user_apply_contact)
         mDataBinding.acTvPhone.text = getContent(R.string.tab_main_user_apply_phone)
         mDataBinding.acTvEmail.text = getContent(R.string.tab_main_user_apply_email)
@@ -34,10 +42,6 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
         mDataBinding.acTvDescription.text = getContent(R.string.tab_main_user_apply_description)
 
         textListener()
-
-        mDataBinding.acIvBack.setOnClickListener {
-            finish()
-        }
 
         mDataBinding.acBtnCommit.setOnClickListener {
             mViewModel.apply(

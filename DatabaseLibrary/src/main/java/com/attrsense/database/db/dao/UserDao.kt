@@ -29,4 +29,8 @@ interface UserDao {
 
     @Query("DELETE FROM USER_TABLE")
     suspend fun clear()
+
+
+    @Query("DELETE FROM USER_TABLE WHERE mobile=:mobile")
+    suspend fun deleteByMobile(mobile: String?)
 }

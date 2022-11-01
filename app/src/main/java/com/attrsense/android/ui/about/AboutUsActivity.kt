@@ -19,6 +19,11 @@ class AboutUsActivity :
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
-        mDataBinding.acIvBack.setOnClickListener { finish() }
+        mDataBinding.toolBarView.load(this).apply {
+            this.setCenterTitle(R.string.tab_main_user_about_us_title)
+            this.setLeftClick {
+                this@AboutUsActivity.finish()
+            }
+        }
     }
 }

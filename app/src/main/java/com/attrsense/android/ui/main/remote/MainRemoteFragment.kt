@@ -1,20 +1,10 @@
 package com.attrsense.android.ui.main.remote
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.DownloadManager
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.database.Cursor
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,20 +18,16 @@ import com.attrsense.android.databinding.FragmentMainRemoteBinding
 import com.attrsense.android.databinding.LayoutDialogItemShowBinding
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
-import com.attrsense.android.service.DownloadIntentService
 import com.attrsense.android.view.ImageShowDialog
 import com.attrsense.android.view.SelectorBottomDialog
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.example.snpetest.JniInterface
 import com.jakewharton.rxbinding4.view.clicks
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.internal.Contexts.getApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,6 +53,26 @@ class MainRemoteFragment :
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
+
+        mDataBinding.toolbar.load(requireActivity()).apply {
+            this.hideLeftIcon()
+            this.setRightClick {
+                rxPermissions.request(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ).subscribe {
+                    try {
+                        SelectorBottomDialog.show(this@MainRemoteFragment)
+                    } catch (e: IllegalStateException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+            this.setCenterTitle("双深科技")
+            this.setRightIcon(R.drawable.icon_add)
+        }
+
         context?.let {
             mAdapter = RemoteImageAdapter(mList)
             mDataBinding.recyclerview.apply {
@@ -75,25 +81,15 @@ class MainRemoteFragment :
             }
         }
 
-        mDataBinding.acImgAdd.clicks().compose(
-            rxPermissions.ensure(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            )
-        ).subscribe {
-            try {
-                SelectorBottomDialog.show(this)
-            } catch (e: IllegalStateException) {
-                e.printStackTrace()
-            }
-        }
-
         mAdapter.setOnItemClickListener { _, _, position ->
             _clickData = mList[position]
             mViewModel.getByThumb(mList[position].thumbnailUrl)
         }
 
+        mAdapter.setOnItemLongClickListener { _, _, position ->
+            mViewModel.deleteByThumb(position, mList[position].thumbnailUrl, mList[position].fileId)
+            false
+        }
 
         liveDataObserves()
     }
@@ -122,11 +118,15 @@ class MainRemoteFragment :
                 }
             }
         }
+
+        mViewModel.deleteLiveData.observe(this) {
+            mAdapter.removeAt(it)
+            ToastUtils.showShort("删除成功！")
+        }
     }
 
     private fun reloadAdapter(
-        response: ResponseData<BaseResponse<ImagesBean?>>,
-        isNewAdd: Boolean? = false
+        response: ResponseData<BaseResponse<ImagesBean?>>, isNewAdd: Boolean? = false
     ) {
         when (response) {
             is ResponseData.onFailed -> {
@@ -172,19 +172,16 @@ class MainRemoteFragment :
 
     private fun upload(list: List<String>) {
         showLoadingDialog("压缩中...")
-        mViewModel.uploadFile("1", "2", list)
+        mViewModel.uploadFile("4", "4", list)
     }
-
-//    override fun onLongClickEvent(position: Int, anfPath: String?) {
-//        mViewModel.deleteByAnfPath(position,anfPath)
-//    }
 
     private fun showDialog(entity: AnfImageEntity) {
         val viewBinding: LayoutDialogItemShowBinding = DataBindingUtil.inflate(
             layoutInflater, R.layout.layout_dialog_item_show, null, true
         )
 
-        Glide.with(requireActivity()).load(entity.thumbImage).error(R.mipmap.ic_launcher)
+        Glide.with(requireActivity()).load(entity.thumbImage)
+            .error(R.mipmap.ic_launcher)
             .into(viewBinding.acIvImg)
 
         val dialog = ImageShowDialog(requireActivity()).apply {
@@ -197,22 +194,22 @@ class MainRemoteFragment :
         lifecycleScope.launch {
             showLoadingDialog("解压中...")
             val bitmap = withContext(Dispatchers.IO) {
-                Log.i("print_logs", "MainRemoteFragment::showDialog: ${entity.anfImage}")
-
                 JniInterface.decoderCommitPath2Buffer(entity.anfImage)
             }
             hideLoadingDialog()
-            viewBinding.acTvInfo.text =
-                StringBuilder().apply {
-                    if (_clickData != null) {
-                        append("原JPG：${CleanMessageUtils.getFormatSize(_clickData?.srcSize!!.toDouble())}").append("\n")
-                    }
-                    append("ANF：${FileUtils.getSize(entity.anfImage)}").append("\n")
-                    append("宽：${bitmap.width}").append("\n").append("高：${bitmap.height}")
-                    toString()
+            viewBinding.acTvInfo.text = StringBuilder().apply {
+                if (_clickData != null) {
+                    append("原JPG：${CleanMessageUtils.getFormatSize(_clickData?.srcSize!!.toDouble())}").append(
+                        "\n"
+                    )
                 }
+                append("ANF：${FileUtils.getSize(entity.anfImage)}").append("\n")
+                append("宽：${bitmap.width}").append("\n").append("高：${bitmap.height}")
+                toString()
+            }
 
-            Glide.with(requireActivity()).load(bitmap).error(R.mipmap.ic_launcher)
+            Glide.with(requireActivity()).load(bitmap)
+                .error(R.mipmap.ic_launcher)
                 .into(viewBinding.acIvImg)
         }
 

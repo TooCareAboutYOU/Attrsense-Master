@@ -5,6 +5,7 @@ import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.PrimitiveIterator
 import javax.inject.Inject
@@ -16,7 +17,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ApplyViewModel @Inject constructor(
-    private val applyRepository: ApplyRepository
+    private val appRepository: AppRepository
 ) : BaseViewModel() {
 
     val applyLiveData: MutableLiveData<ResponseData<BaseResponse<EmptyBean?>>> = MutableLiveData()
@@ -25,7 +26,7 @@ class ApplyViewModel @Inject constructor(
      * 提交申请
      */
     fun apply(name: String, mobile: String, company: String, email: String, briefly: String?) =
-        applyRepository.apply(name, mobile, company, email, briefly).collectInLaunch {
+        appRepository.apply(name, mobile, company, email, briefly).collectInLaunch {
             applyLiveData.value = it
         }
 

@@ -1,8 +1,10 @@
 package com.attrsense.android.baselibrary.base.internal
 
 import android.os.Bundle
+import com.attrsense.android.baselibrary.util.ActivityManager
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.android.baselibrary.view.LoadingDialog
+import com.blankj.utilcode.util.ActivityUtils
 import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -33,8 +35,8 @@ open class SkeletonActivity : RxAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ActivityManager.getInstance().add(this)
         rxPermissions = RxPermissions(this)
-
         //临时监听网络状态
 //        val mDisposable = ReactiveNetwork.observeNetworkConnectivity(this)
 //            .subscribeOn(Schedulers.io())
@@ -69,6 +71,7 @@ open class SkeletonActivity : RxAppCompatActivity() {
         super.onDestroy()
         mDisposables.dispose()
         hideLoadingDialog()
+        ActivityManager.getInstance().remove(this)
     }
 
     /**

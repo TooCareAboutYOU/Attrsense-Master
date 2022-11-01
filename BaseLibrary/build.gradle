@@ -59,7 +59,7 @@ dependencies {
 //    testImplementation rootProject.ext.dependencies["mockk"]
     debugImplementation rootProject.ext.dependencies["leakcanaryAndroid"]
     implementation rootProject.ext.dependencies["okHttpProfiler"]
-//    debugImplementation rootProject.ext.dependencies["debugDB"] //debug 数据库
+    debugImplementation rootProject.ext.dependencies["debugDB"] //debug 数据库
 //    api rootProject.ext.dependencies["legacySupportV4"]
 
     api rootProject.ext.dependencies["multidex"]

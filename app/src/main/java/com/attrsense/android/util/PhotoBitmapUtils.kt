@@ -136,6 +136,7 @@ object PhotoBitmapUtils {
         return savePhotoToSD(bitmap, context)
     }
 
+
     /**
      * 读取照片旋转角度
      *

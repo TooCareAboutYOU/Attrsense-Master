@@ -2,11 +2,13 @@ package com.attrsense.android.view
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.attrsense.android.databinding.DialogSelectorBottomBinding
 import com.attrsense.android.widget.BaseBottomSheetDialogFragment
 import com.yuyh.library.imgsel.ISNav
@@ -74,7 +76,7 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
             callback: onClickEventListener? = null
         ) {
             SelectorBottomDialog(fragment, maxCount, callback).show(
-                fragment.parentFragmentManager,//.supportFragmentManager,
+                fragment.parentFragmentManager,
                 SelectorBottomDialog::class.java.simpleName
             )
         }
@@ -90,7 +92,6 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
             )
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,

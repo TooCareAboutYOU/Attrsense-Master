@@ -18,11 +18,11 @@ open class BaseRepository : SkeletonRepository() {
     //自定好了
     private val partName = "imageFile"
 
-    protected fun String.toRequestBody(): RequestBody =
+    fun String.toRequestBody(): RequestBody =
         this.toRequestBody("text/plain".toMediaType())
 
 
-    protected fun String.toMultipartBody(): MultipartBody.Part {
+    fun String.toMultipartBody(): MultipartBody.Part {
         val file = java.io.File(this)
         val imageFileBody = file.asRequestBody("multipart/form-data".toMediaType())
         return MultipartBody.Part.createFormData(
@@ -33,7 +33,7 @@ open class BaseRepository : SkeletonRepository() {
     }
 
 
-    protected fun List<String?>.toMultipartBody(): List<MultipartBody.Part> =
+    fun List<String?>.toMultipartBody(): List<MultipartBody.Part> =
         if (this.isNotEmpty()) {
             ArrayList<MultipartBody.Part>(this.size).also {
                 this.forEachIndexed { _, path ->

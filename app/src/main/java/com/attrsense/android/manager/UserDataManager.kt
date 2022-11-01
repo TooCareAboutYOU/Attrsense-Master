@@ -1,5 +1,6 @@
 package com.attrsense.android.manager
 
+import android.util.Log
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import javax.inject.Inject
 
@@ -11,24 +12,32 @@ import javax.inject.Inject
 
 class UserDataManager @Inject constructor(private val mmkvUtils: MMKVUtils) {
 
-    companion object{
+    companion object {
+        //用户手机号
+        private const val KEY_ACCOUNT_MOBILE = "key_account_mobile"
+
         //账户token
         private const val KEY_ACCOUNT_TOKEN = "key_account_token"
+
+        //刷新token
         private const val KEY_ACCOUNT_REFRESH_TOKEN = "key_account_refresh_token"
-        private const val _token = "" //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzMzNTgxODUsInVzZXJfaWQiOjV9.4ugNg57lwAamYi9RmdRjYcJJ08hYY1kc7o6qfUCHAQE
     }
 
     init {
-        mmkvUtils.setValue(KEY_ACCOUNT_TOKEN, _token)
+        mmkvUtils.setValue(KEY_ACCOUNT_TOKEN, "")
     }
 
     fun isLogin(): Boolean {
         return mmkvUtils.getString(KEY_ACCOUNT_TOKEN) != ""
     }
 
+    fun getMobile(): String? = mmkvUtils.getString(KEY_ACCOUNT_MOBILE)
+
     fun getToken(): String? = mmkvUtils.getString(KEY_ACCOUNT_TOKEN)
 
-    fun setToken(token: String? = "", refresh_token: String? = "") {
+
+    fun save(mobile: String? = "", token: String? = "", refresh_token: String? = "") {
+        mmkvUtils.setValue(KEY_ACCOUNT_MOBILE, mobile)
         mmkvUtils.setValue(KEY_ACCOUNT_TOKEN, token)
         mmkvUtils.setValue(KEY_ACCOUNT_REFRESH_TOKEN, refresh_token)
     }

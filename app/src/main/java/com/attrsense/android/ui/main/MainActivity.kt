@@ -1,10 +1,6 @@
 package com.attrsense.android.ui.main
 
-import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.viewpager2.widget.ViewPager2
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
@@ -13,7 +9,6 @@ import com.attrsense.android.ui.main.local.MainLocalFragment
 import com.attrsense.android.ui.main.my.MainMyFragment
 import com.attrsense.android.ui.main.remote.MainRemoteFragment
 import com.attrsense.android.widget.FragmentAdapter
-import com.blankj.utilcode.util.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 

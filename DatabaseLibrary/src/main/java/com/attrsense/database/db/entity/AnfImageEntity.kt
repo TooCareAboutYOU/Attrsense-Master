@@ -20,6 +20,10 @@ data class AnfImageEntity(
     @ColumnInfo(name = "userToken")
     var token: String? = "",
 
+    //用户手机号
+    @ColumnInfo(name = "userMobile")
+    var mobile: String? = "",
+
     //本地原图
     @ColumnInfo(name = "originalImage")
     var originalImage: String? = "",
