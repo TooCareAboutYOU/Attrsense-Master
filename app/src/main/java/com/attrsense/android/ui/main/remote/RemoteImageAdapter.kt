@@ -1,10 +1,13 @@
 package com.attrsense.android.ui.main.remote
 
 import com.attrsense.android.R
+import com.attrsense.android.app.GlideApp
+import com.attrsense.android.databinding.LayoutRemoteItemBinding
 import com.attrsense.android.model.ImageInfoBean
-import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.chad.library.adapter.base.module.BaseLoadMoreModule
+import com.chad.library.adapter.base.module.LoadMoreModule
+import com.chad.library.adapter.base.viewholder.BaseDataBindingHolder
 
 /**
  * author : zhangshuai@attrsense.com
@@ -12,12 +15,18 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
  * mark : custom something
  */
 class RemoteImageAdapter constructor(list: MutableList<ImageInfoBean>) :
-    BaseQuickAdapter<ImageInfoBean, BaseViewHolder>(R.layout.layout_remote_item, list) {
+    BaseQuickAdapter<ImageInfoBean, BaseDataBindingHolder<LayoutRemoteItemBinding>>(
+        R.layout.layout_remote_item, list
+    ), LoadMoreModule {
 
-    override fun convert(holder: BaseViewHolder, item: ImageInfoBean) {
-        Glide.with(context)
+    override fun convert(
+        holder: BaseDataBindingHolder<LayoutRemoteItemBinding>,
+        item: ImageInfoBean
+    ) {
+        GlideApp.with(context)
             .load(item.thumbnailUrl)
             .error(R.mipmap.ic_launcher)
-            .into(holder.getView(R.id.acIv_img))
+            .into(holder.dataBinding!!.acIvImg)
     }
+
 }

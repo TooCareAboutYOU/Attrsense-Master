@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,14 +19,14 @@ import com.attrsense.android.databinding.FragmentMainRemoteBinding
 import com.attrsense.android.databinding.LayoutDialogItemShowBinding
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
-import com.attrsense.android.view.ImageShowDialog
-import com.attrsense.android.view.SelectorBottomDialog
+import com.attrsense.ui.library.dialog.ImageShowDialog
+import com.attrsense.ui.library.dialog.SelectorBottomDialog
 import com.attrsense.database.db.entity.AnfImageEntity
+import com.attrsense.ui.library.loadview.AttrLoadMoreView
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.example.snpetest.JniInterface
-import com.jakewharton.rxbinding4.view.clicks
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -70,11 +71,14 @@ class MainRemoteFragment :
                 }
             }
             this.setCenterTitle("双深科技")
-            this.setRightIcon(R.drawable.icon_add)
+            this.setRightIcon(com.attrsense.ui.library.R.drawable.icon_add)
         }
 
         context?.let {
-            mAdapter = RemoteImageAdapter(mList)
+            mAdapter = RemoteImageAdapter(mList).apply {
+                setEmptyView(com.attrsense.ui.library.R.layout.layout_load_empty_view)
+                loadMoreModule.loadMoreView = AttrLoadMoreView()
+            }
             mDataBinding.recyclerview.apply {
                 layoutManager = GridLayoutManager(it, 3, RecyclerView.VERTICAL, false)
                 adapter = mAdapter

@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.attrsense.android.view.toolbar.AttrToolBarView
+        <com.attrsense.ui.library.toolbar.AttrToolBarView
             android:id="@+id/tool_bar_view"
             style="@style/AttrToolbarTheme" />
 

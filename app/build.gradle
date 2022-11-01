@@ -1,11 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'kotlinx-serialization'
+    id 'dagger.hilt.android.plugin'
 }
 kapt {
     correctErrorTypes = true
@@ -84,8 +84,9 @@ dependencies {
     kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
     kapt rootProject.ext.dependencies["glideCompiler"]
 
-    implementation files("libs/JniLibs-release_v3.1.aar")
+//    implementation files("libs/JniLibs-release_v3.1.aar")
 
+    implementation files("libs/JniLibs-release_21.aar")
 
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")

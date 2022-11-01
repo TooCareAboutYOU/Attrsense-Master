@@ -1,7 +1,6 @@
 package com.attrsense.android.baselibrary.di
 
 import android.app.Application
-import com.attrsense.android.baselibrary.view.LoadingDialog
 import com.blankj.utilcode.util.Utils
 import dagger.Module
 import dagger.Provides

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--列表刷新加载更多-->
+    <string name="string_empty">空空如也...</string>
+    <string name="string_error">加载失败，请检查网络！</string>
+    <string name="string_load_more_loading">加载中...</string>
+    <string name="string_load_more_complete">加载完成</string>
+    <string name="string_load_more_end">加载结束</string>
+    <string name="string_load_more_failed">加载失败</string>
+    <string name="string_refresh">刷新中...</string>
+</resources>

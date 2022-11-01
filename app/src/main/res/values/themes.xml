@@ -47,33 +47,32 @@
 
 
     <!--  全局Toolbar-->
+<!--    <style name="AttrToolbarTheme">-->
+<!--        <item name="android:layout_width">match_parent</item>-->
+<!--        <item name="android:layout_height">?android:attr/actionBarSize</item>-->
+<!--        <item name="android:background">@android:color/white</item>-->
+<!--    </style>-->
 
-    <style name="AttrToolbarTheme">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
-        <item name="android:background">@android:color/white</item>
-    </style>
-
-    <!-- Dialog全屏style -->
-    <style name="MyDialog" parent="@android:style/Theme.NoTitleBar.Fullscreen">
-        <!-- 是否有边框 -->
-        <item name="android:windowFrame">@null</item>
-        <!--是否在悬浮Activity之上  -->
-        <item name="android:windowIsFloating">true</item>
-        <!--标题  -->
-        <item name="android:windowNoTitle">false</item>
-        <!--阴影  -->
-        <item name="android:windowIsTranslucent">true</item><!--半透明-->
-        <!-- 点外边可以消失  -->
-        <item name="android:windowCloseOnTouchOutside">true</item>
-    </style>
+<!--    &lt;!&ndash; Dialog全屏style &ndash;&gt;-->
+<!--    <style name="MyDialog" parent="@android:style/Theme.NoTitleBar.Fullscreen">-->
+<!--        &lt;!&ndash; 是否有边框 &ndash;&gt;-->
+<!--        <item name="android:windowFrame">@null</item>-->
+<!--        &lt;!&ndash;是否在悬浮Activity之上  &ndash;&gt;-->
+<!--        <item name="android:windowIsFloating">true</item>-->
+<!--        &lt;!&ndash;标题  &ndash;&gt;-->
+<!--        <item name="android:windowNoTitle">false</item>-->
+<!--        &lt;!&ndash;阴影  &ndash;&gt;-->
+<!--        <item name="android:windowIsTranslucent">true</item>&lt;!&ndash;半透明&ndash;&gt;-->
+<!--        &lt;!&ndash; 点外边可以消失  &ndash;&gt;-->
+<!--        <item name="android:windowCloseOnTouchOutside">true</item>-->
+<!--    </style>-->
 
 
 
     <!--    提交按钮-->
     <style name="CommitButtonTheme">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:layout_height">?android:attr/actionBarSize</item>
         <item name="android:background">@drawable/selector_commit_button_bg</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">18sp</item>

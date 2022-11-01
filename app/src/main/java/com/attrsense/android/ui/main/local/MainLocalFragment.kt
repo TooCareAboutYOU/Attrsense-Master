@@ -1,17 +1,10 @@
 package com.attrsense.android.ui.main.local
 
 import android.Manifest
-import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import android.media.ThumbnailUtils
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,18 +17,13 @@ import com.attrsense.android.databinding.LayoutDialogItemShowBinding
 import com.attrsense.android.ui.main.OnItemClickListener
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.util.FilesHelper
-import com.attrsense.android.view.ImageShowDialog
-import com.attrsense.android.view.SelectorBottomDialog
+import com.attrsense.ui.library.dialog.ImageShowDialog
+import com.attrsense.ui.library.dialog.SelectorBottomDialog
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.example.snpetest.JniInterface
-import com.jakewharton.rxbinding4.view.clicks
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -83,7 +71,7 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
                 }
             }
             this.setCenterTitle("双深科技")
-            this.setRightIcon(R.drawable.icon_add)
+            this.setRightIcon(com.attrsense.ui.library.R.drawable.icon_add)
         }
 
         context?.let {
@@ -168,6 +156,7 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
                                 isLocal = true
                             )
                             localList.add(entity)
+                            userDataManager.setAnf(anfPaths[0])
                         }
                         mViewModel.addEntities(localList)
                     }

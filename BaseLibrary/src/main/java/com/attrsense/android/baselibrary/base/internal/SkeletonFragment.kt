@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.attrsense.android.baselibrary.util.MMKVUtils
-import com.attrsense.android.baselibrary.view.LoadingDialog
+import com.attrsense.ui.library.dialog.LoadingDialog
 import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxFragment
 import io.reactivex.disposables.CompositeDisposable

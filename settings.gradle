@@ -30,3 +30,4 @@ rootProject.name = "Attrsense-Master"
 include ':app'
 include ':BaseLibrary'
 include ':DatabaseLibrary'
+include ':UILibrary'

@@ -3,8 +3,7 @@ package com.attrsense.android.baselibrary.base.internal
 import android.os.Bundle
 import com.attrsense.android.baselibrary.util.ActivityManager
 import com.attrsense.android.baselibrary.util.MMKVUtils
-import com.attrsense.android.baselibrary.view.LoadingDialog
-import com.blankj.utilcode.util.ActivityUtils
+import com.attrsense.ui.library.dialog.LoadingDialog
 import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -18,10 +17,6 @@ import javax.inject.Inject
  */
 open class SkeletonActivity : RxAppCompatActivity() {
 
-    //也可自定义存储类型
-//    @Inject
-//    lateinit var mmkv:MMKV
-
     @Inject
     lateinit var _mmkv: MMKVUtils
 
@@ -32,9 +27,12 @@ open class SkeletonActivity : RxAppCompatActivity() {
 
     protected lateinit var rxPermissions: RxPermissions
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 经测试在代码里直接声明透明状态栏更有效
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            window.statusBarColor = Color.TRANSPARENT
+//        }
         ActivityManager.getInstance().add(this)
         rxPermissions = RxPermissions(this)
         //临时监听网络状态

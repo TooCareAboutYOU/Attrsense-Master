@@ -25,7 +25,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/tab_bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
             android:background="@android:color/white"
             app:menu="@menu/menu_main_tab_navigation"
             app:layout_constraintBottom_toBottomOf="parent"

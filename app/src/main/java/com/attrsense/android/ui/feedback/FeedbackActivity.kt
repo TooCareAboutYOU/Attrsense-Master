@@ -12,7 +12,7 @@ import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMAct
 import com.attrsense.android.baselibrary.view.GridLayoutDecoration
 import com.attrsense.android.databinding.ActivityFeedbackBinding
 import com.attrsense.android.ui.feedback.entity.ItemMultipleEntity
-import com.attrsense.android.view.SelectorBottomDialog
+import com.attrsense.ui.library.dialog.SelectorBottomDialog
 import com.blankj.utilcode.util.ToastUtils
 import com.jakewharton.rxbinding4.widget.textChanges
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity

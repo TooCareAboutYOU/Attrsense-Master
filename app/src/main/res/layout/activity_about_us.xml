@@ -9,7 +9,7 @@
         android:orientation="vertical"
         tools:context=".ui.apply.ApplyActivity">
 
-        <com.attrsense.android.view.toolbar.AttrToolBarView
+        <com.attrsense.ui.library.toolbar.AttrToolBarView
             android:id="@+id/tool_bar_view"
             style="@style/AttrToolbarTheme"
             app:layout_constraintEnd_toEndOf="parent"
