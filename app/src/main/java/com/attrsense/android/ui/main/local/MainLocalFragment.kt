@@ -14,7 +14,6 @@ import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFra
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.databinding.FragmentMainLocalBinding
 import com.attrsense.android.databinding.LayoutDialogItemShowBinding
-import com.attrsense.android.ui.main.OnItemClickListener
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.util.FilesHelper
 import com.attrsense.ui.library.dialog.ImageShowDialog
@@ -35,8 +34,8 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, MainLocalViewModel>(),
-    OnItemClickListener {
+class MainLocalFragment :
+    BaseDataBindingVMFragment<FragmentMainLocalBinding, MainLocalViewModel>() {
 
     @Inject
     lateinit var userDataManager: UserDataManager
@@ -48,10 +47,6 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
     override fun setLayoutResId(): Int = R.layout.fragment_main_local
 
     override fun setViewModel(): Class<MainLocalViewModel> = MainLocalViewModel::class.java
-
-    override fun onCreateFragment(savedInstanceState: Bundle?) {
-        super.onCreateFragment(savedInstanceState)
-    }
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
@@ -75,51 +70,60 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
         }
 
         context?.let {
-            mAdapter = LocalImageAdapter(it, this)
+            mAdapter = LocalImageAdapter()
             mDataBinding.recyclerview.apply {
                 layoutManager = GridLayoutManager(it, 3, RecyclerView.VERTICAL, false)
                 adapter = mAdapter
             }
         }
 
+        initListener()
+
         liveDataObserves()
+
+        mViewModel.getAll()
     }
 
     /**
      * 拍照单张图片的编解码操作
      */
     private fun liveDataObserves() {
-        mViewModel.getAll()
-        mViewModel.getAllLiveData.observe(this) {
+        mViewModel.getLiveData.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-//                    ToastUtils.showShort(it.throwable.toString())
+                    ToastUtils.showShort(it.throwable.toString())
                     Log.i("print_logs", "MainLocalFragment::liveDataObserves: ${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
-                    mAdapter.setData(it.value)
+                    it.value?.apply {
+                        if (this.isNotEmpty()) {
+                            mAdapter.addData(this)
+                        }
+                    }
                 }
             }
-        }
-
-        mViewModel.addEntityLiveData.observe(this) {
-            when (it) {
-                is ResponseData.onFailed -> {
-
-                }
-                is ResponseData.onSuccess -> {
-                    mViewModel.getAll()
-                    hideLoadingDialog()
-                }
-            }
+            hideLoadingDialog()
         }
 
         mViewModel.deleteLiveData.observe(this) {
-            mViewModel.getAll()
+            mAdapter.removeAt(it)
             ToastUtils.showShort("删除成功！")
         }
-
     }
+
+    private fun initListener() {
+        mAdapter.setOnItemClickListener { _, _, position ->
+            val data = mAdapter.getItem(position)
+            showDialog(data)
+        }
+
+        mAdapter.setOnItemLongClickListener { _, _, position ->
+            val data = mAdapter.getItem(position)
+            mViewModel.deleteByAnfPath(position, data.anfImage)
+            false
+        }
+    }
+
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -164,17 +168,6 @@ class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, Ma
             }
         } else {
             hideLoadingDialog()
-        }
-    }
-
-
-    override fun onLongClickEvent(position: Int, anfPath: String?) {
-        mViewModel.deleteByAnfPath(position, anfPath)
-    }
-
-    override fun onLocalClickEvent(entity: AnfImageEntity?) {
-        entity?.also {
-            showDialog(it)
         }
     }
 

@@ -16,6 +16,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
+import com.attrsense.ui.library.BuildConfig
 import com.attrsense.ui.library.R
 import com.attrsense.ui.library.databinding.LayoutToolBarBinding
 
@@ -101,11 +102,11 @@ class AttrToolBarView constructor(
                 mBinding.acIvLeft.setImageBitmap(res)
             }
             else -> {
-//                if (BuildConfig.DEBUG) {
-//                    throw IllegalArgumentException("The leftIcon 'res' type mismatch")
-//                } else {
-//                    Log.e("print_logs", "The leftIcon 'res' type mismatch")
-//                }
+                if (BuildConfig.DEBUG) {
+                    throw IllegalArgumentException("The leftIcon 'res' type mismatch")
+                } else {
+                    Log.e("print_logs", "The leftIcon 'res' type mismatch")
+                }
             }
         }
 
@@ -158,11 +159,11 @@ class AttrToolBarView constructor(
                 mBinding.acTvTitle.text = res
             }
             else -> {
-//                if (BuildConfig.DEBUG) {
-//                    throw IllegalArgumentException("The title 'res' type mismatch")
-//                } else {
-//                    Log.e("print_logs", "The title 'res' type mismatch")
-//                }
+                if (BuildConfig.DEBUG) {
+                    throw IllegalArgumentException("The title 'res' type mismatch")
+                } else {
+                    Log.e("print_logs", "The title 'res' type mismatch")
+                }
             }
         }
         return this.mBinding.acTvTitle
@@ -206,11 +207,11 @@ class AttrToolBarView constructor(
                 mBinding.acIvRight.setImageBitmap(res)
             }
             else -> {
-//                if (BuildConfig.DEBUG) {
-//                    throw IllegalArgumentException("The rightIcon 'res' type mismatch")
-//                } else {
-//                    Log.e("print_logs", "The rightIcon 'res' type mismatch")
-//                }
+                if (BuildConfig.DEBUG) {
+                    throw IllegalArgumentException("The rightIcon 'res' type mismatch")
+                } else {
+                    Log.e("print_logs", "The rightIcon 'res' type mismatch")
+                }
             }
         }
 

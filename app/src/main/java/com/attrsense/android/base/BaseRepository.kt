@@ -15,7 +15,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
  */
 open class BaseRepository : SkeletonRepository() {
 
-    //自定好了
+    //自定义，不可修改
     private val partName = "imageFile"
 
     fun String.toRequestBody(): RequestBody =

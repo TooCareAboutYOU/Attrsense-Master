@@ -65,7 +65,7 @@ class DownloadService : Service() {
                             is ResponseData.onFailed -> {
                                 Log.e(
                                     "print_logs",
-                                    "DownloadIntentService::onStartCommand: ${it.throwable}"
+                                    "DownloadService::onStartCommand: ${it.throwable}"
                                 )
                             }
                             is ResponseData.onSuccess -> {
@@ -85,8 +85,6 @@ class DownloadService : Service() {
     }
 
     private fun download(anfPath: String) {
-        Log.i("print_logs", "DownloadIntentService::download: $anfPath")
-
         val request = DownloadManager.Request(Uri.parse(anfPath))
         //设置在什么网络情况下进行下载
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)

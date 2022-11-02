@@ -41,7 +41,6 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
                 if (downloadId == -1L) {
                     return
                 }
-
 //                executorService.execute {
                 val query = DownloadManager.Query()
                 //通过下载的id查找
@@ -79,10 +78,7 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
                                                         entity.isDownload = true
                                                         databaseRepository.update(entity)
                                                             .collect {
-                                                                Log.i(
-                                                                    "print_logs",
-                                                                    "DownloadBroadcastReceiver::onReceive: 下载成功，写入数据库成功！"
-                                                                )
+
                                                             }
                                                     }
                                                 }

@@ -40,7 +40,7 @@ interface AnfImageDao {
      * 查询
      */
     @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile AND isLocal=:isLocal")
-    suspend fun getAllByType(mobile: String?, isLocal: Boolean = true): List<AnfImageEntity?>
+    suspend fun getAllByType(mobile: String?, isLocal: Boolean = true): List<AnfImageEntity>
 
     /**
      * 查询

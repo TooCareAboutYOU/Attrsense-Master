@@ -21,13 +21,12 @@ class MainLocalViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository
 ) : BaseAndroidViewModel() {
 
-    val addEntityLiveData: MutableLiveData<ResponseData<Boolean>> = MutableLiveData()
-    val getAllLiveData: MutableLiveData<ResponseData<List<AnfImageEntity?>>> = MutableLiveData()
+    val getLiveData: MutableLiveData<ResponseData<List<AnfImageEntity>>> = MutableLiveData()
     val deleteLiveData: MutableLiveData<Int> = MutableLiveData()
 
     fun addEntities(entityList: List<AnfImageEntity>) =
         databaseRepository.addList(entityList).collectInLaunch {
-            addEntityLiveData.value = it.also { data ->
+            getLiveData.value = it.also { data ->
                 when (data) {
                     is ResponseData.onFailed -> {
                         Log.e(
@@ -43,7 +42,7 @@ class MainLocalViewModel @Inject constructor(
         }
 
     fun getAll() = databaseRepository.getAllByType(userDataManager.getMobile())
-        .collectInLaunch { getAllLiveData.value = it }
+        .collectInLaunch { getLiveData.value = it }
 
     fun deleteByAnfPath(position: Int, anfImage: String?) =
         databaseRepository.deleteByAnf(userDataManager.getMobile(), anfImage).collectInLaunch {

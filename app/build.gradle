@@ -84,9 +84,9 @@ dependencies {
     kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
     kapt rootProject.ext.dependencies["glideCompiler"]
 
-//    implementation files("libs/JniLibs-release_v3.1.aar")
+    implementation files("libs/JniLibs-release_v3.1.aar")
 
-    implementation files("libs/JniLibs-release_21.aar")
+//    implementation files("libs/JniLibs-release_21.aar")
 
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")

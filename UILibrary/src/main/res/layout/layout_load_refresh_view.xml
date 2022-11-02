@@ -9,7 +9,7 @@
             android:id="@+id/acTv_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/string_refresh"
+            android:text="@string/string_load_refresh"
             android:textColor="@color/color_000000_20PER"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"

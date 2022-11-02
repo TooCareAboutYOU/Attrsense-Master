@@ -45,8 +45,10 @@ class DatabaseRepository @Inject constructor(
     fun addList(anfPaths: List<AnfImageEntity>) = flow {
         if (anfPaths.isNotEmpty()) {
             anfDao.addList(anfPaths)
+            emit(ResponseData.onSuccess(anfPaths))
+        } else {
+            emit(ResponseData.onSuccess(null))
         }
-        emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
     /**

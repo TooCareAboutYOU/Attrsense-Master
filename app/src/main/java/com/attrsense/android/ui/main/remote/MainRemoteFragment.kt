@@ -2,14 +2,15 @@ package com.attrsense.android.ui.main.remote
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
@@ -19,10 +20,10 @@ import com.attrsense.android.databinding.FragmentMainRemoteBinding
 import com.attrsense.android.databinding.LayoutDialogItemShowBinding
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
+import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.ui.library.dialog.ImageShowDialog
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
-import com.attrsense.database.db.entity.AnfImageEntity
-import com.attrsense.ui.library.loadview.AttrLoadMoreView
+import com.attrsense.ui.library.loadview.RecyclerLoadMoreView
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
@@ -41,16 +42,16 @@ class MainRemoteFragment :
 
     private lateinit var mAdapter: RemoteImageAdapter
 
-    private val mList: MutableList<ImageInfoBean> = mutableListOf()
+    //页码
+    private var pageIndex = 1
+
+    //一页的数量
+    private val pageSize = 10
+
 
     override fun setLayoutResId(): Int = R.layout.fragment_main_remote
 
     override fun setViewModel(): Class<MainRemoteViewModel> = MainRemoteViewModel::class.java
-
-    override fun onCreateFragment(savedInstanceState: Bundle?) {
-        super.onCreateFragment(savedInstanceState)
-    }
-
 
     override fun initView(savedInstanceState: Bundle?) {
         super.initView(savedInstanceState)
@@ -74,40 +75,77 @@ class MainRemoteFragment :
             this.setRightIcon(com.attrsense.ui.library.R.drawable.icon_add)
         }
 
+        initRecyclerView()
+
+        liveDataObserves()
+
+        initRefreshLayout()
+
+        loadServer()
+
+    }
+
+    private fun initRecyclerView() {
         context?.let {
-            mAdapter = RemoteImageAdapter(mList).apply {
-                setEmptyView(com.attrsense.ui.library.R.layout.layout_load_empty_view)
-                loadMoreModule.loadMoreView = AttrLoadMoreView()
+            mAdapter = RemoteImageAdapter()
+            mAdapter.apply {
+                loadMoreModule.apply {
+                    //设置加载状态UI
+                    loadMoreView = RecyclerLoadMoreView()
+                    //打开或者关闭加载更多功能
+                    isEnableLoadMore = true
+                    // 是否自定义加载下一页（默认为true）
+                    isAutoLoadMore = true
+                    // 当数据不满一页时，是否继续自动加载（默认为true）
+                    isEnableLoadMoreIfNotFullPage = false
+                }
             }
+
             mDataBinding.recyclerview.apply {
                 layoutManager = GridLayoutManager(it, 3, RecyclerView.VERTICAL, false)
                 adapter = mAdapter
             }
+
+            mAdapter.setEmptyView(com.attrsense.ui.library.R.layout.layout_load_empty_view)
+        }
+
+
+        // 设置加载更多监听事件
+        mAdapter.loadMoreModule.setOnLoadMoreListener {
+            loadServer()
         }
 
         mAdapter.setOnItemClickListener { _, _, position ->
-            _clickData = mList[position]
-            mViewModel.getByThumb(mList[position].thumbnailUrl)
+            _clickData = mAdapter.getItem(position)
+            mViewModel.getByThumb(_clickData!!.thumbnailUrl)
         }
 
         mAdapter.setOnItemLongClickListener { _, _, position ->
-            mViewModel.deleteByThumb(position, mList[position].thumbnailUrl, mList[position].fileId)
+            val data = mAdapter.getItem(position)
+            mViewModel.deleteByThumb(position, data.thumbnailUrl, data.fileId)
             false
         }
+    }
 
-        liveDataObserves()
+
+    private fun initRefreshLayout() {
+        mDataBinding.swipeRefreshLayout.setColorSchemeColors(Color.rgb(47, 223, 189))
+        mDataBinding.swipeRefreshLayout.setOnRefreshListener(OnRefreshListener {
+            pageIndex = 1
+            mAdapter.setList(null)
+            loadServer()
+        })
     }
 
     private var _clickData: ImageInfoBean? = null
     private fun liveDataObserves() {
-        mViewModel.getRemoteFiles(1, 10)
         mViewModel.getAllLiveData.observe(this) {
-            reloadAdapter(it)
+            loadData(it)
         }
 
         mViewModel.uploadLiveData.observe(this) {
             //新增单条或者多条数据
-            reloadAdapter(it, true)
+            loadData(it)
         }
 
         mViewModel.getByThumbLiveData.observe(this) {
@@ -129,24 +167,41 @@ class MainRemoteFragment :
         }
     }
 
-    private fun reloadAdapter(
-        response: ResponseData<BaseResponse<ImagesBean?>>, isNewAdd: Boolean? = false
+    private fun loadServer() {
+        mViewModel.getRemoteFiles(pageIndex, pageSize)
+    }
+
+    private fun loadData(
+        response: ResponseData<BaseResponse<ImagesBean?>>
     ) {
+        mDataBinding.swipeRefreshLayout.isRefreshing = false
+        mAdapter.loadMoreModule.isEnableLoadMore = true
         when (response) {
             is ResponseData.onFailed -> {
                 ToastUtils.showShort("解压失败！")
-                Log.e("print_logs", "MainRemoteFragment::reloadAdapter: ${response.throwable}")
+                Log.e("print_logs", "MainRemoteFragment::loadData: ${response.throwable}")
+                mAdapter.loadMoreModule.loadMoreFail()
             }
             is ResponseData.onSuccess -> {
                 response.value?.data?.images?.apply {
                     if (this.isNotEmpty()) {
-                        isNewAdd?.let {
-                            if (it) {
-                                mList.addAll(this)
-                                mAdapter.notifyItemInserted(mList.size - 1)
-                            } else {
-                                mAdapter.setList(this)
-                            }
+                        if (pageIndex == 1) {
+                            mAdapter.setList(this)
+                        } else {
+                            mAdapter.addData(this)
+//                            mAdapter.notifyItemInserted(mAdapter.itemCount - 1)
+                        }
+                        if (this.size < pageSize) {
+                            mAdapter.loadMoreModule.loadMoreEnd()
+                        } else {
+                            mAdapter.loadMoreModule.loadMoreComplete()
+                        }
+                        pageIndex++
+                    } else {
+                        if (pageIndex == 1) {
+                            mAdapter.setEmptyView(com.attrsense.ui.library.R.layout.layout_load_empty_view)
+                        } else {
+                            mAdapter.loadMoreModule.loadMoreEnd()
                         }
                     }
                 }

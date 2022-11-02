@@ -109,16 +109,6 @@ class MainRemoteViewModel @Inject constructor(
                         )
                     }
                     is ResponseData.onSuccess -> {
-
-                        Log.i(
-                            "print_logs",
-                            "MainRemoteViewModel::saveToDatabase->已经存在: ${it.value?.thumbImage}"
-                        )
-                        Log.i(
-                            "print_logs",
-                            "MainRemoteViewModel::saveToDatabase->待存数据: ${item.thumbnailUrl}"
-                        )
-
                         if (it.value == null) {
                             val entity = AnfImageEntity(
                                 token = appRepository.userManger.getToken(),
@@ -127,10 +117,6 @@ class MainRemoteViewModel @Inject constructor(
                                 thumbImage = item.thumbnailUrl,
                                 anfImage = item.url,
                                 isLocal = false
-                            )
-                            Log.i(
-                                "print_logs",
-                                "MainRemoteViewModel::添加到数据库: $entity"
                             )
                             addEntity(entity)
                         }
@@ -153,10 +139,6 @@ class MainRemoteViewModel @Inject constructor(
                             )
                         }
                         is ResponseData.onSuccess -> {
-                            Log.i(
-                                "print_logs",
-                                "MainRemoteViewModel::addEntities: 添加成功！${data.value}"
-                            )
                             DownloadService.start(
                                 getApplication(),
                                 entity.thumbImage,
@@ -204,10 +186,6 @@ class MainRemoteViewModel @Inject constructor(
                         .collectInLaunch { state ->
                             when (state) {
                                 is ResponseData.onFailed -> {
-                                    Log.e(
-                                        "print_logs",
-                                        "MainRemoteViewModel::deleteByThumb: ${state.throwable}"
-                                    )
 
                                 }
                                 is ResponseData.onSuccess -> {
