@@ -2,14 +2,14 @@ package com.attrsense.android.baselibrary.base.open.activity
 
 import android.os.Bundle
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 
 /**
  * author : zhangshuai@attrsense.com
  * date : 2022/10/8 10:07
  * mark : 包含视图的基类-样式二
  */
-abstract class BaseDataBindingVMActivity<DB : ViewDataBinding, VM : ViewModel> :
+abstract class BaseDataBindingVMActivity<DB : ViewDataBinding, VM : BaseViewModel> :
     BaseDataBindingActivity<DB>() {
 
     lateinit var mViewModel: VM

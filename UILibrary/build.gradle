@@ -62,4 +62,5 @@ dependencies {
 //    api rootProject.ext.dependencies["exifinterface"]
     api rootProject.ext.dependencies["glide"]
     kapt rootProject.ext.dependencies["glideCompiler"]
+    api rootProject.ext.dependencies["glideTransformations"]
 }

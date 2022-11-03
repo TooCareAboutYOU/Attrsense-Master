@@ -80,9 +80,6 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
 
         //提交
         mDataBinding.acBtnCommit.setOnClickListener {
-
-            showLoadingDialog()
-
             val pictures = arrayListOf<String?>().apply {
                 if (mList.size > 0) {
                     mList.forEach { this.add(it.imageUrl) }

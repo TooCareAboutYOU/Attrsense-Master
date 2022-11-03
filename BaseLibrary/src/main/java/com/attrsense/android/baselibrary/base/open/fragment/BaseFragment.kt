@@ -2,10 +2,15 @@ package com.attrsense.android.baselibrary.base.open.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.attrsense.android.baselibrary.base.internal.SkeletonActivity
 import com.attrsense.android.baselibrary.base.internal.SkeletonFragment
+import com.attrsense.android.baselibrary.base.open.activity.BaseActivity
+import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 
 /**
  * author : zhangshuai@attrsense.com
@@ -14,8 +19,20 @@ import com.attrsense.android.baselibrary.base.internal.SkeletonFragment
  */
 open class BaseFragment : SkeletonFragment() {
 
+    //自定义
     protected fun <VM : ViewModel> loadViewModel(vm: Class<VM>): VM {
-        return ViewModelProvider(this)[vm]
+        return ViewModelProvider(this)[vm].also {
+            when (it) {
+                is BaseViewModel -> {
+                    it.setLoadView(this)
+                }
+                is BaseAndroidViewModel -> {
+                    it.setLoadView(this)
+                }
+                else -> {
+                }
+            }
+        }
     }
 
     override fun onAttach(context: Context) {

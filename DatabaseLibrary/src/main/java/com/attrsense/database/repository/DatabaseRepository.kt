@@ -1,6 +1,5 @@
 package com.attrsense.database.repository
 
-import android.util.Log
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.repository.SkeletonRepository
 import com.attrsense.database.db.AttrSenseRoomDatabase
@@ -63,12 +62,19 @@ class DatabaseRepository @Inject constructor(
 
     /**
      * 更新列表
-     * @param anfImageEntity List<AnfImageEntity>
+     * @param entities List<AnfImageEntity>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun updateList(anfImageEntity: List<AnfImageEntity>) = flow {
-        anfDao.updateList(anfImageEntity)
-        emit(ResponseData.onSuccess(true))
+    fun updateList(entities: List<AnfImageEntity>) = flow {
+//        anfDao.updateList(anfImageEntity)
+        if (entities.isNotEmpty()) {
+//            anfDao.addList(anfPaths)
+            anfDao.updateList(entities)
+            emit(ResponseData.onSuccess(entities))
+        } else {
+            emit(ResponseData.onSuccess(null))
+        }
+//        emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
     /**

@@ -1,6 +1,8 @@
 package com.attrsense.android.base
 
 import android.text.TextUtils
+import com.attrsense.android.baselibrary.base.open.model.BaseResponse
+import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.repository.SkeletonRepository
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -38,7 +40,7 @@ open class BaseRepository : SkeletonRepository() {
             ArrayList<MultipartBody.Part>(this.size).also {
                 this.forEachIndexed { _, path ->
                     if (!TextUtils.isEmpty(path)) {
-                        val file = java.io.File(path)
+                        val file = java.io.File(path!!)
                         val imageFileBody = file.asRequestBody("multipart/form-data".toMediaType())
                         val filePart = MultipartBody.Part.createFormData(
                             partName,
@@ -50,7 +52,6 @@ open class BaseRepository : SkeletonRepository() {
                 }
             }
         } else {
-            ArrayList(0)
+            emptyList()
         }
-
 }

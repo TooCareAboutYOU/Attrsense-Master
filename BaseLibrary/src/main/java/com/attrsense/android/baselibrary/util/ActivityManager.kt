@@ -1,6 +1,8 @@
 package com.attrsense.android.baselibrary.util
 
+import android.app.Activity
 import android.text.TextUtils
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import java.util.concurrent.CopyOnWriteArrayList
@@ -12,8 +14,8 @@ import java.util.concurrent.CopyOnWriteArrayList
  */
 class ActivityManager {
 
-    private val activityStack: CopyOnWriteArrayList<AppCompatActivity> =
-        CopyOnWriteArrayList<AppCompatActivity>()
+    private val activityStack: CopyOnWriteArrayList<Activity> =
+        CopyOnWriteArrayList<Activity>()
 
     companion object {
         private object InnerClass {
@@ -37,7 +39,7 @@ class ActivityManager {
         cls: Class<T>
     ) {
         if (activityStack.size > 0) {
-            val iterator: Iterator<AppCompatActivity> = activityStack.iterator()
+            val iterator: Iterator<Activity> = activityStack.iterator()
             while (iterator.hasNext()) {
                 val activity = iterator.next()
                 if (activity
@@ -54,7 +56,7 @@ class ActivityManager {
      *
      * @return 堆栈对象
      */
-    fun getActivityStack(): CopyOnWriteArrayList<AppCompatActivity> {
+    fun getActivityStack(): CopyOnWriteArrayList<Activity> {
         return activityStack
     }
 
@@ -64,7 +66,7 @@ class ActivityManager {
      * @param item 传入上层生成Disposable
      */
     @Synchronized
-    fun add(item: AppCompatActivity) {
+    fun add(item: Activity) {
         activityStack.add(item)
     }
 
@@ -72,10 +74,11 @@ class ActivityManager {
      * 移除stack栈
      */
     @Synchronized
-    fun remove(item: AppCompatActivity): Boolean {
-        var item = item
+    fun remove(item: Activity): Boolean {
         if (activityStack.contains(item)) {
-            item.finish()
+            if (!item.isFinishing) {
+                item.finish()
+            }
             activityStack.remove(item)
             return true
         }
@@ -88,9 +91,9 @@ class ActivityManager {
      * @param activities 指定删除Activity数组
      */
     @Synchronized
-    fun removeMore(vararg activities: AppCompatActivity) {
+    fun removeMore(vararg activities: Activity) {
         for (i in activities.indices) {
-            val iterator: Iterator<AppCompatActivity> = activityStack.iterator()
+            val iterator: Iterator<Activity> = activityStack.iterator()
             while (iterator.hasNext()) {
                 if (iterator
                         .next() != activities[1]
@@ -107,7 +110,7 @@ class ActivityManager {
     @Synchronized
     fun clear() {
         if (activityStack.size > 0) {
-            val iterator: Iterator<AppCompatActivity> = activityStack.iterator()
+            val iterator: Iterator<Activity> = activityStack.iterator()
             while (iterator.hasNext()) {
                 remove(iterator.next())
             }
@@ -118,7 +121,7 @@ class ActivityManager {
     @Synchronized
     fun removeAllExceptByName(classNames: ArrayList<String>) {
         if (activityStack.size > 0) {
-            val iterator: Iterator<AppCompatActivity> = activityStack.iterator()
+            val iterator: Iterator<Activity> = activityStack.iterator()
             while (iterator.hasNext()) {
                 val activity = iterator.next()
                 if (!isExistActivity(activity, classNames)) {
@@ -134,7 +137,7 @@ class ActivityManager {
     @Synchronized
     fun removeActivityByName(className: String) {
         if (activityStack.size > 0) {
-            val iterator: Iterator<AppCompatActivity> = activityStack.iterator()
+            val iterator: Iterator<Activity> = activityStack.iterator()
             while (iterator.hasNext()) {
                 val activity = iterator.next()
                 if (isExistActivity(activity, className)) {
@@ -148,14 +151,14 @@ class ActivityManager {
     /**
      * 根据类名称判断是否存在activity
      */
-    fun isExistActivity(activity: AppCompatActivity?, className: String): Boolean {
+    fun isExistActivity(activity: Activity?, className: String): Boolean {
         if (activity == null || TextUtils.isEmpty(className)) {
             return false
         }
         return activity.javaClass.simpleName == className
     }
 
-    fun isExistActivity(activity: AppCompatActivity?, classNames: ArrayList<String>?): Boolean {
+    fun isExistActivity(activity: Activity?, classNames: ArrayList<String>?): Boolean {
         if (activity == null || classNames == null) {
             return false
         }
@@ -173,16 +176,16 @@ class ActivityManager {
     /**
      * 清空除首页之外的所有页面
      */
-    fun removeNonMainActivities() {
+    fun removeActivity(activityName: String) {
         val classNames = ArrayList<String>()
-        classNames.add("MainActivity")
+        classNames.add(activityName)
         removeAllExceptByName(classNames)
     }
 
     /**
      * 获取栈顶activity(activeActivities维护的栈)
      */
-    fun getTopActivity(): AppCompatActivity? {
+    fun getTopActivity(): Activity? {
         val size = activityStack.size
         return if (size == 0) {
             null

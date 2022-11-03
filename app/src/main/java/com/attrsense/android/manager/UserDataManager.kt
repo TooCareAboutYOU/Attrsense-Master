@@ -20,8 +20,6 @@ class UserDataManager @Inject constructor(private val mmkvUtils: MMKVUtils) {
 
         //刷新token
         private const val KEY_ACCOUNT_REFRESH_TOKEN = "key_account_refresh_token"
-
-        private const val KEY_ANF_PATH = "key_anf_path"
     }
 
     init {
@@ -42,10 +40,4 @@ class UserDataManager @Inject constructor(private val mmkvUtils: MMKVUtils) {
         mmkvUtils.setValue(KEY_ACCOUNT_TOKEN, token)
         mmkvUtils.setValue(KEY_ACCOUNT_REFRESH_TOKEN, refresh_token)
     }
-
-    fun setAnf(anfPath: String?) {
-        mmkvUtils.setValue(KEY_ANF_PATH, anfPath)
-    }
-
-    fun getAnf() = mmkvUtils.getString(KEY_ANF_PATH)
 }

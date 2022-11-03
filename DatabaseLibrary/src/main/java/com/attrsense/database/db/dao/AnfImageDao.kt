@@ -138,7 +138,6 @@ interface AnfImageDao {
     @Transaction
     suspend fun deleteByThumb(mobile: String?,thumbImage: String?){
         getByThumb(mobile, thumbImage)?.let {
-            Log.i("print_logs", "AnfImageDao::deleteByThumb: $it")
             removeFile(it)
             delete(it)
         }

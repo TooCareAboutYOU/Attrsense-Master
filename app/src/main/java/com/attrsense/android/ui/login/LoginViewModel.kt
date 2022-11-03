@@ -1,7 +1,6 @@
 package com.attrsense.android.ui.login
 
-import androidx.lifecycle.MutableLiveData
-import com.attrsense.android.baselibrary.base.open.model.BaseResponse
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.model.LoginBean
@@ -22,19 +21,21 @@ class LoginViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : BaseViewModel() {
 
-    val loginLivedata: MutableLiveData<ResponseData<BaseResponse<LoginBean?>>> = MutableLiveData()
+    val loginLivedata = ResponseMutableLiveData<LoginBean?>()
 
     fun login(mobile: String, code: String) {
-        appRepository.login(mobile, code).collectInLaunch {
-            when (it) {
-                is ResponseData.onSuccess -> {
-                    saveUser(mobile, it.value?.data?.token, it.value?.data?.refresh_token)
+        appRepository.login(mobile, code)
+            .collectInLaunch(this) {
+                when (it) {
+                    is ResponseData.onSuccess -> {
+                        saveUser(mobile, it.value?.data?.token, it.value?.data?.refresh_token)
+                    }
+                    else -> {
+
+                    }
                 }
-                else -> {
-                }
+                loginLivedata.value = it
             }
-            loginLivedata.value = it
-        }
     }
 
     private suspend fun saveUser(mobile: String, token: String?, refresh_token: String?) {

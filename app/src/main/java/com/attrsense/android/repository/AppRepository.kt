@@ -52,7 +52,6 @@ class AppRepository @Inject constructor(
         emit(ResponseData.onSuccess(apiService.login(body)))
     }.flowOnIO()
 
-
     /**
      * 退出登录
      * @return Flow<ResponseData<BaseResponse<EmptyBean?>>>
@@ -88,7 +87,7 @@ class AppRepository @Inject constructor(
     fun uploadFile(
         rate: String?,
         roiRate: String?,
-        imageFilePaths: List<String>? = null
+        imageFilePaths: List<String> = emptyList()
     ) = flow {
         emit(
             ResponseData.onSuccess(
@@ -96,7 +95,7 @@ class AppRepository @Inject constructor(
                     userManger.getToken(),
                     rate?.toRequestBody(),
                     roiRate?.toRequestBody(),
-                    imageFilePaths?.toMultipartBody()
+                    imageFilePaths.toMultipartBody()
                 )
             )
         )
@@ -106,7 +105,6 @@ class AppRepository @Inject constructor(
         val body = getBody().apply {
             this["fileId"] = fileId
         }
-
         emit(ResponseData.onSuccess(apiService.deleteFile(userManger.getToken(), body)))
     }.flowOnIO()
 
@@ -117,14 +115,14 @@ class AppRepository @Inject constructor(
      * @param pictures List<String?>?
      * @return Flow<ResponseData<BaseResponse<EmptyBean?>>>
      */
-    fun feedback(description: String, pictures: List<String?>? = arrayListOf()) =
+    fun feedback(description: String, pictures: List<String?> = emptyList<String>()) =
         flow {
             emit(
                 ResponseData.onSuccess(
                     apiService.feedback(
                         userManger.getToken(),
                         description.toRequestBody(),
-                        pictures?.toMultipartBody()
+                        pictures.toMultipartBody()
                     )
                 )
             )

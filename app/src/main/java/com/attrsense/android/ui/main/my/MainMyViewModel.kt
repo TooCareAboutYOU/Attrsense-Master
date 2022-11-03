@@ -2,6 +2,7 @@ package com.attrsense.android.ui.main.my
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
@@ -24,38 +25,43 @@ class MainMyViewModel @Inject constructor(
 ) :
     BaseViewModel() {
 
-    val logoutLivedata: MutableLiveData<ResponseData<BaseResponse<EmptyBean?>>> =
-        MutableLiveData()
+    val logoutLivedata = ResponseMutableLiveData<EmptyBean?>()
 
     fun logout() {
         //网络接口退出
-        appRepository.logout().collectInLaunch {
+        appRepository.logout().collectInLaunch(this) {
             it.apply {
                 when (it) {
                     is ResponseData.onFailed -> {
 
                     }
                     is ResponseData.onSuccess -> {
-                        //清空对应数据
-                        appRepository.databaseRepository.clearByToken(appRepository.userManger.getMobile())
-                            .collectInLaunch { state ->
-                                when (state) {
-                                    is ResponseData.onFailed -> {
-
-                                    }
-                                    is ResponseData.onSuccess -> {
-                                        //删除用户表对应用户
-                                        appRepository.getUserDao().deleteByMobile(userDataManager.getMobile())
-                                        //最后清空临时存储
-                                        appRepository.userManger.save()
-                                        logoutLivedata.value = this
-                                    }
-                                }
-                            }
+                        clearUserByToken(it)
                     }
                 }
             }
         }
+    }
+
+    //清空对应数据库
+    private suspend fun clearUserByToken(callback: ResponseData<BaseResponse<EmptyBean?>>) {
+        appRepository.databaseRepository.clearByToken(appRepository.userManger.getMobile())
+            .collectInLaunch { state ->
+                when (state) {
+                    is ResponseData.onFailed -> {
+
+                    }
+                    is ResponseData.onSuccess -> {
+                        //删除用户表对应用户
+                        appRepository.getUserDao()
+                            .deleteByMobile(userDataManager.getMobile())
+                        //最后清空临时存储
+                        appRepository.userManger.save()
+
+                        logoutLivedata.value = callback
+                    }
+                }
+            }
     }
 
 }

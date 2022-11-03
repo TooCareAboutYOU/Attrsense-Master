@@ -106,5 +106,4 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
             RegisterActivity.jump(this)
         }
     }
-
 }

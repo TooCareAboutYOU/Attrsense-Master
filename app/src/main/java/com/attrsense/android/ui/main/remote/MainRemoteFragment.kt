@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
@@ -130,11 +129,11 @@ class MainRemoteFragment :
 
     private fun initRefreshLayout() {
         mDataBinding.swipeRefreshLayout.setColorSchemeColors(Color.rgb(47, 223, 189))
-        mDataBinding.swipeRefreshLayout.setOnRefreshListener(OnRefreshListener {
+        mDataBinding.swipeRefreshLayout.setOnRefreshListener {
             pageIndex = 1
             mAdapter.setList(null)
             loadServer()
-        })
+        }
     }
 
     private var _clickData: ImageInfoBean? = null
@@ -162,8 +161,15 @@ class MainRemoteFragment :
         }
 
         mViewModel.deleteLiveData.observe(this) {
-            mAdapter.removeAt(it)
-            ToastUtils.showShort("删除成功！")
+            when (it) {
+                is ResponseData.onFailed -> {
+                    ToastUtils.showShort("删除失败！")
+                }
+                is ResponseData.onSuccess -> {
+                    mAdapter.removeAt(it.value!!)
+                    ToastUtils.showShort("删除成功！")
+                }
+            }
         }
     }
 
@@ -189,10 +195,9 @@ class MainRemoteFragment :
                             mAdapter.setList(this)
                         } else {
                             mAdapter.addData(this)
-//                            mAdapter.notifyItemInserted(mAdapter.itemCount - 1)
                         }
                         if (this.size < pageSize) {
-                            mAdapter.loadMoreModule.loadMoreEnd()
+                            mAdapter.loadMoreModule.loadMoreEnd(true)
                         } else {
                             mAdapter.loadMoreModule.loadMoreComplete()
                         }
@@ -201,7 +206,7 @@ class MainRemoteFragment :
                         if (pageIndex == 1) {
                             mAdapter.setEmptyView(com.attrsense.ui.library.R.layout.layout_load_empty_view)
                         } else {
-                            mAdapter.loadMoreModule.loadMoreEnd()
+                            mAdapter.loadMoreModule.loadMoreEnd(true)
                         }
                     }
                 }
@@ -235,6 +240,7 @@ class MainRemoteFragment :
     }
 
     private fun showDialog(entity: AnfImageEntity) {
+        showLoadingDialog("解压中...")
         val viewBinding: LayoutDialogItemShowBinding = DataBindingUtil.inflate(
             layoutInflater, R.layout.layout_dialog_item_show, null, true
         )
@@ -251,11 +257,10 @@ class MainRemoteFragment :
 
 
         lifecycleScope.launch {
-            showLoadingDialog("解压中...")
             val bitmap = withContext(Dispatchers.IO) {
                 JniInterface.decoderCommitPath2Buffer(entity.anfImage)
             }
-            hideLoadingDialog()
+
             viewBinding.acTvInfo.text = StringBuilder().apply {
                 if (_clickData != null) {
                     append("原JPG：${CleanMessageUtils.getFormatSize(_clickData?.srcSize!!.toDouble())}").append(
@@ -272,6 +277,8 @@ class MainRemoteFragment :
                 .into(viewBinding.acIvImg)
         }
 
+        hideLoadingDialog()
+
 
         viewBinding.acIvImg.setOnClickListener {
             dialog.dismiss()
@@ -287,7 +294,7 @@ class MainRemoteFragment :
                 if (!TextUtils.isEmpty(entity.anfImage) && !File(entity.cacheImage).exists()) {
                     val path = JniInterface.decoderCommit(entity.anfImage)
                     entity.cacheImage = path
-                    mViewModel.addEntities(arrayListOf(entity))
+                    mViewModel.updateList(arrayListOf(entity))
                 }
             }
             ToastUtils.showShort("保存成功!")

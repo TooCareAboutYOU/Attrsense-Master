@@ -43,7 +43,6 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
         launch()
         //展示完毕的监听
         splashScreen.setOnExitAnimationListener { provider ->
-            Log.i("print_logs", "SplashActivity::setOnExitAnimationListener: 启动进程才会回调！")
             //移除监听
             provider.remove()
             //跳转到下个页面
@@ -109,7 +108,7 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
 
     private fun toActivity(clz: Class<*>) {
         startActivity(Intent(this@LaunchActivity, clz))
-        finish()
         overridePendingTransition(0, 0)
+        finish()
     }
 }

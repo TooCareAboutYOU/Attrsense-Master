@@ -111,7 +111,7 @@ class LoadingDialog : AlertDialog {
     }
 
     private fun showDialog() {
-        if (!isActivityRunning(context)) {
+        if (!isActivityRunning(context) && !isShowing) {
             return
         }
         show()

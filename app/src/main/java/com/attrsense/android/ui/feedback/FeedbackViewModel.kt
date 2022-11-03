@@ -21,8 +21,8 @@ class FeedbackViewModel @Inject constructor(private val appRepository: AppReposi
     val feedbackLivedata: MutableLiveData<Boolean> =
         MutableLiveData()
 
-    fun feedback(description: String, pictures: List<String?>? = null) =
-        appRepository.feedback(description, pictures).collectInLaunch {
+    fun feedback(description: String, pictures: List<String?> = emptyList()) =
+        appRepository.feedback(description, pictures).collectInLaunch(this) {
             feedbackLivedata.value = when (it) {
                 is ResponseData.onFailed -> false
                 is ResponseData.onSuccess -> true

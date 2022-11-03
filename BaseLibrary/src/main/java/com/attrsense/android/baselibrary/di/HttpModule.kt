@@ -1,11 +1,16 @@
 package com.attrsense.android.baselibrary.di
 
 import android.annotation.SuppressLint
+import android.text.TextUtils
+import android.util.Log
 import com.attrsense.android.baselibrary.BuildConfig
 import com.attrsense.android.baselibrary.config.BaseConfig
 import com.attrsense.android.baselibrary.http.HttpDns
 import com.attrsense.android.baselibrary.http.HttpEventListener
-import com.blankj.utilcode.util.JsonUtils
+import com.attrsense.android.baselibrary.http.convert.SkeletonConverterFactory
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import com.orhanobut.logger.Logger
@@ -16,7 +21,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -41,21 +46,23 @@ object HttpModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        val interceptorLogger = HttpLoggingInterceptor(HttpLogger()).apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        val interceptorLogger = HttpLoggingInterceptor(HttpLogger())
+        interceptorLogger.level = HttpLoggingInterceptor.Level.BODY
+
         val builder = OkHttpClient.Builder()
             .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
             .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
             .readTimeout(TIME_OUT, TimeUnit.SECONDS)
-            .addNetworkInterceptor(interceptorLogger)
             .eventListenerFactory(HttpEventListener.FACTORY)
-            .dns(HttpDns())
             .sslSocketFactory(createSSLSocketFactory()!!, trustManager)
             .hostnameVerifier(hostnameVerifier)
+            .dns(HttpDns())
+
         if (BuildConfig.DEBUG) {
+            builder.addInterceptor(interceptorLogger)
             builder.addInterceptor(OkHttpProfilerInterceptor())
         }
+
         return builder.build()
     }
 
@@ -66,33 +73,44 @@ object HttpModule {
             .baseUrl(BaseConfig.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
+            .addConverterFactory(SkeletonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory.invoke())
             .build()
     }
 
 
     private class HttpLogger : HttpLoggingInterceptor.Logger {
+
+        private val gson: Gson by lazy { GsonBuilder().setPrettyPrinting().create() }
+        private val jsonParser: JsonParser by lazy { JsonParser() }
         private val mMessage = java.lang.StringBuilder()
+
         override fun log(message: String) {
-            // 请求或者响应开始
-            var localMsg: String? = message
-            if (localMsg!!.startsWith("--> POST") || localMsg.startsWith("--> GET") || localMsg.startsWith(
-                    "--> PUT"
-                )
-            ) {
-                mMessage.setLength(0)
-            }
-            // 以{}或者[]形式的说明是响应结果的json数据，需要进行格式化
-            if (localMsg.startsWith("{") && localMsg.endsWith("}")
-                || localMsg.startsWith("[") && localMsg.endsWith("]")
-            ) {
-                localMsg = JsonUtils.formatJson(localMsg)
-            }
-            mMessage.append("$localMsg\n")
-            // 响应结束，打印整条日志
-            if (localMsg!!.startsWith("<-- END HTTP")) {
-                Logger.i(mMessage.toString())
+            try {
+                // 请求或者响应开始
+                var localMsg: String? = message
+                if (localMsg!!.startsWith("--> POST")
+                    || localMsg.startsWith("--> GET")
+                    || localMsg.startsWith("--> PUT")
+                    || localMsg.startsWith("--> DELETE")
+                ) {
+                    mMessage.setLength(0)
+                }
+
+                // 以{}或者[]形式的说明是响应结果的json数据，需要进行格式化
+                if ((localMsg.startsWith("{") && localMsg.startsWith("}", localMsg.length - 2))
+                    || (localMsg.startsWith("[") && localMsg.startsWith("]", localMsg.length - 2))
+                ) {
+                    localMsg = gson.toJson(jsonParser.parse(localMsg).asJsonObject)
+                }
+                mMessage.append("$localMsg\n")
+                // 响应结束，打印整条日志
+                if (localMsg!!.startsWith("<-- END HTTP")) {
+                    Logger.i(mMessage.toString())
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

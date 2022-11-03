@@ -1,10 +1,12 @@
 package com.attrsense.android.baselibrary.base.open.activity
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.attrsense.android.baselibrary.base.internal.SkeletonActivity
+import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 
 /**
  * author : zhangshuai@attrsense.com
@@ -17,12 +19,19 @@ open class BaseActivity : SkeletonActivity() {
      * 子类需添加注释：@AndroidEntryPoint
      * 手动实例化ViewModel
      */
-    protected fun <VM : ViewModel> loadViewModel(vm: Class<VM>): VM {
-        return ViewModelProvider(this)[vm]
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
+    fun <VM : ViewModel> loadViewModel(vm: Class<VM>): VM {
+        return ViewModelProvider(this)[vm].also {
+            when (it) {
+                is BaseViewModel -> {
+                    it.setLoadView(this)
+                }
+                is BaseAndroidViewModel -> {
+                    it.setLoadView(this)
+                }
+                else -> {
+                }
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

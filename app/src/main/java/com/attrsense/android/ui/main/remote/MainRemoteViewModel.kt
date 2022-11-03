@@ -1,8 +1,8 @@
 package com.attrsense.android.ui.main.remote
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.attrsense.android.baselibrary.base.open.model.BaseResponse
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData2
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
 import com.attrsense.android.model.ImageInfoBean
@@ -25,10 +25,10 @@ class MainRemoteViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : BaseAndroidViewModel() {
 
-    val getAllLiveData: MutableLiveData<ResponseData<BaseResponse<ImagesBean?>>> = MutableLiveData()
-    val uploadLiveData: MutableLiveData<ResponseData<BaseResponse<ImagesBean?>>> = MutableLiveData()
-    val getByThumbLiveData: MutableLiveData<ResponseData<AnfImageEntity?>> = MutableLiveData()
-    val deleteLiveData: MutableLiveData<Int> = MutableLiveData()
+    val getAllLiveData = ResponseMutableLiveData<ImagesBean?>()
+    val uploadLiveData = ResponseMutableLiveData<ImagesBean?>()
+    val getByThumbLiveData = ResponseMutableLiveData2<AnfImageEntity?>()
+    val deleteLiveData = ResponseMutableLiveData2<Int>()
 
     /**
      * 获取远端数据
@@ -42,11 +42,14 @@ class MainRemoteViewModel @Inject constructor(
     ) = appRepository.getRemoteFiles(
         page,
         perPage
-    ).collectInLaunch {
+    ).collectInLaunch(this) {
         getAllLiveData.value = it.apply {
             when (this) {
                 is ResponseData.onFailed -> {
-                    Log.e("print_logs", "MainRemoteViewModel::getRemoteFiles: ${this.throwable}")
+                    Log.e(
+                        "print_logs",
+                        "MainRemoteViewModel::getRemoteFiles: ${this.throwable}"
+                    )
                 }
                 is ResponseData.onSuccess -> {
                     value?.data?.images?.also { imgList ->
@@ -69,12 +72,12 @@ class MainRemoteViewModel @Inject constructor(
     fun uploadFile(
         rate: String?,
         roiRate: String?,
-        imageFilePaths: List<String>? = null
+        imageFilePaths: List<String> = emptyList()
     ) = appRepository.uploadFile(
         rate,
         roiRate,
         imageFilePaths
-    ).collectInLaunch {
+    ).collectInLaunch(this) {
         uploadLiveData.value = it.apply {
             when (this) {
                 is ResponseData.onFailed -> {
@@ -156,8 +159,8 @@ class MainRemoteViewModel @Inject constructor(
             }
 
 
-    fun addEntities(entityList: List<AnfImageEntity>) =
-        databaseRepository.addList(entityList).collectInLaunch {
+    fun updateList(entityList: List<AnfImageEntity>) {
+        databaseRepository.updateList(entityList).collectInLaunch {
             when (it) {
                 is ResponseData.onFailed -> {
                     Log.e(
@@ -170,10 +173,11 @@ class MainRemoteViewModel @Inject constructor(
                 }
             }
         }
+    }
 
 
     fun deleteByThumb(position: Int, thumbImage: String?, fileId: String?) =
-        appRepository.deleteFile(fileId).collectInLaunch {
+        appRepository.deleteFile(fileId).collectInLaunch(this) {
             when (it) {
                 is ResponseData.onFailed -> {
                     Log.e("print_logs", "MainLocalViewModel::deleteByThumb: 添加失败！${it.throwable}")
@@ -189,7 +193,7 @@ class MainRemoteViewModel @Inject constructor(
 
                                 }
                                 is ResponseData.onSuccess -> {
-                                    deleteLiveData.value = position
+                                    deleteLiveData.value = ResponseData.onSuccess(position)
                                 }
                             }
                         }

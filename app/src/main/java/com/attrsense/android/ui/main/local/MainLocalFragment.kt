@@ -92,7 +92,7 @@ class MainLocalFragment :
             when (it) {
                 is ResponseData.onFailed -> {
                     ToastUtils.showShort(it.throwable.toString())
-                    Log.i("print_logs", "MainLocalFragment::liveDataObserves: ${it.throwable}")
+                    Log.e("print_logs", "MainLocalFragment::liveDataObserves: ${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
                     it.value?.apply {
@@ -160,7 +160,6 @@ class MainLocalFragment :
                                 isLocal = true
                             )
                             localList.add(entity)
-                            userDataManager.setAnf(anfPaths[0])
                         }
                         mViewModel.addEntities(localList)
                     }
@@ -173,6 +172,7 @@ class MainLocalFragment :
 
 
     private fun showDialog(entity: AnfImageEntity) {
+        showLoadingDialog("解压中...")
         val viewBinding: LayoutDialogItemShowBinding = DataBindingUtil.inflate(
             layoutInflater, R.layout.layout_dialog_item_show, null, true
         )
@@ -188,11 +188,10 @@ class MainLocalFragment :
 
 
         lifecycleScope.launch {
-            showLoadingDialog("解压中...")
+
             val bitmap = withContext(Dispatchers.IO) {
                 JniInterface.decoderCommitPath2Buffer(entity.anfImage)
             }
-            hideLoadingDialog()
             viewBinding.acTvInfo.text =
                 StringBuilder().append("原JPG：${FileUtils.getSize(entity.originalImage)}")
                     .append("\n").append("ANF：${FileUtils.getSize(entity.anfImage)}").append("\n")
@@ -202,7 +201,7 @@ class MainLocalFragment :
             Glide.with(requireActivity()).load(bitmap).error(R.mipmap.ic_launcher)
                 .into(viewBinding.acIvImg)
         }
-
+        hideLoadingDialog()
 
         viewBinding.acIvImg.setOnClickListener {
             dialog.dismiss()
@@ -212,13 +211,12 @@ class MainLocalFragment :
             dialog.dismiss()
         }
 
-
         viewBinding.acTvSave.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 if (!TextUtils.isEmpty(entity.anfImage) && !File(entity.cacheImage).exists()) {
                     val path = JniInterface.decoderCommit(entity.anfImage)
                     entity.cacheImage = path
-                    mViewModel.addEntities(arrayListOf(entity))
+                    mViewModel.updateList(arrayListOf(entity))
                 }
             }
             ToastUtils.showShort("保存成功!")

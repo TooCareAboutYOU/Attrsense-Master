@@ -1,7 +1,8 @@
 package com.attrsense.android.baselibrary.base.internal
 
 import android.os.Bundle
-import com.attrsense.android.baselibrary.util.ActivityManager
+import android.util.Log
+import com.attrsense.android.baselibrary.base.open.viewmodel.LoadViewImpl
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.ui.library.dialog.LoadingDialog
 import com.tbruyelle.rxpermissions3.RxPermissions
@@ -15,7 +16,7 @@ import javax.inject.Inject
  * date : 2022/10/8
  * mark : custom something
  */
-open class SkeletonActivity : RxAppCompatActivity() {
+open class SkeletonActivity : RxAppCompatActivity(), LoadViewImpl {
 
     @Inject
     lateinit var _mmkv: MMKVUtils
@@ -33,8 +34,9 @@ open class SkeletonActivity : RxAppCompatActivity() {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            window.statusBarColor = Color.TRANSPARENT
 //        }
-        ActivityManager.getInstance().add(this)
         rxPermissions = RxPermissions(this)
+
+
         //临时监听网络状态
 //        val mDisposable = ReactiveNetwork.observeNetworkConnectivity(this)
 //            .subscribeOn(Schedulers.io())
@@ -42,7 +44,6 @@ open class SkeletonActivity : RxAppCompatActivity() {
 //            .subscribe {
 //                Logger.i("网络状态：${it.state()}")
 //            }
-//        mDisposables.add(mDisposable)
     }
 
     override fun onRestart() {
@@ -68,8 +69,14 @@ open class SkeletonActivity : RxAppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mDisposables.dispose()
+
+    }
+
+    //手动调用finish时，事件处理优先于生命周期
+    override fun finish() {
+        //需要提前从window移除Dialog
         hideLoadingDialog()
-        ActivityManager.getInstance().remove(this)
+        super.finish()
     }
 
     /**
@@ -85,15 +92,16 @@ open class SkeletonActivity : RxAppCompatActivity() {
         mDisposables.remove(disposable)
     }
 
-    fun showLoadingDialog() {
+    override fun showLoadingDialog(text: String) {
         if (!isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {
             loadingDialog = LoadingDialog(this)
         }
     }
 
-    fun hideLoadingDialog() {
+    override fun hideLoadingDialog() {
         if (!isFinishing && !isDestroyed && loadingDialog != null && loadingDialog?.isShowing!!) {
             loadingDialog?.dismiss()
         }
+        loadingDialog = null
     }
 }

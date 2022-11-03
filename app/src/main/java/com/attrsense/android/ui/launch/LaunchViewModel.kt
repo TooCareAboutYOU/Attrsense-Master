@@ -16,23 +16,4 @@ class LaunchViewModel @Inject constructor(
     private val apiService: ApiService,
 ) : BaseViewModel() {
 
-    private val githubLiveData: MutableLiveData<String> = MutableLiveData()
-
-//    fun load(format: String) {
-//        githubLiveData.value = format
-//    }
-//
-//    fun github(): LiveData<Result<HPIImageBean?>> = githubLiveData.switchMap { format ->
-//        liveData {
-//            val result = try {
-//                Log.i("PrintLog", "发起请求: $format")
-//                Result.success(apiService.getHPIImage(format, 1, 1))
-//            } catch (e: Exception) {
-//                Log.i("PrintLog", "请求失败！$e")
-//                Result.failure(e)
-//            }
-//            Logger.json("${result.getOrNull()?.toString()}")
-//            emit(result)
-//        }
-//    }
 }

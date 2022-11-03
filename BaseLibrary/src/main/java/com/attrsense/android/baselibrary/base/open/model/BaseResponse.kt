@@ -17,25 +17,4 @@ open class BaseResponse<T>(
     override fun toString(): String {
         return Gson().toJson(this)
     }
-
-//    companion object {
-//        fun <T> isLoading(): BaseResponse<T> {
-//            return BaseResponse()
-//        }
-//
-//        fun <T> error(e: Throwable): BaseResponse<T> {
-//            return BaseResponse(message = e.toString())
-//        }
-//
-//        fun <T> success(): BaseResponse<T> {
-//            return BaseResponse()
-//        }
-//
-//        //登录失效时触发
-//        const val CODE_LOGIN_INVALID = "login_invalid"
-//
-//        fun <T> loginInvalid(errorCode: String?, msg: String): BaseResponse<T> {
-//            return BaseResponse(errorCode = errorCode, message = msg)
-//        }
-//    }
 }

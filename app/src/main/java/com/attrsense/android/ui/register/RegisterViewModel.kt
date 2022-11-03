@@ -2,6 +2,7 @@ package com.attrsense.android.ui.register
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.flowWithLifecycle
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
@@ -19,11 +20,11 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : BaseViewModel() {
-    val registerLivedata: MutableLiveData<ResponseData<BaseResponse<EmptyBean?>>> =
-        MutableLiveData()
+
+    val registerLivedata = ResponseMutableLiveData<EmptyBean?>()
 
     fun register(mobile: String, code: String) {
-        appRepository.register(mobile, code).collectInLaunch {
+        appRepository.register(mobile, code).collectInLaunch(this) {
             registerLivedata.value = it
         }
     }

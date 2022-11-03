@@ -15,7 +15,7 @@ object RxSchedulers {
      * 统一线程处理
      * 简化线程
      */
-    fun <T> rxObservableScheduler(): ObservableTransformer<T, T> {
+    fun <T : Any> rxObservableScheduler(): ObservableTransformer<T, T> {
         return ObservableTransformer { observable: Observable<T> ->
             observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
