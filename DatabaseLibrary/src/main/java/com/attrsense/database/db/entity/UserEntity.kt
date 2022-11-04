@@ -22,6 +22,10 @@ data class UserEntity(
 
     //密码
     @ColumnInfo(name = "token", typeAffinity = ColumnInfo.TEXT)
-    var token: String? = ""
+    var token: String? = "",
+
+    //密码
+    @ColumnInfo(name = "refresh_token", typeAffinity = ColumnInfo.TEXT)
+    var refreshToken: String? = ""
 
 ) : BaseEntity()

@@ -1,15 +1,16 @@
 package com.attrsense.android.baselibrary.di
 
 import android.content.Context
+import android.util.Log
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.android.baselibrary.util.MMKVUtilsImpl
 import com.tencent.mmkv.MMKV
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.io.File
 import javax.inject.Singleton
 
 /**

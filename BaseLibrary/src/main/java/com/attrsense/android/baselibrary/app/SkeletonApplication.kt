@@ -13,6 +13,7 @@ import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.FormatStrategy
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
+import com.tencent.mmkv.MMKV
 import com.yuyh.library.imgsel.ISNav
 
 /**
@@ -39,12 +40,10 @@ open class SkeletonApplication : Application() {
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(SkeletonApplicationObserver(this))
 
+        initLogger()
+
         Looper.myQueue().addIdleHandler {
             try {
-
-
-                initLogger()
-
                 ISNav.getInstance().init { context, path, imageView ->
                     Glide.with(context).load(path).into(imageView)
                 }

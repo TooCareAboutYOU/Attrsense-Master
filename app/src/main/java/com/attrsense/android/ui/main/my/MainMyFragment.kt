@@ -26,18 +26,13 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
 
     override fun setLayoutResId(): Int = R.layout.fragment_main_my
 
-    override fun setViewModel(): Class<MainMyViewModel> = MainMyViewModel::class.java
-
-    override fun onCreateFragment(savedInstanceState: Bundle?) {
-        super.onCreateFragment(savedInstanceState)
-    }
-
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
+
+        mDataBinding.acTvUserMobile.text = _mmkv.getString(UserDataManager.KEY_USER_MOBILE)
 
         jumpActivity()
 
-        mViewModel.logoutLivedata.observe(this) {
+        viewModel.logoutLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
                     ToastUtils.showShort("退出异常！")
@@ -79,7 +74,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
         }
 
         mDataBinding.acTvLogout.setOnClickListener {
-            mViewModel.logout()
+            viewModel.logout()
         }
     }
 

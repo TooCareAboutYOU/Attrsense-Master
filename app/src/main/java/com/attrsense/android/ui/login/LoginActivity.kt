@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.transition.Explode
-import android.util.Log
 import android.view.Window
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -36,11 +35,9 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
 
     override fun setLayoutResId(): Int = R.layout.activity_login
 
-    override fun setViewModel(): Class<LoginViewModel> = LoginViewModel::class.java
 
     override fun initViewBefore(savedInstanceState: Bundle?) {
         super.initViewBefore(savedInstanceState)
-
         window.apply {
             requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
             enterTransition = Explode()
@@ -55,8 +52,6 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
-
         addBackPress(this)
 
         val mobile: Observable<CharSequence> =
@@ -84,12 +79,12 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         }
 
         mDataBinding.acBtnLogin.setOnClickListener {
-            mViewModel.login(
+            viewModel.login(
                 mDataBinding.acEtMobile.text.toString(), mDataBinding.acEtCode.text.toString()
             )
         }
 
-        mViewModel.loginLivedata.observe(this) {
+        viewModel.loginLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
                     ToastUtils.showShort("登录失败！${it.throwable}")

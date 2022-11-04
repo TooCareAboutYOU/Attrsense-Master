@@ -21,10 +21,7 @@ abstract class BaseDataBindingFragment<DB : ViewDataBinding> : BaseFragment() {
     @LayoutRes
     protected abstract fun setLayoutResId(): Int
 
-    open fun onCreateFragment(savedInstanceState: Bundle?) {}
-
     protected abstract fun initView(savedInstanceState: Bundle?)
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -32,7 +29,6 @@ abstract class BaseDataBindingFragment<DB : ViewDataBinding> : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        onCreateFragment(savedInstanceState)
     }
 
     override fun onCreateView(

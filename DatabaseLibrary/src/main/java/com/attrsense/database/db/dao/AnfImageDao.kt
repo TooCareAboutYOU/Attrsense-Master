@@ -1,6 +1,5 @@
 package com.attrsense.database.db.dao
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -39,22 +38,22 @@ interface AnfImageDao {
     /**
      * 查询
      */
-    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile AND isLocal=:isLocal")
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile AND is_local=:isLocal")
     suspend fun getAllByType(mobile: String?, isLocal: Boolean = true): List<AnfImageEntity>
 
     /**
      * 查询
      */
-    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile")
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile")
     suspend fun getAll(mobile: String?): List<AnfImageEntity?>
 
-    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile AND anfImage=:anfImage")
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile AND anf_image=:anfImage")
     suspend fun getByAnf(mobile: String?, anfImage: String?): AnfImageEntity?
 
-    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile AND originalImage=:originalPath")
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile AND original_image=:originalPath")
     suspend fun getByOriginal(mobile: String?, originalPath: String): AnfImageEntity?
 
-    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile AND thumbImage=:thumbImage")
+    @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile AND thumb_image=:thumbImage")
     suspend fun getByThumb(mobile: String?, thumbImage: String?): AnfImageEntity?
 
 
@@ -88,16 +87,16 @@ interface AnfImageDao {
     @Delete
     suspend fun deleteList(anfImageEntity: List<AnfImageEntity>): Int
 
-    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile AND anfImage=:anfImage")
+    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile AND anf_image=:anfImage")
     suspend fun deleteAnf(mobile: String?, vararg anfImage: String?): Int
 
-    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile AND anfImage=:anfImage")
+    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile AND anf_image=:anfImage")
     suspend fun deleteAnfs(mobile: String?, anfImage: List<String>): Int
 
-    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile AND isLocal=:isLocal")
+    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile AND is_local=:isLocal")
     suspend fun deleteType(mobile: String?, isLocal: Boolean? = true)
 
-    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE userMobile=:mobile")
+    @Query("DELETE FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile")
     suspend fun clearByToken(mobile: String?)
 
     @Query("DELETE FROM ANF_IMAGE_TABLE")

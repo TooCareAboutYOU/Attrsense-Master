@@ -1,13 +1,10 @@
 package com.attrsense.android.ui.main.my
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
-import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,7 +53,7 @@ class MainMyViewModel @Inject constructor(
                         appRepository.getUserDao()
                             .deleteByMobile(userDataManager.getMobile())
                         //最后清空临时存储
-                        appRepository.userManger.save()
+                        appRepository.userManger.unSave()
 
                         logoutLivedata.value = callback
                     }

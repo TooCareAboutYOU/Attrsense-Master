@@ -1,7 +1,6 @@
 package com.attrsense.android.baselibrary.base.open.activity
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.attrsense.android.baselibrary.base.internal.SkeletonActivity
@@ -23,10 +22,10 @@ open class BaseActivity : SkeletonActivity() {
         return ViewModelProvider(this)[vm].also {
             when (it) {
                 is BaseViewModel -> {
-                    it.setLoadView(this)
+                    it.setOnViewModelCallback(this)
                 }
                 is BaseAndroidViewModel -> {
-                    it.setLoadView(this)
+                    it.setOnViewModelCallback(this)
                 }
                 else -> {
                 }

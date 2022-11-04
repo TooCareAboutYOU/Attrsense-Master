@@ -40,7 +40,7 @@ class LoginViewModel @Inject constructor(
 
     private suspend fun saveUser(mobile: String, token: String?, refresh_token: String?) {
         withContext(Dispatchers.Default) {
-            appRepository.getUserDao().add(UserEntity(mobile = mobile, token = token))
+            appRepository.getUserDao().addUser(UserEntity(mobile = mobile, token = token, refreshToken = refresh_token))
             appRepository.userManger.save(
                 mobile,
                 token,

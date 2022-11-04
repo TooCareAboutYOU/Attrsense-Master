@@ -22,7 +22,7 @@ import com.attrsense.android.model.ImagesBean
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.ui.library.dialog.ImageShowDialog
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
-import com.attrsense.ui.library.loadview.RecyclerLoadMoreView
+import com.attrsense.ui.library.recycler.RecyclerLoadMoreView
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
@@ -47,14 +47,9 @@ class MainRemoteFragment :
     //一页的数量
     private val pageSize = 10
 
-
     override fun setLayoutResId(): Int = R.layout.fragment_main_remote
 
-    override fun setViewModel(): Class<MainRemoteViewModel> = MainRemoteViewModel::class.java
-
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
-
         mDataBinding.toolbar.load(requireActivity()).apply {
             this.hideLeftIcon()
             this.setRightClick {
@@ -70,7 +65,7 @@ class MainRemoteFragment :
                     }
                 }
             }
-            this.setCenterTitle("双深科技")
+            this.setCenterTitle("双深")
             this.setRightIcon(com.attrsense.ui.library.R.drawable.icon_add)
         }
 
@@ -116,12 +111,12 @@ class MainRemoteFragment :
 
         mAdapter.setOnItemClickListener { _, _, position ->
             _clickData = mAdapter.getItem(position)
-            mViewModel.getByThumb(_clickData!!.thumbnailUrl)
+            viewModel.getByThumb(_clickData!!.thumbnailUrl)
         }
 
         mAdapter.setOnItemLongClickListener { _, _, position ->
             val data = mAdapter.getItem(position)
-            mViewModel.deleteByThumb(position, data.thumbnailUrl, data.fileId)
+            viewModel.deleteByThumb(position, data.thumbnailUrl, data.fileId)
             false
         }
     }
@@ -138,16 +133,16 @@ class MainRemoteFragment :
 
     private var _clickData: ImageInfoBean? = null
     private fun liveDataObserves() {
-        mViewModel.getAllLiveData.observe(this) {
+        viewModel.getAllLiveData.observe(this) {
             loadData(it)
         }
 
-        mViewModel.uploadLiveData.observe(this) {
+        viewModel.uploadLiveData.observe(this) {
             //新增单条或者多条数据
             loadData(it)
         }
 
-        mViewModel.getByThumbLiveData.observe(this) {
+        viewModel.getByThumbLiveData.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
 
@@ -160,7 +155,7 @@ class MainRemoteFragment :
             }
         }
 
-        mViewModel.deleteLiveData.observe(this) {
+        viewModel.deleteLiveData.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
                     ToastUtils.showShort("删除失败！")
@@ -174,7 +169,7 @@ class MainRemoteFragment :
     }
 
     private fun loadServer() {
-        mViewModel.getRemoteFiles(pageIndex, pageSize)
+        viewModel.getRemoteFiles(pageIndex, pageSize)
     }
 
     private fun loadData(
@@ -212,7 +207,7 @@ class MainRemoteFragment :
                 }
             }
         }
-        hideLoadingDialog()
+        dismissLoadingDialog()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -230,13 +225,13 @@ class MainRemoteFragment :
                 }
             }
         } else {
-            hideLoadingDialog()
+            dismissLoadingDialog()
         }
     }
 
     private fun upload(list: List<String>) {
         showLoadingDialog("压缩中...")
-        mViewModel.uploadFile("4", "4", list)
+        viewModel.uploadFile("4", "4", list)
     }
 
     private fun showDialog(entity: AnfImageEntity) {
@@ -277,7 +272,7 @@ class MainRemoteFragment :
                 .into(viewBinding.acIvImg)
         }
 
-        hideLoadingDialog()
+        dismissLoadingDialog()
 
 
         viewBinding.acIvImg.setOnClickListener {
@@ -294,7 +289,7 @@ class MainRemoteFragment :
                 if (!TextUtils.isEmpty(entity.anfImage) && !File(entity.cacheImage).exists()) {
                     val path = JniInterface.decoderCommit(entity.anfImage)
                     entity.cacheImage = path
-                    mViewModel.updateList(arrayListOf(entity))
+                    viewModel.updateList(arrayListOf(entity))
                 }
             }
             ToastUtils.showShort("保存成功!")

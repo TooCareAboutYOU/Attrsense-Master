@@ -1,6 +1,7 @@
 package com.attrsense.android.baselibrary.util
 
 import android.os.Parcelable
+import android.util.Log
 import com.orhanobut.logger.Logger
 import com.tencent.mmkv.MMKV
 import java.util.Collections
@@ -67,6 +68,7 @@ class MMKVUtilsImpl @Inject constructor(private val _mmkv: MMKV) : MMKVUtils {
             }
             else -> {
                 Logger.e("Save Failed！！！")
+                throw IllegalArgumentException("the key(${key}) type not supported")
                 return
             }
         }

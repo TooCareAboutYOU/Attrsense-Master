@@ -15,10 +15,7 @@ class AboutUsActivity :
 
     override fun setLayoutResId(): Int = R.layout.activity_about_us
 
-    override fun setViewModel(): Class<AboutUsViewModel> = AboutUsViewModel::class.java
-
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
         mDataBinding.toolBarView.load(this).apply {
             this.setCenterTitle(R.string.tab_main_user_about_us_title)
             this.setLeftClick {

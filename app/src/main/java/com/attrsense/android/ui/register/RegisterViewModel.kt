@@ -1,11 +1,7 @@
 package com.attrsense.android.ui.register
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.flowWithLifecycle
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
-import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
-import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

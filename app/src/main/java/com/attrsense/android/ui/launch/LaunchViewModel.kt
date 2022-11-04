@@ -1,8 +1,8 @@
 package com.attrsense.android.ui.launch
 
-import androidx.lifecycle.*
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.api.ApiService
+import com.attrsense.android.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -13,7 +13,6 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class LaunchViewModel @Inject constructor(
-    private val apiService: ApiService,
+    private val appRepository: AppRepository,
 ) : BaseViewModel() {
-
 }

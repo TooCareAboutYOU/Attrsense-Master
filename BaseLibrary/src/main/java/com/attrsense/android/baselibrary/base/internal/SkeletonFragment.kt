@@ -3,7 +3,7 @@ package com.attrsense.android.baselibrary.base.internal
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import com.attrsense.android.baselibrary.base.open.viewmodel.LoadViewImpl
+import com.attrsense.android.baselibrary.base.open.viewmodel.OnViewModelCallback
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.ui.library.dialog.LoadingDialog
 import com.tbruyelle.rxpermissions3.RxPermissions
@@ -16,7 +16,7 @@ import javax.inject.Inject
  * date : 2022/10/8 10:07
  * mark : custom something
  */
-open class SkeletonFragment : RxFragment(), LoadViewImpl {
+open class SkeletonFragment : RxFragment(), OnViewModelCallback {
 
     //也可自定义存储类型
 //    @Inject
@@ -29,7 +29,6 @@ open class SkeletonFragment : RxFragment(), LoadViewImpl {
     protected lateinit var rxPermissions: RxPermissions
 
     private var loadingDialog: LoadingDialog? = null
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -62,7 +61,8 @@ open class SkeletonFragment : RxFragment(), LoadViewImpl {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        hideLoadingDialog()
+        dismissLoadingDialog()
+        loadingDialog = null
     }
 
     override fun onDestroy() {
@@ -74,38 +74,41 @@ open class SkeletonFragment : RxFragment(), LoadViewImpl {
     }
 
 
-
     /**
      * 自定义函数
      */
     //手动添加指定Disposable
-    fun addDisposable(disposable: Disposable) {
+    override fun addDisposable(disposable: Disposable) {
         (requireActivity() as SkeletonActivity).addDisposable(disposable)
     }
 
     //手动移除指定Disposable
-    fun removeDisposable(disposable: Disposable) {
+    override fun removeDisposable(disposable: Disposable) {
         (requireActivity() as SkeletonActivity).removeDisposable(disposable)
     }
 
     override fun showLoadingDialog(text: String) {
-        try {
-            if (!requireActivity().isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {
-                loadingDialog = LoadingDialog(requireActivity(), text)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+//        try {
+//            if (!requireActivity().isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {
+//                loadingDialog = LoadingDialog(requireActivity(), text)
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+
+        (requireActivity() as SkeletonActivity).showLoadingDialog(text)
     }
 
-    override fun hideLoadingDialog() {
-        try {
-            if (!requireActivity().isFinishing && !requireActivity().isDestroyed && loadingDialog != null && loadingDialog?.isShowing!!) {
-                loadingDialog?.dismiss()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    override fun dismissLoadingDialog() {
+//        try {
+//            if (!requireActivity().isFinishing && !requireActivity().isDestroyed && loadingDialog != null && loadingDialog?.isShowing!!) {
+//                loadingDialog?.cancel()
+//                loadingDialog = null
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+        (requireActivity() as SkeletonActivity).dismissLoadingDialog()
     }
 
 }

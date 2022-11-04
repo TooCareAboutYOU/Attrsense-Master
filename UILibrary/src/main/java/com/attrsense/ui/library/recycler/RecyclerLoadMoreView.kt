@@ -1,4 +1,4 @@
-package com.attrsense.ui.library.loadview
+package com.attrsense.ui.library.recycler
 
 import android.view.LayoutInflater
 import android.view.View
@@ -35,16 +35,24 @@ class RecyclerLoadMoreView : BaseLoadMoreView() {
     private fun createView(type: Int, holder: BaseViewHolder, @StringRes resId: Int): View {
         return when (type) {
             0 -> {
-                holder.getView<AppCompatTextView>(R.id.acTv_loading)
+                holder.getView<AppCompatTextView>(R.id.acTv_loading).apply {
+                    text = this.resources.getText(resId)
+                }
             }
             1 -> {
-                holder.getView<AppCompatTextView>(R.id.acTv_complete)
+                holder.getView<AppCompatTextView>(R.id.acTv_complete).apply {
+                    text = this.resources.getText(resId)
+                }
             }
             2 -> {
-                holder.getView<AppCompatTextView>(R.id.acTv_failed)
+                holder.getView<AppCompatTextView>(R.id.acTv_failed).apply {
+                    text = this.resources.getText(resId)
+                }
             }
             else -> {
-                holder.getView<AppCompatTextView>(R.id.acTv_end)
+                holder.getView<AppCompatTextView>(R.id.acTv_end).apply {
+                    text = this.resources.getText(resId)
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.attrsense.android.manager
 
+import android.text.TextUtils
+import android.util.Log
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import javax.inject.Inject
 
@@ -9,35 +11,46 @@ import javax.inject.Inject
  * mark : 用户信息操作相关
  */
 
-class UserDataManager @Inject constructor(private val mmkvUtils: MMKVUtils) {
+class UserDataManager @Inject constructor(
+    private val mmkvUtils: MMKVUtils
+) {
 
     companion object {
         //用户手机号
-        private const val KEY_ACCOUNT_MOBILE = "key_account_mobile"
+        const val KEY_USER_MOBILE = "key_user_mobile"
 
         //账户token
-        private const val KEY_ACCOUNT_TOKEN = "key_account_token"
+        private const val KEY_USER_TOKEN = "key_user_token"
 
         //刷新token
-        private const val KEY_ACCOUNT_REFRESH_TOKEN = "key_account_refresh_token"
-    }
-
-    init {
-        mmkvUtils.setValue(KEY_ACCOUNT_TOKEN, "")
+        private const val KEY_USER_REFRESH_TOKEN = "key_user_refresh_token"
     }
 
     fun isLogin(): Boolean {
-        return mmkvUtils.getString(KEY_ACCOUNT_TOKEN) != ""
+        val state = !TextUtils.isEmpty(mmkvUtils.getString(KEY_USER_TOKEN))
+        return state
     }
 
-    fun getMobile(): String? = mmkvUtils.getString(KEY_ACCOUNT_MOBILE)
+    fun getMobile(): String? {
+        val mobile = mmkvUtils.getString(KEY_USER_MOBILE)
+        return mobile
+    }
 
-    fun getToken(): String? = mmkvUtils.getString(KEY_ACCOUNT_TOKEN)
+    fun getToken(): String? {
+        val token = mmkvUtils.getString(KEY_USER_TOKEN)
+        return token
+    }
 
 
     fun save(mobile: String? = "", token: String? = "", refresh_token: String? = "") {
-        mmkvUtils.setValue(KEY_ACCOUNT_MOBILE, mobile)
-        mmkvUtils.setValue(KEY_ACCOUNT_TOKEN, token)
-        mmkvUtils.setValue(KEY_ACCOUNT_REFRESH_TOKEN, refresh_token)
+        mmkvUtils.setValue(KEY_USER_MOBILE, mobile)
+        mmkvUtils.setValue(KEY_USER_TOKEN, token)
+        mmkvUtils.setValue(KEY_USER_REFRESH_TOKEN, refresh_token)
+    }
+
+    fun unSave() {
+        mmkvUtils.removeKey(KEY_USER_MOBILE)
+        mmkvUtils.removeKey(KEY_USER_TOKEN)
+        mmkvUtils.removeKey(KEY_USER_REFRESH_TOKEN)
     }
 }

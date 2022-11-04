@@ -34,8 +34,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainLocalFragment :
-    BaseDataBindingVMFragment<FragmentMainLocalBinding, MainLocalViewModel>() {
+class MainLocalFragment : BaseDataBindingVMFragment<FragmentMainLocalBinding, MainLocalViewModel>() {
 
     @Inject
     lateinit var userDataManager: UserDataManager
@@ -43,13 +42,9 @@ class MainLocalFragment :
     private val localList: ArrayList<AnfImageEntity> by lazy { arrayListOf() }
     private lateinit var mAdapter: LocalImageAdapter
 
-
     override fun setLayoutResId(): Int = R.layout.fragment_main_local
 
-    override fun setViewModel(): Class<MainLocalViewModel> = MainLocalViewModel::class.java
-
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
         mDataBinding.toolBarView.load(requireActivity()).apply {
             hideLeftIcon()
             this.setRightClick {
@@ -65,7 +60,7 @@ class MainLocalFragment :
                     }
                 }
             }
-            this.setCenterTitle("双深科技")
+            this.setCenterTitle("双深")
             this.setRightIcon(com.attrsense.ui.library.R.drawable.icon_add)
         }
 
@@ -81,14 +76,14 @@ class MainLocalFragment :
 
         liveDataObserves()
 
-        mViewModel.getAll()
+        viewModel.getAll()
     }
 
     /**
      * 拍照单张图片的编解码操作
      */
     private fun liveDataObserves() {
-        mViewModel.getLiveData.observe(this) {
+        viewModel.getLiveData.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
                     ToastUtils.showShort(it.throwable.toString())
@@ -102,10 +97,10 @@ class MainLocalFragment :
                     }
                 }
             }
-            hideLoadingDialog()
+            dismissLoadingDialog()
         }
 
-        mViewModel.deleteLiveData.observe(this) {
+        viewModel.deleteLiveData.observe(this) {
             mAdapter.removeAt(it)
             ToastUtils.showShort("删除成功！")
         }
@@ -119,7 +114,7 @@ class MainLocalFragment :
 
         mAdapter.setOnItemLongClickListener { _, _, position ->
             val data = mAdapter.getItem(position)
-            mViewModel.deleteByAnfPath(position, data.anfImage)
+            viewModel.deleteByAnfPath(position, data.anfImage)
             false
         }
     }
@@ -143,7 +138,7 @@ class MainLocalFragment :
                             anfImage = anf_path,
                             isLocal = true
                         )
-                        mViewModel.addEntities(arrayListOf(entity))
+                        viewModel.addEntities(arrayListOf(entity))
                     }
                 } else {
                     val paths = data.getStringArrayListExtra("result") as ArrayList // 图片集合地址
@@ -161,12 +156,12 @@ class MainLocalFragment :
                             )
                             localList.add(entity)
                         }
-                        mViewModel.addEntities(localList)
+                        viewModel.addEntities(localList)
                     }
                 }
             }
         } else {
-            hideLoadingDialog()
+            dismissLoadingDialog()
         }
     }
 
@@ -201,7 +196,7 @@ class MainLocalFragment :
             Glide.with(requireActivity()).load(bitmap).error(R.mipmap.ic_launcher)
                 .into(viewBinding.acIvImg)
         }
-        hideLoadingDialog()
+        dismissLoadingDialog()
 
         viewBinding.acIvImg.setOnClickListener {
             dialog.dismiss()
@@ -216,7 +211,7 @@ class MainLocalFragment :
                 if (!TextUtils.isEmpty(entity.anfImage) && !File(entity.cacheImage).exists()) {
                     val path = JniInterface.decoderCommit(entity.anfImage)
                     entity.cacheImage = path
-                    mViewModel.updateList(arrayListOf(entity))
+                    viewModel.updateList(arrayListOf(entity))
                 }
             }
             ToastUtils.showShort("保存成功!")

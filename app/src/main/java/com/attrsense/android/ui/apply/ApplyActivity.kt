@@ -1,9 +1,7 @@
 package com.attrsense.android.ui.apply
 
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
@@ -20,13 +18,9 @@ import io.reactivex.rxjava3.core.Observable
 @AndroidEntryPoint
 class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewModel>() {
 
-
     override fun setLayoutResId(): Int = R.layout.activity_apply
 
-    override fun setViewModel(): Class<ApplyViewModel> = ApplyViewModel::class.java
-
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
         mDataBinding.toolBarView.load(this).apply {
             this.setCenterTitle(R.string.tab_main_user_apply_title)
             this.setLeftClick {
@@ -44,7 +38,7 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
         textListener()
 
         mDataBinding.acBtnCommit.setOnClickListener {
-            mViewModel.apply(
+            viewModel.apply(
                 mDataBinding.acEtContact.text.toString(),
                 mDataBinding.acEtPhone.text.toString(),
                 mDataBinding.acEtCompany.text.toString(),
@@ -53,7 +47,7 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
             )
         }
 
-        mViewModel.applyLiveData.observe(this) {
+        viewModel.applyLiveData.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
                     ToastUtils.showShort("提交失败：${it.throwable}")

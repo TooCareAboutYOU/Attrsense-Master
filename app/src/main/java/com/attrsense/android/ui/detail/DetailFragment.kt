@@ -13,17 +13,7 @@ class DetailFragment :
 
     override fun setLayoutResId(): Int = R.layout.fragment_main_local
 
-    override fun setViewModel(): Class<DetailFragmentViewModel> =
-        DetailFragmentViewModel::class.java
-
-
-    override fun onCreateFragment(savedInstanceState: Bundle?) {
-        super.onCreateFragment(savedInstanceState)
-    }
-
-
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
     }
 
 

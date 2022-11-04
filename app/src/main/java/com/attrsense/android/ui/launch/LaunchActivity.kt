@@ -31,7 +31,6 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
 
     override fun setLayoutResId(): Int = R.layout.activity_launch
 
-    override fun setViewModel(): Class<LaunchViewModel> = LaunchViewModel::class.java
 
     override fun initViewBefore(savedInstanceState: Bundle?) {
         super.initViewBefore(savedInstanceState)
@@ -39,7 +38,6 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
         launch()
         //展示完毕的监听
         splashScreen.setOnExitAnimationListener { provider ->

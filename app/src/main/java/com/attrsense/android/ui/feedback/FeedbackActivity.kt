@@ -45,10 +45,8 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
 
     override fun setLayoutResId(): Int = R.layout.activity_feedback
 
-    override fun setViewModel(): Class<FeedbackViewModel> = FeedbackViewModel::class.java
 
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
 
         mDataBinding.toolBarView.load(this).apply {
             this.setCenterTitle(R.string.tab_main_user_feedback_title)
@@ -86,12 +84,12 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
                 }
             }
 
-            mViewModel.feedback(mDataBinding.acEtDescription.text.toString(), pictures)
+            viewModel.feedback(mDataBinding.acEtDescription.text.toString(), pictures)
         }
 
 
         //监听提交
-        mViewModel.feedbackLivedata.observe(this) {
+        viewModel.feedbackLivedata.observe(this) {
             if (it) {
                 ToastUtils.showShort("提交成功！")
                 mDataBinding.acEtDescription.text = null
@@ -101,7 +99,7 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
             } else {
                 ToastUtils.showShort("提交失败,请重试！")
             }
-            hideLoadingDialog()
+            dismissLoadingDialog()
         }
 
 

@@ -1,11 +1,8 @@
 package com.attrsense.android.baselibrary.base.open.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
-import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
@@ -19,6 +16,7 @@ import kotlin.system.exitProcess
  */
 abstract class BaseDataBindingActivity<DB : ViewDataBinding> :
     BaseActivity() {
+
 
     lateinit var mDataBinding: DB
 
@@ -36,9 +34,6 @@ abstract class BaseDataBindingActivity<DB : ViewDataBinding> :
         initView(savedInstanceState)
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-    }
 
     override fun onRestart() {
         super.onRestart()

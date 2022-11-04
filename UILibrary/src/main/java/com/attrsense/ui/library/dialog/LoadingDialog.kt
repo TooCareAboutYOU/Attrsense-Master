@@ -4,12 +4,19 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil.setContentView
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import com.attrsense.ui.library.R
 
 /**
@@ -52,9 +59,15 @@ class LoadingDialog : AlertDialog {
     private var mTextColorResId = -1
     private var mTextSize = -1
 
+//    private val lifecycleOwner by lazy{
+//        when (context) {
+//            is RxFa -> {}
+//            else -> {}
+//        }
+//    }
+
     constructor(context: Context) : super(context) {
         showDialog()
-
     }
 
     /**
@@ -163,7 +176,10 @@ class LoadingDialog : AlertDialog {
         window!!.setBackgroundDrawable(ColorDrawable(0))
         window!!.setDimAmount(0f)
         setCanceledOnTouchOutside(false)
-        window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT)
+        window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT
+        )
 
 
 //        val bgParams = mRrRoot!!.layoutParams

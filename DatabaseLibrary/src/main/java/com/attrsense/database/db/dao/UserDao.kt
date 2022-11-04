@@ -1,6 +1,6 @@
 package com.attrsense.database.db.dao
 
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.room.*
 import com.attrsense.database.db.entity.UserEntity
 
@@ -33,4 +33,29 @@ interface UserDao {
 
     @Query("DELETE FROM USER_TABLE WHERE mobile=:mobile")
     suspend fun deleteByMobile(mobile: String?)
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     *                                          优美的分割线
+     * ---------------------------------------------------------------------------------------------
+     * @description：
+     */
+
+    /**
+     * 新增用户
+     * @param userEntity UserEntity
+     */
+    @Transaction
+    suspend fun addUser(userEntity: UserEntity) {
+        queryByMobile(userEntity.mobile)?.let {
+            if (it.isNotEmpty()) {
+                it[0].token = userEntity.token
+                it[0].refreshToken = userEntity.refreshToken
+                update(it[0])
+                return
+            }
+        }
+        add(userEntity)
+    }
 }

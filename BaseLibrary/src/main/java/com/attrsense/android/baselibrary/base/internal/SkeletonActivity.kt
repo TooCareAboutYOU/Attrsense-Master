@@ -2,7 +2,7 @@ package com.attrsense.android.baselibrary.base.internal
 
 import android.os.Bundle
 import android.util.Log
-import com.attrsense.android.baselibrary.base.open.viewmodel.LoadViewImpl
+import com.attrsense.android.baselibrary.base.open.viewmodel.OnViewModelCallback
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.ui.library.dialog.LoadingDialog
 import com.tbruyelle.rxpermissions3.RxPermissions
@@ -16,7 +16,7 @@ import javax.inject.Inject
  * date : 2022/10/8
  * mark : custom something
  */
-open class SkeletonActivity : RxAppCompatActivity(), LoadViewImpl {
+open class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
 
     @Inject
     lateinit var _mmkv: MMKVUtils
@@ -35,7 +35,6 @@ open class SkeletonActivity : RxAppCompatActivity(), LoadViewImpl {
 //            window.statusBarColor = Color.TRANSPARENT
 //        }
         rxPermissions = RxPermissions(this)
-
 
         //临时监听网络状态
 //        val mDisposable = ReactiveNetwork.observeNetworkConnectivity(this)
@@ -69,13 +68,13 @@ open class SkeletonActivity : RxAppCompatActivity(), LoadViewImpl {
     override fun onDestroy() {
         super.onDestroy()
         mDisposables.dispose()
-
     }
 
     //手动调用finish时，事件处理优先于生命周期
     override fun finish() {
         //需要提前从window移除Dialog
-        hideLoadingDialog()
+        dismissLoadingDialog()
+        loadingDialog = null
         super.finish()
     }
 
@@ -83,25 +82,33 @@ open class SkeletonActivity : RxAppCompatActivity(), LoadViewImpl {
      * 自定义函数
      */
     //手动添加指定Disposable
-    fun addDisposable(disposable: Disposable) {
+    override fun addDisposable(disposable: Disposable) {
         mDisposables.add(disposable)
     }
 
     //手动移除指定Disposable
-    fun removeDisposable(disposable: Disposable) {
+    override fun removeDisposable(disposable: Disposable) {
         mDisposables.remove(disposable)
     }
 
     override fun showLoadingDialog(text: String) {
         if (!isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {
-            loadingDialog = LoadingDialog(this)
+            loadingDialog = LoadingDialog(this,text)
         }
     }
 
-    override fun hideLoadingDialog() {
+    override fun dismissLoadingDialog() {
         if (!isFinishing && !isDestroyed && loadingDialog != null && loadingDialog?.isShowing!!) {
-            loadingDialog?.dismiss()
+            loadingDialog?.cancel()
+            loadingDialog = null
         }
-        loadingDialog = null
+    }
+
+    private fun dialogListener() {
+        loadingDialog?.setOnCancelListener {
+        }
+
+        loadingDialog?.setOnDismissListener {
+        }
     }
 }

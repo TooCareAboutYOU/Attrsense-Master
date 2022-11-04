@@ -26,12 +26,9 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
         }
     }
 
-    override fun setViewModel(): Class<MainViewModel> = MainViewModel::class.java
-
     override fun setLayoutResId(): Int = R.layout.activity_main
 
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
         mDataBinding.tabBottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.item_local -> {

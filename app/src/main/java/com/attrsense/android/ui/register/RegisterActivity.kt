@@ -34,8 +34,6 @@ class RegisterActivity :
 
     override fun setLayoutResId(): Int = R.layout.activity_register
 
-    override fun setViewModel(): Class<RegisterViewModel> = RegisterViewModel::class.java
-
     override fun initViewBefore(savedInstanceState: Bundle?) {
         super.initViewBefore(savedInstanceState)
         window.apply {
@@ -45,8 +43,6 @@ class RegisterActivity :
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        super.initView(savedInstanceState)
-
         mDataBinding.toolbar.load(this).apply {
             setCenterTitle("注\t\t册")
             setLeftClick {
@@ -77,13 +73,13 @@ class RegisterActivity :
         }
 
         mDataBinding.acBtnRegister.setOnClickListener {
-            mViewModel.register(
+            viewModel.register(
                 mDataBinding.acEtMobile.text.toString(),
                 mDataBinding.acEtCode.text.toString()
             )
         }
 
-        mViewModel.registerLivedata.observe(this) {
+        viewModel.registerLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
                     ToastUtils.showShort("注册失败！")

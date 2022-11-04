@@ -1,8 +1,6 @@
 package com.attrsense.android.ui.feedback
 
 import androidx.lifecycle.MutableLiveData
-import com.attrsense.android.baselibrary.base.open.model.BaseResponse
-import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.repository.AppRepository
