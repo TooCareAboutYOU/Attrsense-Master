@@ -30,6 +30,7 @@ open class BaseViewModel : ViewModel() {
             if (isShowLoading) {
                 viewModel?.showLoading()
             }
+
             action.invoke(it)
 
             if (isShowLoading) {

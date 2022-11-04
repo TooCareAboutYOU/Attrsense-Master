@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 /**
  * author : zhangshuai@attrsense.com
@@ -29,7 +30,6 @@ open class BaseAndroidViewModel : AndroidViewModel(SkeletonApplication.getInstan
         crossinline action: suspend (value: T) -> Unit
     ) = viewModelScope.launch(Dispatchers.Main) {
         collect {
-
             if (isShowLoading) {
                 viewModel?.showLoading()
             }
@@ -43,12 +43,10 @@ open class BaseAndroidViewModel : AndroidViewModel(SkeletonApplication.getInstan
     }
 
     fun showLoading() {
-        Log.d("print_logs", "BaseAndroidViewModel::collectInLaunch: showLoading")
         this._loadViewImpl?.showLoadingDialog()
     }
 
     fun hideLoading() {
-        Log.d("print_logs", "BaseAndroidViewModel::collectInLaunch: hideLoading")
         this._loadViewImpl?.hideLoadingDialog()
     }
 

@@ -1,16 +1,13 @@
 package com.attrsense.android.baselibrary.app
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.os.Bundle
 import android.os.Looper
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import com.attrsense.android.baselibrary.BuildConfig
 import com.attrsense.android.baselibrary.base.internal.SkeletonApplicationObserver
 import com.attrsense.android.baselibrary.crash.CrashHandler
-import com.attrsense.android.baselibrary.util.ActivityManager
 import com.bumptech.glide.Glide
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.FormatStrategy
@@ -44,6 +41,8 @@ open class SkeletonApplication : Application() {
 
         Looper.myQueue().addIdleHandler {
             try {
+
+
                 initLogger()
 
                 ISNav.getInstance().init { context, path, imageView ->
