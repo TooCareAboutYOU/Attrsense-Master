@@ -44,7 +44,7 @@ object FilesHelper {
                 bitmapFile.createNewFile()
             }
             val fileOutputStream = FileOutputStream(bitmapFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fileOutputStream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fileOutputStream)
             fileOutputStream.flush()
             fileOutputStream.close()
         } catch (e: Exception) {
@@ -63,9 +63,9 @@ object FilesHelper {
         val result = localPath?.let {
             val rightPath=PhotoBitmapUtils.amendRotatePhoto(it,context)
             val bitmap = BitmapFactory.decodeFile(rightPath)
-            val thumb = ThumbnailUtils.extractThumbnail(bitmap, 100, 100)
+            val thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.width, bitmap.height)
             val filename = it.substringAfterLast("/")
-            saveFile(context, thumb, filename)
+            saveFile(context, thumb, "${System.currentTimeMillis()}_$filename")
         }
         return result
     }

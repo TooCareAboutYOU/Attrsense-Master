@@ -22,10 +22,11 @@ class ApplyViewModel @Inject constructor(
     /**
      * 提交申请
      */
-    fun apply(name: String, mobile: String, company: String, email: String, briefly: String?) =
+    fun apply(name: String, mobile: String, company: String, email: String, briefly: String?) {
         appRepository.apply(name, mobile, company, email, briefly)
             .collectInLaunch(this) {
                 applyLiveData.value = it
             }
+    }
 
 }

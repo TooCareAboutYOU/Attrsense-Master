@@ -13,7 +13,7 @@ import com.attrsense.android.baselibrary.view.GridLayoutDecoration
 import com.attrsense.android.databinding.ActivityFeedbackBinding
 import com.attrsense.android.ui.feedback.entity.ItemMultipleEntity
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
-import com.blankj.utilcode.util.ToastUtils
+import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,27 +77,27 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
         })
 
         //提交
-        mDataBinding.acBtnCommit.setOnClickListener {
+        mDataBinding.acBtnCommit.clicks().subscribe {
             val pictures = arrayListOf<String?>().apply {
                 if (mList.size > 0) {
                     mList.forEach { this.add(it.imageUrl) }
                 }
             }
 
-            viewModel.feedback(mDataBinding.acEtDescription.text.toString(), pictures)
+            mViewModel.feedback(mDataBinding.acEtDescription.text.toString(), pictures)
         }
 
 
         //监听提交
-        viewModel.feedbackLivedata.observe(this) {
+        mViewModel.feedbackLivedata.observe(this) {
             if (it) {
-                ToastUtils.showShort("提交成功！")
+                showToast("提交成功！")
                 mDataBinding.acEtDescription.text = null
                 mList.clear()
                 mList.add(ItemMultipleEntity(ItemMultipleEntity.PLACE_HOLDER))
                 mAdapter.notifyDataSetChanged()
             } else {
-                ToastUtils.showShort("提交失败,请重试！")
+                showToast("提交失败,请重试！")
             }
             dismissLoadingDialog()
         }

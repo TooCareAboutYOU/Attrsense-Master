@@ -13,8 +13,6 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val appRepository: AppRepository,
-    private val mmkv: MMKVUtils
 ) : BaseViewModel() {
 
 }

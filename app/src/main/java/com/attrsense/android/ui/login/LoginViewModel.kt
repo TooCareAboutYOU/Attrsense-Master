@@ -7,8 +7,6 @@ import com.attrsense.android.model.LoginBean
 import com.attrsense.android.repository.AppRepository
 import com.attrsense.database.db.entity.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -27,25 +25,29 @@ class LoginViewModel @Inject constructor(
         appRepository.login(mobile, code)
             .collectInLaunch(this) {
                 when (it) {
-                    is ResponseData.onSuccess -> {
-                        saveUser(mobile, it.value?.data?.token, it.value?.data?.refresh_token)
-                    }
-                    else -> {
+                    is ResponseData.onFailed -> {
 
                     }
+                    is ResponseData.onSuccess -> {
+                        saveUser(mobile, it.value?.data?.token, it.value?.data?.refresh_token)
+                        loginLivedata.value = it
+                    }
                 }
-                loginLivedata.value = it
             }
     }
 
-    private suspend fun saveUser(mobile: String, token: String?, refresh_token: String?) {
-        withContext(Dispatchers.Default) {
-            appRepository.getUserDao().addUser(UserEntity(mobile = mobile, token = token, refreshToken = refresh_token))
-            appRepository.userManger.save(
-                mobile,
-                token,
-                refresh_token
+    private fun saveUser(mobile: String, token: String?, refresh_token: String?) {
+        appRepository.addUser(
+            UserEntity(
+                mobile = mobile,
+                token = token,
+                refreshToken = refresh_token
             )
-        }
+        ).collectInLaunch {  }
+        appRepository.userManger.save(
+            mobile,
+            token,
+            refresh_token
+        )
     }
 }

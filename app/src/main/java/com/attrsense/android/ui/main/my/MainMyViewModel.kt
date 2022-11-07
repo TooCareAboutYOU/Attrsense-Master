@@ -7,6 +7,7 @@ import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.repository.AppRepository
+import com.attrsense.database.repository.DatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -17,6 +18,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainMyViewModel @Inject constructor(
+    private val databaseRepository: DatabaseRepository,
     private val appRepository: AppRepository,
     private val userDataManager: UserDataManager
 ) :
@@ -30,7 +32,7 @@ class MainMyViewModel @Inject constructor(
             it.apply {
                 when (it) {
                     is ResponseData.onFailed -> {
-
+                        showToast(it.throwable.toString())
                     }
                     is ResponseData.onSuccess -> {
                         clearUserByToken(it)
@@ -41,8 +43,8 @@ class MainMyViewModel @Inject constructor(
     }
 
     //清空对应数据库
-    private suspend fun clearUserByToken(callback: ResponseData<BaseResponse<EmptyBean?>>) {
-        appRepository.databaseRepository.clearByToken(appRepository.userManger.getMobile())
+    private fun clearUserByToken(callback: ResponseData<BaseResponse<EmptyBean?>>) {
+        databaseRepository.clearByToken(appRepository.userManger.getMobile())
             .collectInLaunch { state ->
                 when (state) {
                     is ResponseData.onFailed -> {
@@ -50,10 +52,12 @@ class MainMyViewModel @Inject constructor(
                     }
                     is ResponseData.onSuccess -> {
                         //删除用户表对应用户
-                        appRepository.getUserDao()
-                            .deleteByMobile(userDataManager.getMobile())
+                        databaseRepository.getUserDao().deleteByMobile(userDataManager.getMobile())
                         //最后清空临时存储
                         appRepository.userManger.unSave()
+
+//                        appRepository.reset()
+//                        databaseRepository.reset()
 
                         logoutLivedata.value = callback
                     }

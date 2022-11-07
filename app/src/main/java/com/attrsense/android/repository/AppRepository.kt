@@ -1,5 +1,6 @@
 package com.attrsense.android.repository
 
+import android.util.Log
 import com.attrsense.android.api.ApiService
 import com.attrsense.android.base.BaseRepository
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
@@ -8,6 +9,7 @@ import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.model.LoginBean
 import com.attrsense.database.db.dao.UserDao
+import com.attrsense.database.db.entity.UserEntity
 import com.attrsense.database.repository.DatabaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,26 +19,24 @@ import javax.inject.Inject
  * 数据库操作管理类
  */
 class AppRepository @Inject constructor(
-    val databaseRepository: DatabaseRepository,
+    private val databaseRepository: DatabaseRepository,
     private val apiService: ApiService,
     val userManger: UserDataManager
 ) : BaseRepository() {
 
-    fun getUserDao(): UserDao = databaseRepository.getUserDao()
-
+    private fun getUserDao(): UserDao = databaseRepository.getUserDao()
 
     /**
      * 登录获取 token
      * BaseResponse<EmptyBean?>
      */
-    fun register(mobile: String, code: String): Flow<ResponseData<BaseResponse<EmptyBean?>>> =
-        flow {
-            val body = getBody().apply {
-                this["mobile"] = mobile
-                this["code"] = code
-            }
-            emit(ResponseData.onSuccess(apiService.register(body)))
-        }.flowOnIO()
+    fun register(mobile: String, code: String) = flow {
+        val body = getBody().apply {
+            this["mobile"] = mobile
+            this["code"] = code
+        }
+        emit(ResponseData.onSuccess(apiService.register(body)))
+    }.flowOnIO()
 
     /**
      * 登录获取
@@ -44,7 +44,7 @@ class AppRepository @Inject constructor(
      * @param code String
      * @return Flow<ResponseData<BaseResponse<LoginBean?>>>
      */
-    fun login(mobile: String, code: String): Flow<ResponseData<BaseResponse<LoginBean?>>> = flow {
+    fun login(mobile: String, code: String) = flow {
         val body = getBody().apply {
             this["mobile"] = mobile
             this["code"] = code
@@ -53,11 +53,30 @@ class AppRepository @Inject constructor(
     }.flowOnIO()
 
     /**
+     * 添加用户到数据库
+     * @param userEntity UserEntity
+     * @return Flow<ResponseData<Boolean>
+     */
+    fun addUser(userEntity: UserEntity) = flow {
+        getUserDao().addUser(userEntity)
+        emit(ResponseData.onSuccess(true))
+    }.flowOnIO()
+
+    /**
      * 退出登录
      * @return Flow<ResponseData<BaseResponse<EmptyBean?>>>
      */
     fun logout(): Flow<ResponseData<BaseResponse<EmptyBean?>>> = flow {
         emit(ResponseData.onSuccess(apiService.logout(userManger.getToken())))
+    }.flowOnIO()
+
+
+    /**
+     * 获取用户编解码数据信息
+     * @return Flow<ResponseData<BaseResponse<UserDataBean?>>>
+     */
+    fun getUserInfo() = flow {
+        emit(ResponseData.onSuccess(apiService.getUserInfo(userManger.getToken())))
     }.flowOnIO()
 
 
@@ -149,6 +168,12 @@ class AppRepository @Inject constructor(
             }
             emit(ResponseData.onSuccess(apiService.applyTest(userManger.getToken(), body)))
         }.flowOnIO()
+
+    fun reset() = flow {
+        getUserDao().clear()
+        getUserDao().reset()
+        emit(ResponseData.onSuccess(true))
+    }.flowOnIO()
 
 }
 

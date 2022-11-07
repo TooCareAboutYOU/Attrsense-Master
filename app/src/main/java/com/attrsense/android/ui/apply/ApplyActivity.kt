@@ -7,7 +7,7 @@ import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.databinding.ActivityApplyBinding
-import com.blankj.utilcode.util.ToastUtils
+import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -37,8 +37,8 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
 
         textListener()
 
-        mDataBinding.acBtnCommit.setOnClickListener {
-            viewModel.apply(
+        mDataBinding.acBtnCommit.clicks().subscribe {
+            mViewModel.apply(
                 mDataBinding.acEtContact.text.toString(),
                 mDataBinding.acEtPhone.text.toString(),
                 mDataBinding.acEtCompany.text.toString(),
@@ -47,10 +47,10 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
             )
         }
 
-        viewModel.applyLiveData.observe(this) {
+        mViewModel.applyLiveData.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-                    ToastUtils.showShort("提交失败：${it.throwable}")
+                    showToast("提交失败：${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
                     mDataBinding.acEtContact.text = null
@@ -58,7 +58,7 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
                     mDataBinding.acEtCompany.text = null
                     mDataBinding.acEtEmail.text = null
                     mDataBinding.acEtDescription.text = null
-                    ToastUtils.showShort("提交成功！")
+                    showToast("提交成功！")
                 }
             }
         }

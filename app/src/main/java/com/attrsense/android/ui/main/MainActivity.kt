@@ -72,10 +72,4 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
             mDataBinding.tabBottomNavigation.menu.getItem(position).isChecked = true
         }
     }
-
-    //设置状态栏/导航栏样式
-//        immersionBar {
-//            transparentStatusBar()
-//            transparentNavigationBar()
-//        }
 }

@@ -27,5 +27,4 @@ class RemoteImageAdapter :
             .error(R.mipmap.ic_launcher)
             .into(holder.dataBinding!!.acIvImg)
     }
-
 }

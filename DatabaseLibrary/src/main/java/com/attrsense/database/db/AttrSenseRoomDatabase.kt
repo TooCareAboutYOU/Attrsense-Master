@@ -5,8 +5,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.attrsense.database.converter.Converter
 import com.attrsense.database.db.dao.AnfImageDao
+import com.attrsense.database.db.dao.LocalAnfDataDao
 import com.attrsense.database.db.dao.UserDao
 import com.attrsense.database.db.entity.AnfImageEntity
+import com.attrsense.database.db.entity.LocalAnfDataEntity
 import com.attrsense.database.db.entity.UserEntity
 
 /**
@@ -17,7 +19,8 @@ import com.attrsense.database.db.entity.UserEntity
 @Database(
     entities = [
         UserEntity::class,
-        AnfImageEntity::class
+        AnfImageEntity::class,
+        LocalAnfDataEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -28,5 +31,7 @@ abstract class AttrSenseRoomDatabase : RoomDatabase() {
     abstract fun getUserDao(): UserDao
 
     abstract fun getAnfImageDao(): AnfImageDao
+
+    abstract fun getLocalAnfData(): LocalAnfDataDao
 
 }

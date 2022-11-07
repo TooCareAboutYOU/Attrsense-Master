@@ -46,10 +46,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                tools:text="18874701235"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/acImg_user_icon"
-                app:layout_constraintStart_toEndOf="@id/acImg_user_icon" />
+                app:layout_constraintStart_toEndOf="@id/acImg_user_icon"
+                tools:text="18874701235" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,6 +71,16 @@
             android:background="@android:color/white"
             android:gravity="center"
             android:text="申请SDK内测"
+            android:textSize="18sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/acTv_statistics"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:text="统计数据"
             android:textSize="18sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -102,11 +112,5 @@
             android:gravity="center"
             android:text="退出登录"
             android:textSize="18sp" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/acTv_test_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Test" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

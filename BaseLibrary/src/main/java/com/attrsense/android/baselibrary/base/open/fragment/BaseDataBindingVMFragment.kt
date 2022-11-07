@@ -14,7 +14,7 @@ abstract class BaseDataBindingVMFragment<DB : ViewDataBinding, VM : ViewModel> :
     BaseDataBindingFragment<DB>() {
 
 
-    protected val viewModel: VM by lazy {
+    protected val mViewModel: VM by lazy {
         val type = javaClass.genericSuperclass as ParameterizedType
         val vmClass: Class<VM> = type.actualTypeArguments[1] as Class<VM>
         ViewModelProvider(this)[vmClass].also {

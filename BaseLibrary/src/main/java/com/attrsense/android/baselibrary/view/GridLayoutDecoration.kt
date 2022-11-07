@@ -18,11 +18,13 @@ class GridLayoutDecoration(private val space: Int=5) : RecyclerView.ItemDecorati
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-//        super.getItemOffsets(outRect, view, parent, state)
         outRect.left = space
+        outRect.top=space
+        outRect.right=space
         outRect.bottom = space
-        if (parent.getChildLayoutPosition(view) % 3 == 0) {
-            outRect.left = 0
-        }
+
+//        if (parent.getChildLayoutPosition(view) % 3 == 0) {
+//            outRect.left = 0
+//        }
     }
 }

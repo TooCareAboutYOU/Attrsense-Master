@@ -2,6 +2,7 @@ package com.attrsense.android.baselibrary.base.internal
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.attrsense.android.baselibrary.base.open.viewmodel.OnViewModelCallback
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.ui.library.dialog.LoadingDialog
@@ -9,6 +10,7 @@ import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 /**
@@ -93,7 +95,7 @@ open class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
 
     override fun showLoadingDialog(text: String) {
         if (!isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {
-            loadingDialog = LoadingDialog(this,text)
+            loadingDialog = LoadingDialog(this, text)
         }
     }
 
@@ -110,5 +112,11 @@ open class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
 
         loadingDialog?.setOnDismissListener {
         }
+    }
+
+
+    override fun showToast(text: String, isLong: Boolean) {
+        val state = if (isLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+        Toast.makeText(this, text, state).show()
     }
 }

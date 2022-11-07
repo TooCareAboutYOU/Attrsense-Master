@@ -51,7 +51,7 @@
                         android:background="@color/default_gray"
                         android:gravity="start"
                         android:hint="@string/hint_tab_main_user_feedback_description"
-                        android:maxLength="30"
+                        android:maxLength="300"
                         android:padding="5dp"
                         android:textSize="14sp" />
 

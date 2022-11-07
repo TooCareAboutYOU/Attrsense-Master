@@ -1,5 +1,6 @@
 package com.attrsense.android.api
 
+import com.attrsense.android.baselibrary.base.open.BaseApi
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.model.*
@@ -12,7 +13,7 @@ import retrofit2.http.*
  * date : 2022/10/8 10:36
  * mark :网络接口
  */
-interface ApiService {
+interface ApiService : BaseApi {
 
     @POST("v1/user/register")
     suspend fun register(@Body body: MutableMap<String, Any?>): BaseResponse<EmptyBean?>
@@ -39,8 +40,8 @@ interface ApiService {
     /**
      * 用户信息
      */
-    @POST("v1/user/user_info")
-    suspend fun getUserInfo(@Header("Authorization") token: String?): BaseResponse<UserBean?>
+    @GET("v1/user/user_info")
+    suspend fun getUserInfo(@Header("Authorization") token: String?): BaseResponse<UserDataBean?>
 
     /**
      * 文件上传
@@ -104,5 +105,4 @@ interface ApiService {
         @Header("Authorization") token: String?,
         @Body body: MutableMap<String, Any?>
     ): BaseResponse<EmptyBean?>
-
 }

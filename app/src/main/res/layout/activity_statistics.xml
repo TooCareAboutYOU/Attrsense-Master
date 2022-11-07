@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.statistics.StatisticsActivity">
+
+        <com.attrsense.ui.library.toolbar.AttrToolBarView
+            android:id="@+id/tool_bar_view"
+            style="@style/AttrToolbarTheme" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_title_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="本地压缩："
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_local_original_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="总原图大小："
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acTv_title_local" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_local_anf_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="总Anf大小："
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acTv_local_original_size" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_local_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="总压缩数量："
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acTv_local_anf_size" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_local_original_size_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/acTv_local_original_size"
+                app:layout_constraintLeft_toRightOf="@id/barrier1"
+                app:layout_constraintTop_toTopOf="@id/acTv_local_original_size"
+                android:text="0" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_local_anf_size_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/acTv_local_anf_size"
+                app:layout_constraintLeft_toRightOf="@id/barrier1"
+                app:layout_constraintTop_toTopOf="@id/acTv_local_anf_size"
+                android:text="0" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_local_count_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/acTv_local_count"
+                app:layout_constraintLeft_toRightOf="@id/barrier1"
+                app:layout_constraintTop_toTopOf="@id/acTv_local_count"
+                android:text="0" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierAllowsGoneWidgets="true"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="acTv_local_original_size,acTv_local_anf_size,acTv_local_count" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_title_remote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="云端压缩："
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_remote_original_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="总原图大小："
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acTv_title_remote" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_remote_anf_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="总Anf大小："
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acTv_remote_original_size" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_remote_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="总压缩数量："
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/acTv_remote_anf_size" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_remote_original_size_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/acTv_remote_original_size"
+                app:layout_constraintLeft_toRightOf="@id/barrier2"
+                app:layout_constraintTop_toTopOf="@id/acTv_remote_original_size"
+                android:text="0" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_remote_anf_size_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/acTv_remote_anf_size"
+                app:layout_constraintLeft_toRightOf="@id/barrier2"
+                app:layout_constraintTop_toTopOf="@id/acTv_remote_anf_size"
+                android:text="0" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/acTv_remote_count_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/acTv_remote_count"
+                app:layout_constraintLeft_toRightOf="@id/barrier2"
+                app:layout_constraintTop_toTopOf="@id/acTv_remote_count"
+                android:text="0" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierAllowsGoneWidgets="true"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="acTv_remote_original_size,acTv_remote_anf_size,acTv_remote_count" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

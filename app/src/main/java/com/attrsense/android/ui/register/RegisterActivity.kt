@@ -13,7 +13,7 @@ import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMAct
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.databinding.ActivityRegisterBinding
 import com.attrsense.android.ui.login.LoginActivity
-import com.blankj.utilcode.util.ToastUtils
+import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -67,25 +67,25 @@ class RegisterActivity :
             )
         }
 
-        mDataBinding.acBtnRequestCode.setOnClickListener {
+        mDataBinding.acBtnRequestCode.clicks().subscribe {
 //            ToastUtils.showShort("验证码发送成功！")
             mDataBinding.acEtCode.setText("111111")
         }
 
-        mDataBinding.acBtnRegister.setOnClickListener {
-            viewModel.register(
+        mDataBinding.acBtnRegister.clicks().subscribe {
+            mViewModel.register(
                 mDataBinding.acEtMobile.text.toString(),
                 mDataBinding.acEtCode.text.toString()
             )
         }
 
-        viewModel.registerLivedata.observe(this) {
+        mViewModel.registerLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-                    ToastUtils.showShort("注册失败！")
+                    showToast("注册失败！")
                 }
                 is ResponseData.onSuccess -> {
-                    ToastUtils.showShort("注册成功!")
+                    showToast("注册成功!")
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 }

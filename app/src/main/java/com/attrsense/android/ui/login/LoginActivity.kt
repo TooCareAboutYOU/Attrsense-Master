@@ -15,7 +15,7 @@ import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.databinding.ActivityLoginBinding
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.register.RegisterActivity
-import com.blankj.utilcode.util.ToastUtils
+import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -74,30 +74,30 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
             mDataBinding.acEtMobile.setText("18874701235")
         }
 
-        mDataBinding.acBtnRequestCode.setOnClickListener {
+        mDataBinding.acBtnRequestCode.clicks().subscribe {
             mDataBinding.acEtCode.setText("111111")
         }
 
-        mDataBinding.acBtnLogin.setOnClickListener {
-            viewModel.login(
+        mDataBinding.acBtnLogin.clicks().subscribe {
+            mViewModel.login(
                 mDataBinding.acEtMobile.text.toString(), mDataBinding.acEtCode.text.toString()
             )
         }
 
-        viewModel.loginLivedata.observe(this) {
+        mViewModel.loginLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-                    ToastUtils.showShort("登录失败！${it.throwable}")
+                    showToast("登录失败！${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
-                    ToastUtils.showShort("登录成功！")
+                    showToast("登录成功！")
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
             }
         }
 
-        mDataBinding.acTvGoRegister.setOnClickListener {
+        mDataBinding.acTvGoRegister.clicks().subscribe {
             RegisterActivity.jump(this)
         }
     }

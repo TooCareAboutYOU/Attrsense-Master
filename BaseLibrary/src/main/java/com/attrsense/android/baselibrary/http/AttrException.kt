@@ -1,6 +1,5 @@
 package com.attrsense.android.baselibrary.http
 
-import java.io.IOException
 
 
 /**
@@ -12,7 +11,7 @@ class AttrException constructor(
     private var errorCode: String? = null,
     private var errorMsg: String? = null,
     cause: Throwable? = null
-) : IOException(errorMsg, cause) {
+) : RuntimeException(errorMsg, cause) {
 
     fun getErrorMsg(): String? {
         return errorMsg

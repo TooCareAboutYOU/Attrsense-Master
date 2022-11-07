@@ -20,5 +20,7 @@
         <item name="android:windowIsTranslucent">true</item><!--半透明-->
         <!-- 点外边可以消失  -->
         <item name="android:windowCloseOnTouchOutside">true</item>
+        <!-- 全屏-->
+        <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

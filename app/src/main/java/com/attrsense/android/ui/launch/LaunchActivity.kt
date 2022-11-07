@@ -12,6 +12,7 @@ import com.attrsense.android.databinding.ActivityLaunchBinding
 import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.manager.UserDataManager
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -46,7 +47,7 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
             //跳转到下个页面
         }
 
-        mDataBinding.acTvNumber.setOnClickListener {
+        mDataBinding.acTvNumber.clicks().subscribe {
             jumpActivity()
         }
     }

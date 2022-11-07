@@ -6,7 +6,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
-import com.blankj.utilcode.util.ToastUtils
 import kotlin.system.exitProcess
 
 /**
@@ -92,7 +91,7 @@ abstract class BaseDataBindingActivity<DB : ViewDataBinding> :
     }
 
     protected fun showBackPressTip() {
-        ToastUtils.showShort("再按一次退出")
+        showToast("再按一次退出")
     }
 
 }

@@ -126,4 +126,7 @@ dependencies {
     api rootProject.ext.dependencies["logger"]
     api rootProject.ext.dependencies["utilCodex"]
     api rootProject.ext.dependencies["mmkv"]
+
+//    api rootProject.ext.dependencies["transferee"]
+//    api rootProject.ext.dependencies["transfereeGlideImageLoader"]
 }

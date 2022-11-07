@@ -1,11 +1,15 @@
 package com.attrsense.android.baselibrary.base.open.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 /**
@@ -13,7 +17,7 @@ import kotlinx.coroutines.launch
  * date : 2022/10/12 10:17
  * mark : custom something
  */
-open class BaseViewModel : ViewModel(), OnViewModelCallback {
+abstract class BaseViewModel : ViewModel(), OnViewModelCallback {
 
     private var mOnViewModelCallback: OnViewModelCallback? = null
 
@@ -24,15 +28,18 @@ open class BaseViewModel : ViewModel(), OnViewModelCallback {
     protected inline fun <T> Flow<T>.collectInLaunch(
         viewModel: BaseViewModel? = null,
         isShowLoading: Boolean = true,
-        title: String = "null",
+        title: String = "",
         crossinline action: suspend (value: T) -> Unit
-    ) = viewModelScope.launch(Dispatchers.Main) {
-        collect {
+    ) {
+        viewModelScope.launch(Dispatchers.Main) {
+
             if (isShowLoading) {
                 viewModel?.showLoadingDialog(title)
             }
 
-            action.invoke(it)
+            collect {
+                action.invoke(it)
+            }
 
             if (isShowLoading) {
                 viewModel?.dismissLoadingDialog()
@@ -55,6 +62,10 @@ open class BaseViewModel : ViewModel(), OnViewModelCallback {
 
     override fun removeDisposable(disposable: Disposable) {
         this.mOnViewModelCallback?.removeDisposable(disposable)
+    }
+
+    override fun showToast(text: String, isLong: Boolean) {
+        this.mOnViewModelCallback?.showToast(text, isLong)
     }
 
     override fun onCleared() {

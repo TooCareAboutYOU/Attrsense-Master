@@ -1,5 +1,6 @@
 package com.attrsense.database.db.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -9,6 +10,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.blankj.utilcode.util.FileUtils
+import kotlinx.coroutines.internal.synchronized
 
 /**
  * author : zhangshuai@attrsense.com
@@ -39,7 +41,7 @@ interface AnfImageDao {
      * 查询
      */
     @Query("SELECT * FROM ANF_IMAGE_TABLE WHERE user_mobile=:mobile AND is_local=:isLocal")
-    suspend fun getAllByType(mobile: String?, isLocal: Boolean = true): List<AnfImageEntity>
+    suspend fun getAllByType(mobile: String?, isLocal: Boolean = true): MutableList<AnfImageEntity>
 
     /**
      * 查询
@@ -63,16 +65,16 @@ interface AnfImageDao {
         if (entity == null) {
             add(newData)
         } else {
-            entity.mobile=newData.mobile
-            entity.token = newData.token
-            entity.originalImage = newData.originalImage
-            entity.thumbImage = newData.thumbImage
-            if (!entity.isDownload) {
-                entity.anfImage = newData.anfImage
-            }
-            entity.isLocal = newData.isLocal
-            entity.cacheImage = newData.cacheImage
-            update(entity)
+//            entity.mobile = newData.mobile
+//            entity.token = newData.token
+//            entity.originalImage = newData.originalImage
+//            entity.thumbImage = newData.thumbImage
+//            entity.anfImage = newData.anfImage
+//            if (newData.isDownload) {
+//                entity.cacheImage = newData.cacheImage
+//            }
+//            entity.isLocal = newData.isLocal
+//            update(entity)
         }
     }
 
@@ -102,6 +104,9 @@ interface AnfImageDao {
     @Query("DELETE FROM ANF_IMAGE_TABLE")
     suspend fun clearDb()
 
+    @Query("UPDATE sqlite_sequence SET seq =0 WHERE name ='Content'")
+    suspend fun reset()
+
     /**
      * ---------------------------------------------------------------------------------------------
      *                                          优美的分割线
@@ -109,7 +114,6 @@ interface AnfImageDao {
      * @description：业务上层操作文件删除相关语句
      *
      */
-
 
 
     //单个删除
@@ -135,7 +139,7 @@ interface AnfImageDao {
      * 通过缩略图删除数据
      */
     @Transaction
-    suspend fun deleteByThumb(mobile: String?,thumbImage: String?){
+    suspend fun deleteByThumb(mobile: String?, thumbImage: String?) {
         getByThumb(mobile, thumbImage)?.let {
             removeFile(it)
             delete(it)
@@ -171,7 +175,7 @@ interface AnfImageDao {
      * 通过mobile删除本地/云端的数据库数据和文件
      */
     @Transaction
-    suspend fun deleteByType(mobile: String?, isLocal: Boolean? = true) {
+    suspend fun deleteByType(mobile: String?, isLocal: Boolean = true) {
         getAll(mobile).let {
             if (it.isNotEmpty()) {
                 it.forEach { entity ->

@@ -1,6 +1,7 @@
 package com.attrsense.android.ui.main.remote
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData2
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
@@ -12,6 +13,7 @@ import com.attrsense.android.service.DownloadService
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.database.repository.DatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -27,8 +29,11 @@ class MainRemoteViewModel @Inject constructor(
 
     val getAllLiveData = ResponseMutableLiveData<ImagesBean?>()
     val uploadLiveData = ResponseMutableLiveData<ImagesBean?>()
-    val getByThumbLiveData = ResponseMutableLiveData2<AnfImageEntity?>()
+
     val deleteLiveData = ResponseMutableLiveData2<Int>()
+
+    val getByThumbLiveData = ResponseMutableLiveData2<Int>()
+    val getAllDbLiveData = MutableLiveData<MutableList<AnfImageEntity>>()
 
     /**
      * 获取远端数据
@@ -39,22 +44,24 @@ class MainRemoteViewModel @Inject constructor(
     fun getRemoteFiles(
         page: Int,
         perPage: Int
-    ) = appRepository.getRemoteFiles(
-        page,
-        perPage
-    ).collectInLaunch(this) {
-        getAllLiveData.value = it.apply {
-            when (this) {
-                is ResponseData.onFailed -> {
-                    Log.e(
-                        "print_logs",
-                        "MainRemoteViewModel::getRemoteFiles: ${this.throwable}"
-                    )
-                }
-                is ResponseData.onSuccess -> {
-                    value?.data?.images?.also { imgList ->
-                        if (imgList.isNotEmpty()) {
-                            saveToDatabase(imgList)
+    ) {
+        appRepository.getRemoteFiles(
+            page,
+            perPage
+        ).collectInLaunch(this) {
+            getAllLiveData.value = it.apply {
+                when (this) {
+                    is ResponseData.onFailed -> {
+                        Log.e(
+                            "print_logs",
+                            "MainRemoteViewModel::getRemoteFiles: ${this.throwable}"
+                        )
+                    }
+                    is ResponseData.onSuccess -> {
+                        value?.data?.images?.also { imgList ->
+                            if (imgList.isNotEmpty()) {
+                                saveToDatabase(imgList)
+                            }
                         }
                     }
                 }
@@ -73,20 +80,25 @@ class MainRemoteViewModel @Inject constructor(
         rate: String?,
         roiRate: String?,
         imageFilePaths: List<String> = emptyList()
-    ) = appRepository.uploadFile(
-        rate,
-        roiRate,
-        imageFilePaths
-    ).collectInLaunch(this) {
-        uploadLiveData.value = it.apply {
-            when (this) {
-                is ResponseData.onFailed -> {
-                    Log.e("print_logs", "MainRemoteViewModel::getRemoteFiles: ${this.throwable}")
-                }
-                is ResponseData.onSuccess -> {
-                    value?.data?.images?.also { imgList ->
-                        if (imgList.isNotEmpty()) {
-                            saveToDatabase(imgList)
+    ) {
+        appRepository.uploadFile(
+            rate,
+            roiRate,
+            imageFilePaths
+        ).collectInLaunch(this) {
+            uploadLiveData.value = it.apply {
+                when (this) {
+                    is ResponseData.onFailed -> {
+                        Log.e(
+                            "print_logs",
+                            "MainRemoteViewModel::getRemoteFiles: ${this.throwable}"
+                        )
+                    }
+                    is ResponseData.onSuccess -> {
+                        value?.data?.images?.also { imgList ->
+                            if (imgList.isNotEmpty()) {
+                                saveToDatabase(imgList)
+                            }
                         }
                     }
                 }
@@ -99,84 +111,72 @@ class MainRemoteViewModel @Inject constructor(
      * 保存到数据库
      */
     private fun saveToDatabase(images: MutableList<ImageInfoBean>) {
+        val list = ArrayList<AnfImageEntity>(images.size)
         images.forEach { item ->
-            databaseRepository.getByThumb(
-                appRepository.userManger.getMobile(),
-                item.thumbnailUrl
-            ).collectInLaunch {
-                when (it) {
-                    is ResponseData.onFailed -> {
-                        Log.e(
-                            "print_logs",
-                            "DownloadIntentService::onStartCommand: ${it.throwable}"
-                        )
-                    }
-                    is ResponseData.onSuccess -> {
-                        if (it.value == null) {
-                            val entity = AnfImageEntity(
-                                token = appRepository.userManger.getToken(),
-                                mobile = appRepository.userManger.getMobile(),
-                                originalImage = item.thumbnailUrl,
-                                thumbImage = item.thumbnailUrl,
-                                anfImage = item.url,
-                                isLocal = false
-                            )
-                            addEntity(entity)
-                        }
-                    }
-                }
-            }
+            val entity = AnfImageEntity(
+                token = appRepository.userManger.getToken(),
+                mobile = appRepository.userManger.getMobile(),
+                originalImage = item.thumbnailUrl,
+                thumbImage = item.thumbnailUrl,
+                anfImage = item.url,
+                fileId = item.fileId,
+                srcSize = item.srcSize,
+                isLocal = false
+            )
+            list.add(entity)
         }
-    }
 
-
-    private fun addEntity(entity: AnfImageEntity) =
-        databaseRepository.getAddOrUpdateByThumb(appRepository.userManger.getMobile(), entity)
-            .collectInLaunch {
-                it.also { data ->
-                    when (data) {
-                        is ResponseData.onFailed -> {
-                            Log.e(
-                                "print_logs",
-                                "MainRemoteViewModel::addEntities: 添加失败！${data.throwable}"
-                            )
-                        }
-                        is ResponseData.onSuccess -> {
-                            DownloadService.start(
-                                getApplication(),
-                                entity.thumbImage,
-                                entity.anfImage
-                            )
-                        }
-                    }
-                }
-            }
-
-    fun getByThumb(thumbImage: String?) =
-        databaseRepository.getByThumb(appRepository.userManger.getMobile(), thumbImage)
-            .collectInLaunch {
-                getByThumbLiveData.value = it
-            }
-
-
-    fun updateList(entityList: List<AnfImageEntity>) {
-        databaseRepository.updateList(entityList).collectInLaunch {
+        databaseRepository.addList(list).collectInLaunch {
             when (it) {
                 is ResponseData.onFailed -> {
-                    Log.e(
-                        "print_logs",
-                        "MainLocalViewModel::addEntities: 添加失败！${it.throwable}"
-                    )
+
                 }
                 is ResponseData.onSuccess -> {
 
+                    it.value?.also { entities ->
+                        if (entities.isNotEmpty()) {
+                            entities.forEach { data ->
+                                DownloadService.start(
+                                    getApplication(),
+                                    data.thumbImage,
+                                    data.anfImage
+                                )
+                            }
+                        }
+
+                    }
                 }
             }
         }
+
+    }
+
+    fun getByThumb(position: Int, thumbImage: String?) {
+        databaseRepository.getByThumb(appRepository.userManger.getMobile(), thumbImage)
+            .collectInLaunch {
+                getByThumbLiveData.value = ResponseData.onSuccess(position)
+                getAll()
+            }
+    }
+
+    private fun getAll() {
+        databaseRepository.getAllByType(appRepository.userManger.getMobile(), false)
+            .collectInLaunch {
+                when (it) {
+                    is ResponseData.onFailed -> {}
+                    is ResponseData.onSuccess -> {
+                        it.value?.let { entities ->
+                            if (entities.isNotEmpty()) {
+                                getAllDbLiveData.value = entities
+                            }
+                        }
+                    }
+                }
+            }
     }
 
 
-    fun deleteByThumb(position: Int, thumbImage: String?, fileId: String?) =
+    fun deleteByThumb(position: Int, thumbImage: String?, fileId: String?) {
         appRepository.deleteFile(fileId).collectInLaunch(this) {
             when (it) {
                 is ResponseData.onFailed -> {
@@ -186,18 +186,39 @@ class MainRemoteViewModel @Inject constructor(
                     databaseRepository.deleteByThumb(
                         appRepository.userManger.getMobile(),
                         thumbImage
-                    )
-                        .collectInLaunch { state ->
-                            when (state) {
-                                is ResponseData.onFailed -> {
+                    ).collectInLaunch { state ->
+                        when (state) {
+                            is ResponseData.onFailed -> {
 
-                                }
-                                is ResponseData.onSuccess -> {
-                                    deleteLiveData.value = ResponseData.onSuccess(position)
-                                }
+                            }
+                            is ResponseData.onSuccess -> {
+                                deleteLiveData.value = ResponseData.onSuccess(position)
                             }
                         }
+                    }
                 }
             }
         }
+    }
+
+    fun deleteAll() {
+        databaseRepository.deleteType(appRepository.userManger.getMobile(), false).collectInLaunch {
+            when (it) {
+                is ResponseData.onFailed -> {
+
+                }
+                is ResponseData.onSuccess -> {
+
+                }
+            }
+        }
+    }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.i("print_logs", "MainRemoteViewModel::onCleared: ")
+
+        deleteAll()
+    }
 }

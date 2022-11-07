@@ -1,10 +1,14 @@
 package com.attrsense.database.repository
 
+import android.util.Log
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.repository.SkeletonRepository
 import com.attrsense.database.db.AttrSenseRoomDatabase
+import com.attrsense.database.db.dao.AnfImageDao
 import com.attrsense.database.db.dao.UserDao
 import com.attrsense.database.db.entity.AnfImageEntity
+import com.attrsense.database.db.entity.LocalAnfDataEntity
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -18,6 +22,11 @@ class DatabaseRepository @Inject constructor(
     private val anfDao = db.getAnfImageDao()
 
     fun getUserDao(): UserDao = db.getUserDao()
+
+    private fun getAnfDao(): AnfImageDao = anfDao
+
+    private fun getLocalAnfDao() = db.getLocalAnfData()
+
 
     /**
      * ---------------------------------------------------------------------------------------------
@@ -41,9 +50,12 @@ class DatabaseRepository @Inject constructor(
      * @param anfPaths List<AnfImageEntity>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun addList(anfPaths: List<AnfImageEntity>) = flow {
+    fun addList(anfPaths: MutableList<AnfImageEntity>) = flow {
         if (anfPaths.isNotEmpty()) {
-            anfDao.addList(anfPaths)
+            anfPaths.forEach {
+                anfDao.getAddOrUpdateByThumb(it.mobile, it)
+            }
+//            anfDao.addList(anfPaths)
             emit(ResponseData.onSuccess(anfPaths))
         } else {
             emit(ResponseData.onSuccess(null))
@@ -66,15 +78,12 @@ class DatabaseRepository @Inject constructor(
      * @return Flow<ResponseData<Boolean>>
      */
     fun updateList(entities: List<AnfImageEntity>) = flow {
-//        anfDao.updateList(anfImageEntity)
         if (entities.isNotEmpty()) {
-//            anfDao.addList(anfPaths)
             anfDao.updateList(entities)
             emit(ResponseData.onSuccess(entities))
         } else {
             emit(ResponseData.onSuccess(null))
         }
-//        emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 
     /**
@@ -196,7 +205,7 @@ class DatabaseRepository @Inject constructor(
      * @param isLocal Boolean?
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteType(mobile: String?, isLocal: Boolean?) = flow {
+    fun deleteType(mobile: String?, isLocal: Boolean = true) = flow {
         anfDao.deleteByType(mobile, isLocal)
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
@@ -217,6 +226,46 @@ class DatabaseRepository @Inject constructor(
      */
     fun clear() = flow {
         anfDao.clearDb()
+        emit(ResponseData.onSuccess(true))
+    }.flowOnIO()
+
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     *                                          优美的分割线
+     * ---------------------------------------------------------------------------------------------
+     * @description：
+     */
+
+    /**
+     * 用于统计本地压缩anf数据
+     * @param entity LocalAnfDataEntity
+     * @return Flow<ResponseData<Boolean>>
+     */
+    fun addLocalData(entity: LocalAnfDataEntity) = flow {
+        getLocalAnfDao().addData(entity)
+        emit(ResponseData.onSuccess(true))
+    }.flowOnIO()
+
+    /**
+     * 通过手机号查询
+     * @param mobile String?
+     * @return Flow<ResponseData<LocalAnfDataEntity>>
+     */
+    fun getLocalData(mobile: String?) = flow {
+        emit(ResponseData.onSuccess(getLocalAnfDao().getData(mobile)))
+    }.flowOnIO()
+
+    /**
+     * ---------------------------------------------------------------------------------------------
+     *                                          优美的分割线
+     * ---------------------------------------------------------------------------------------------
+     * @description： 慎重操作 重置表自增索引
+     */
+
+    fun reset() = flow {
+        anfDao.clearDb()
+        anfDao.reset()
         emit(ResponseData.onSuccess(true))
     }.flowOnIO()
 }

@@ -3,6 +3,7 @@ package com.attrsense.ui.library.dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
+import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import com.attrsense.ui.library.R
@@ -27,9 +28,9 @@ class ImageShowDialog constructor(
          * 设置宽度全屏，要设置在show的后面
          */
         val layoutParams = window!!.attributes
-        layoutParams.gravity = Gravity.TOP
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
+//        layoutParams.gravity = Gravity.TOP
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         window!!.decorView.setPadding(0, 0, 0, 0)
         window!!.attributes = layoutParams
     }

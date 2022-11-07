@@ -41,7 +41,6 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
                 if (downloadId == -1L) {
                     return
                 }
-//                executorService.execute {
                 val query = DownloadManager.Query()
                 //通过下载的id查找
                 query.setFilterById(downloadId)
@@ -64,27 +63,7 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
 
                                     val remoteUri =
                                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_URI))
-
-                                    runBlocking {
-                                        databaseRepository.getByAnf(
-                                            userDataManager.getMobile(),
-                                            remoteUri
-                                        ).collect { i ->
-                                            when (i) {
-                                                is ResponseData.onFailed -> {}
-                                                is ResponseData.onSuccess -> {
-                                                    i.value?.let { entity ->
-                                                        entity.anfImage = localAnfUri
-                                                        entity.isDownload = true
-                                                        databaseRepository.update(entity)
-                                                            .collect {
-
-                                                            }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                    updateDb(remoteUri, localAnfUri)
                                 }
                                 cursor.close()
                             }
@@ -93,8 +72,28 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-//                }
             }
         }
     }
+
+    private fun updateDb(remoteUri: String?, localAnfUri: String?) = runBlocking {
+        launch {
+            databaseRepository.getByAnf(userDataManager.getMobile(), remoteUri).collect { i ->
+                when (i) {
+                    is ResponseData.onFailed -> {}
+                    is ResponseData.onSuccess -> {
+                        i.value?.let { entity ->
+                            entity.anfImage = localAnfUri
+                            entity.isDownload = true
+                            databaseRepository.update(entity)
+                                .collect {
+//                                    Log.i("print_logs", "下载成功: ")
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

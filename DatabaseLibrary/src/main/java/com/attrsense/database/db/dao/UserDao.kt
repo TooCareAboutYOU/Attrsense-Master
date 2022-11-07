@@ -1,6 +1,5 @@
 package com.attrsense.database.db.dao
 
-import android.util.Log
 import androidx.room.*
 import com.attrsense.database.db.entity.UserEntity
 
@@ -27,13 +26,14 @@ interface UserDao {
     @Query("SELECT * FROM USER_TABLE WHERE token =:token")
     suspend fun queryByToken(token: String?): List<UserEntity>?
 
-    @Query("DELETE FROM USER_TABLE")
-    suspend fun clear()
-
-
     @Query("DELETE FROM USER_TABLE WHERE mobile=:mobile")
     suspend fun deleteByMobile(mobile: String?)
 
+    @Query("DELETE FROM USER_TABLE")
+    suspend fun clear()
+
+    @Query("UPDATE sqlite_sequence SET seq =0 WHERE name ='Content'")
+    suspend fun reset()
 
     /**
      * ---------------------------------------------------------------------------------------------

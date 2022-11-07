@@ -14,7 +14,8 @@ import com.attrsense.android.ui.feedback.FeedbackActivity
 import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.ui.main.MainActivity
-import com.blankj.utilcode.util.ToastUtils
+import com.attrsense.android.ui.statistics.StatisticsActivity
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,10 +33,10 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
 
         jumpActivity()
 
-        viewModel.logoutLivedata.observe(this) {
+        mViewModel.logoutLivedata.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-                    ToastUtils.showShort("退出异常！")
+                    showToast("退出异常！")
                     Log.e("print_logs", "MainMyFragment::jumpActivity: ${it.throwable}")
                 }
                 is ResponseData.onSuccess -> {
@@ -47,34 +48,43 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
     }
 
     private fun jumpActivity() {
-        mDataBinding.acTvGoFeedBack.setOnClickListener {
+        mDataBinding.acTvGoFeedBack.clicks().subscribe {
             if (userManger.isLogin()) {
                 toActivity(FeedbackActivity::class.java)
             } else {
-                ToastUtils.showShort("未登录！")
+                showToast("未登录！")
                 LoginActivity.jump(requireActivity())
             }
         }
 
-        mDataBinding.acTvApply.setOnClickListener {
+        mDataBinding.acTvApply.clicks().subscribe {
             if (userManger.isLogin()) {
                 toActivity(ApplyActivity::class.java)
             } else {
-                ToastUtils.showShort("未登录！")
+                showToast("未登录！")
                 LoginActivity.jump(requireActivity())
             }
         }
 
-        mDataBinding.acTvContact.setOnClickListener {
+        mDataBinding.acTvStatistics.clicks().subscribe {
+            if (userManger.isLogin()) {
+                toActivity(StatisticsActivity::class.java)
+            } else {
+                showToast("未登录！")
+                LoginActivity.jump(requireActivity())
+            }
+        }
+
+        mDataBinding.acTvContact.clicks().subscribe {
             toActivity(ContactUsActivity::class.java)
         }
 
-        mDataBinding.acTvAboutUs.setOnClickListener {
+        mDataBinding.acTvAboutUs.clicks().subscribe {
             toActivity(AboutUsActivity::class.java)
         }
 
-        mDataBinding.acTvLogout.setOnClickListener {
-            viewModel.logout()
+        mDataBinding.acTvLogout.clicks().subscribe {
+            mViewModel.logout()
         }
     }
 

@@ -41,6 +41,14 @@ data class AnfImageEntity(
     @ColumnInfo(name = "cache_image")
     var cacheImage: String? = "",
 
+    //压缩图片的文件ID(用于删除图片).
+    @ColumnInfo(name = "fileId")
+    var fileId: String? = "",
+
+    //原图大小
+    @ColumnInfo(name = "src_size")
+    var srcSize: Int = 0,
+
     //是否本地数据，还是云端数据
     @ColumnInfo(name = "is_local")
     var isLocal: Boolean = true,

@@ -4,35 +4,30 @@ import android.Manifest
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.CleanMessageUtils
+import com.attrsense.android.baselibrary.view.GridLayoutDecoration
 import com.attrsense.android.databinding.FragmentMainRemoteBinding
-import com.attrsense.android.databinding.LayoutDialogItemShowBinding
+import com.attrsense.android.databinding.LayoutImageViewPagerBinding
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
+import com.attrsense.android.ui.main.ImageViewPagerFragment
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.ui.library.dialog.ImageShowDialog
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
 import com.attrsense.ui.library.recycler.RecyclerLoadMoreView
-import com.blankj.utilcode.util.FileUtils
-import com.blankj.utilcode.util.ToastUtils
-import com.bumptech.glide.Glide
-import com.example.snpetest.JniInterface
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
 
 
 @AndroidEntryPoint
@@ -45,7 +40,7 @@ class MainRemoteFragment :
     private var pageIndex = 1
 
     //一页的数量
-    private val pageSize = 10
+    private val pageSize = 20
 
     override fun setLayoutResId(): Int = R.layout.fragment_main_remote
 
@@ -96,7 +91,8 @@ class MainRemoteFragment :
             }
 
             mDataBinding.recyclerview.apply {
-                layoutManager = GridLayoutManager(it, 3, RecyclerView.VERTICAL, false)
+                layoutManager = GridLayoutManager(it, 2, RecyclerView.VERTICAL, false)
+                addItemDecoration(GridLayoutDecoration(10))
                 adapter = mAdapter
             }
 
@@ -111,12 +107,12 @@ class MainRemoteFragment :
 
         mAdapter.setOnItemClickListener { _, _, position ->
             _clickData = mAdapter.getItem(position)
-            viewModel.getByThumb(_clickData!!.thumbnailUrl)
+            mViewModel.getByThumb(position, _clickData!!.thumbnailUrl)
         }
 
         mAdapter.setOnItemLongClickListener { _, _, position ->
             val data = mAdapter.getItem(position)
-            viewModel.deleteByThumb(position, data.thumbnailUrl, data.fileId)
+            mViewModel.deleteByThumb(position, data.thumbnailUrl, data.fileId)
             false
         }
     }
@@ -125,6 +121,7 @@ class MainRemoteFragment :
     private fun initRefreshLayout() {
         mDataBinding.swipeRefreshLayout.setColorSchemeColors(Color.rgb(47, 223, 189))
         mDataBinding.swipeRefreshLayout.setOnRefreshListener {
+            mViewModel.deleteAll()
             pageIndex = 1
             mAdapter.setList(null)
             loadServer()
@@ -132,44 +129,51 @@ class MainRemoteFragment :
     }
 
     private var _clickData: ImageInfoBean? = null
+    private var clickPosition = -1
     private fun liveDataObserves() {
-        viewModel.getAllLiveData.observe(this) {
+        mViewModel.getAllLiveData.observe(this) {
             loadData(it)
         }
 
-        viewModel.uploadLiveData.observe(this) {
+        mViewModel.uploadLiveData.observe(this) {
             //新增单条或者多条数据
             loadData(it)
         }
 
-        viewModel.getByThumbLiveData.observe(this) {
+        mViewModel.getByThumbLiveData.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
 
                 }
                 is ResponseData.onSuccess -> {
-                    it.value?.let { entity ->
-                        showDialog(entity)
-                    }
+//                    it.value?.let { entity ->
+//                        showDialog(entity)
+//                    }
+                    clickPosition = it.value!!
+
                 }
             }
         }
 
-        viewModel.deleteLiveData.observe(this) {
+        mViewModel.getAllDbLiveData.observe(this) {
+            showDialog(clickPosition, it)
+        }
+
+        mViewModel.deleteLiveData.observe(this) {
             when (it) {
                 is ResponseData.onFailed -> {
-                    ToastUtils.showShort("删除失败！")
+                    showToast("删除失败！")
                 }
                 is ResponseData.onSuccess -> {
                     mAdapter.removeAt(it.value!!)
-                    ToastUtils.showShort("删除成功！")
+                    showToast("删除成功！")
                 }
             }
         }
     }
 
     private fun loadServer() {
-        viewModel.getRemoteFiles(pageIndex, pageSize)
+        mViewModel.getRemoteFiles(pageIndex, pageSize)
     }
 
     private fun loadData(
@@ -179,7 +183,7 @@ class MainRemoteFragment :
         mAdapter.loadMoreModule.isEnableLoadMore = true
         when (response) {
             is ResponseData.onFailed -> {
-                ToastUtils.showShort("解压失败！")
+                showToast("解压失败！")
                 Log.e("print_logs", "MainRemoteFragment::loadData: ${response.throwable}")
                 mAdapter.loadMoreModule.loadMoreFail()
             }
@@ -231,71 +235,45 @@ class MainRemoteFragment :
 
     private fun upload(list: List<String>) {
         showLoadingDialog("压缩中...")
-        viewModel.uploadFile("4", "4", list)
+        mViewModel.uploadFile("4", "4", list)
     }
 
-    private fun showDialog(entity: AnfImageEntity) {
-        showLoadingDialog("解压中...")
-        val viewBinding: LayoutDialogItemShowBinding = DataBindingUtil.inflate(
-            layoutInflater, R.layout.layout_dialog_item_show, null, true
-        )
 
-        Glide.with(requireActivity()).load(entity.thumbImage)
-            .error(R.mipmap.ic_launcher)
-            .into(viewBinding.acIvImg)
+    private fun showDialog(enterPosition: Int, localList: MutableList<AnfImageEntity>) {
+
+        val viewBinding: LayoutImageViewPagerBinding = DataBindingUtil.inflate(
+            layoutInflater, R.layout.layout_image_view_pager, null, true
+        )
 
         val dialog = ImageShowDialog(requireActivity()).apply {
             show()
             setCancelable(true)
             setContentView(viewBinding.root)
         }
+        viewBinding.viewPager2.adapter =
+            ViewPager2Adapter(requireActivity() as AppCompatActivity, dialog, localList)
 
+        viewBinding.viewPager2.setCurrentItem(enterPosition, false)
 
-        lifecycleScope.launch {
-            val bitmap = withContext(Dispatchers.IO) {
-                JniInterface.decoderCommitPath2Buffer(entity.anfImage)
-            }
-
-            viewBinding.acTvInfo.text = StringBuilder().apply {
-                if (_clickData != null) {
-                    append("原JPG：${CleanMessageUtils.getFormatSize(_clickData?.srcSize!!.toDouble())}").append(
-                        "\n"
-                    )
-                }
-                append("ANF：${FileUtils.getSize(entity.anfImage)}").append("\n")
-                append("宽：${bitmap.width}").append("\n").append("高：${bitmap.height}")
-                toString()
-            }
-
-            Glide.with(requireActivity()).load(bitmap)
-                .error(R.mipmap.ic_launcher)
-                .into(viewBinding.acIvImg)
-        }
-
-        dismissLoadingDialog()
-
-
-        viewBinding.acIvImg.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        viewBinding.root.setOnClickListener {
-            dialog.dismiss()
-        }
-
-
-        viewBinding.acTvSave.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                if (!TextUtils.isEmpty(entity.anfImage) && !File(entity.cacheImage).exists()) {
-                    val path = JniInterface.decoderCommit(entity.anfImage)
-                    entity.cacheImage = path
-                    viewModel.updateList(arrayListOf(entity))
-                }
-            }
-            ToastUtils.showShort("保存成功!")
-        }
         dialog.setOnDismissListener {
-            _clickData = null
+            viewBinding.viewPager2.removeAllViews()
+        }
+    }
+
+    private class ViewPager2Adapter(
+        private val activity: FragmentActivity,
+        private val dialog: ImageShowDialog,
+        private val dataList: MutableList<AnfImageEntity>
+    ) : FragmentStateAdapter(activity) {
+        override fun getItemCount(): Int = dataList.size
+
+        override fun createFragment(position: Int): Fragment {
+            return ImageViewPagerFragment.newInstance(dataList[position],
+                object : ImageViewPagerFragment.OnViewPagerFragmentListener {
+                    override fun onDismiss() {
+                        dialog.dismiss()
+                    }
+                })
         }
     }
 }
