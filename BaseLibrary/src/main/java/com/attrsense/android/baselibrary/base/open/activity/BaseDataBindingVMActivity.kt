@@ -3,6 +3,7 @@ package com.attrsense.android.baselibrary.base.open.activity
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -17,8 +18,6 @@ abstract class BaseDataBindingVMActivity<DB : ViewDataBinding, VM : ViewModel> :
     protected val mViewModel: VM by lazy {
         val type = javaClass.genericSuperclass as ParameterizedType
         val vmClass: Class<VM> = type.actualTypeArguments[1] as Class<VM>
-        ViewModelProvider(this)[vmClass].also {
-            loadViewModel(vmClass)
-        }
+        ViewModelProvider(this)[vmClass].also { loadViewModel(vmClass) }
     }
 }

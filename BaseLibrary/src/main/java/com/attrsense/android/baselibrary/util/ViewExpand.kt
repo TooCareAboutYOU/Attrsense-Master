@@ -3,6 +3,7 @@ package com.attrsense.android.baselibrary.util
 import android.view.View
 import android.widget.Checkable
 import com.jakewharton.rxbinding4.view.clicks
+import io.reactivex.rxjava3.disposables.Disposable
 
 /**
  * @author zhangshuai
@@ -17,12 +18,12 @@ private var <T : View> T.lastClickTime: Long
 /**
  * 设置不能快速点击的监听
  */
-fun <T : View> T.singleClick(onClickListener: View.OnClickListener, time: Long = 800) {
-    clicks().subscribe {
+fun <T : View> T.singleClick(time: Long = 1000, block: () -> Unit): Disposable {
+    return clicks().subscribe {
         val currentTimeMillis = System.currentTimeMillis()
         if (currentTimeMillis - lastClickTime > time || this is Checkable) {
             lastClickTime = currentTimeMillis
-            onClickListener.onClick(this)
+            block()
         }
     }
 }

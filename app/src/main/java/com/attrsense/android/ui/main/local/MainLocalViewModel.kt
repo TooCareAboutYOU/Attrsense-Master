@@ -24,7 +24,7 @@ class MainLocalViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository
 ) : BaseAndroidViewModel() {
 
-    val getLiveData = ResponseMutableLiveData2<List<AnfImageEntity>>()
+    val getLiveData = ResponseMutableLiveData2<MutableList<AnfImageEntity>>()
     val deleteLiveData: MutableLiveData<Int> = MutableLiveData()
 
     /**
@@ -43,7 +43,6 @@ class MainLocalViewModel @Inject constructor(
                         )
                     }
                     is ResponseData.onSuccess -> {
-
                         data.value?.forEach { entity ->
                             addToStatistics(entity)
                         }

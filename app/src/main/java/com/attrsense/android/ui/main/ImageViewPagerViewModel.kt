@@ -22,7 +22,7 @@ class ImageViewPagerViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository
 ) : BaseViewModel() {
 
-    val getLiveData = ResponseMutableLiveData2<List<AnfImageEntity>>()
+    val getLiveData = ResponseMutableLiveData2<List<AnfImageEntity>?>()
 
     /**
      * 更多数据

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.SplashScreen.Starting" parent="Theme.SplashScreen">
+<!--        <item name="android:windowSplashScreenBrandingImage">@drawable/splash_branding</item>-->
+        <!--以特定的单色填充背景-->
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <!-- 启动页展示的图片,替换起始窗口中心的图标-->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher</item>
+        <!-- 展示时常(低版本不生效需要代码设置) 以在显示起始窗口的同时播放动画-->
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <!-- 启动画面退出后 Activity 的主题-->
+        <item name="postSplashScreenTheme">@style/Launcher</item>
+    </style>
+</resources>

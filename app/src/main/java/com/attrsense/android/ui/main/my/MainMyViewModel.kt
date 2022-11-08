@@ -5,6 +5,7 @@ import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.repository.AppRepository
 import com.attrsense.database.repository.DatabaseRepository
@@ -19,8 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainMyViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository,
-    private val appRepository: AppRepository,
-    private val userDataManager: UserDataManager
+    private val appRepository: AppRepository
 ) :
     BaseViewModel() {
 
@@ -28,7 +28,7 @@ class MainMyViewModel @Inject constructor(
 
     fun logout() {
         //网络接口退出
-        appRepository.logout().collectInLaunch(this) {
+        appRepository.logout().showLoading(this).collectInLaunch {
             it.apply {
                 when (it) {
                     is ResponseData.onFailed -> {
@@ -44,7 +44,7 @@ class MainMyViewModel @Inject constructor(
 
     //清空对应数据库
     private fun clearUserByToken(callback: ResponseData<BaseResponse<EmptyBean?>>) {
-        databaseRepository.clearByToken(appRepository.userManger.getMobile())
+        databaseRepository.clearByMobile(appRepository.userManger.getMobile())
             .collectInLaunch { state ->
                 when (state) {
                     is ResponseData.onFailed -> {
@@ -52,7 +52,8 @@ class MainMyViewModel @Inject constructor(
                     }
                     is ResponseData.onSuccess -> {
                         //删除用户表对应用户
-                        databaseRepository.getUserDao().deleteByMobile(userDataManager.getMobile())
+                        databaseRepository.getUserDao()
+                            .deleteByMobile(appRepository.userManger.getMobile())
                         //最后清空临时存储
                         appRepository.userManger.unSave()
 

@@ -6,6 +6,7 @@ import android.util.Log
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
+import com.attrsense.android.baselibrary.util.singleClick
 import com.attrsense.android.databinding.FragmentMainMyBinding
 import com.attrsense.android.ui.about.AboutUsActivity
 import com.attrsense.android.ui.apply.ApplyActivity
@@ -48,7 +49,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
     }
 
     private fun jumpActivity() {
-        mDataBinding.acTvGoFeedBack.clicks().subscribe {
+        mDataBinding.acTvGoFeedBack.singleClick {
             if (userManger.isLogin()) {
                 toActivity(FeedbackActivity::class.java)
             } else {
@@ -57,7 +58,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
             }
         }
 
-        mDataBinding.acTvApply.clicks().subscribe {
+        mDataBinding.acTvApply.singleClick {
             if (userManger.isLogin()) {
                 toActivity(ApplyActivity::class.java)
             } else {
@@ -66,7 +67,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
             }
         }
 
-        mDataBinding.acTvStatistics.clicks().subscribe {
+        mDataBinding.acTvStatistics.singleClick {
             if (userManger.isLogin()) {
                 toActivity(StatisticsActivity::class.java)
             } else {
@@ -75,15 +76,15 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
             }
         }
 
-        mDataBinding.acTvContact.clicks().subscribe {
+        mDataBinding.acTvContact.singleClick {
             toActivity(ContactUsActivity::class.java)
         }
 
-        mDataBinding.acTvAboutUs.clicks().subscribe {
+        mDataBinding.acTvAboutUs.singleClick {
             toActivity(AboutUsActivity::class.java)
         }
 
-        mDataBinding.acTvLogout.clicks().subscribe {
+        mDataBinding.acTvLogout.singleClick {
             mViewModel.logout()
         }
     }

@@ -1,18 +1,11 @@
 package com.attrsense.android.repository
 
-import android.util.Log
 import com.attrsense.android.api.ApiService
 import com.attrsense.android.base.BaseRepository
-import com.attrsense.android.baselibrary.base.open.model.BaseResponse
-import com.attrsense.android.baselibrary.base.open.model.EmptyBean
-import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.manager.UserDataManager
-import com.attrsense.android.model.LoginBean
 import com.attrsense.database.db.dao.UserDao
 import com.attrsense.database.db.entity.UserEntity
 import com.attrsense.database.repository.DatabaseRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -30,13 +23,13 @@ class AppRepository @Inject constructor(
      * 登录获取 token
      * BaseResponse<EmptyBean?>
      */
-    fun register(mobile: String, code: String) = flow {
+    fun register(mobile: String, code: String) = request {
         val body = getBody().apply {
             this["mobile"] = mobile
             this["code"] = code
         }
-        emit(ResponseData.onSuccess(apiService.register(body)))
-    }.flowOnIO()
+        apiService.register(body)
+    }
 
     /**
      * 登录获取
@@ -44,40 +37,41 @@ class AppRepository @Inject constructor(
      * @param code String
      * @return Flow<ResponseData<BaseResponse<LoginBean?>>>
      */
-    fun login(mobile: String, code: String) = flow {
+    fun login(mobile: String, code: String) = request {
         val body = getBody().apply {
             this["mobile"] = mobile
             this["code"] = code
         }
-        emit(ResponseData.onSuccess(apiService.login(body)))
-    }.flowOnIO()
+        apiService.login(body)
+    }
+
 
     /**
      * 添加用户到数据库
      * @param userEntity UserEntity
      * @return Flow<ResponseData<Boolean>
      */
-    fun addUser(userEntity: UserEntity) = flow {
+    fun addUser(userEntity: UserEntity) = request {
         getUserDao().addUser(userEntity)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 退出登录
      * @return Flow<ResponseData<BaseResponse<EmptyBean?>>>
      */
-    fun logout(): Flow<ResponseData<BaseResponse<EmptyBean?>>> = flow {
-        emit(ResponseData.onSuccess(apiService.logout(userManger.getToken())))
-    }.flowOnIO()
+    fun logout() = request {
+        apiService.logout(userManger.getToken())
+    }
 
 
     /**
      * 获取用户编解码数据信息
      * @return Flow<ResponseData<BaseResponse<UserDataBean?>>>
      */
-    fun getUserInfo() = flow {
-        emit(ResponseData.onSuccess(apiService.getUserInfo(userManger.getToken())))
-    }.flowOnIO()
+    fun getUserInfo() = request {
+        apiService.getUserInfo(userManger.getToken())
+    }
 
 
     /**
@@ -89,13 +83,13 @@ class AppRepository @Inject constructor(
     fun getRemoteFiles(
         page: Int,
         perPage: Int
-    ) = flow {
+    ) = request {
         val body = getBody().apply {
             this["page"] = page
             this["perPage"] = perPage
         }
-        emit(ResponseData.onSuccess(apiService.getUploadFiles(userManger.getToken(), body)))
-    }.flowOnIO()
+        apiService.getUploadFiles(userManger.getToken(), body)
+    }
 
     /**
      * 文件上传
@@ -107,25 +101,21 @@ class AppRepository @Inject constructor(
         rate: String?,
         roiRate: String?,
         imageFilePaths: List<String> = emptyList()
-    ) = flow {
-        emit(
-            ResponseData.onSuccess(
-                apiService.uploadFile(
-                    userManger.getToken(),
-                    rate?.toRequestBody(),
-                    roiRate?.toRequestBody(),
-                    imageFilePaths.toMultipartBody()
-                )
-            )
+    ) = request {
+        apiService.uploadFile(
+            userManger.getToken(),
+            rate?.toRequestBody(),
+            roiRate?.toRequestBody(),
+            imageFilePaths.toMultipartBody()
         )
-    }.flowOnIO()
+    }
 
-    fun deleteFile(fileId: String?) = flow {
+    fun deleteFile(fileId: String?) = request {
         val body = getBody().apply {
             this["fileId"] = fileId
         }
-        emit(ResponseData.onSuccess(apiService.deleteFile(userManger.getToken(), body)))
-    }.flowOnIO()
+        apiService.deleteFile(userManger.getToken(), body)
+    }
 
 
     /**
@@ -134,18 +124,13 @@ class AppRepository @Inject constructor(
      * @param pictures List<String?>?
      * @return Flow<ResponseData<BaseResponse<EmptyBean?>>>
      */
-    fun feedback(description: String, pictures: List<String?> = emptyList<String>()) =
-        flow {
-            emit(
-                ResponseData.onSuccess(
-                    apiService.feedback(
-                        userManger.getToken(),
-                        description.toRequestBody(),
-                        pictures.toMultipartBody()
-                    )
-                )
-            )
-        }.flowOnIO()
+    fun feedback(description: String, pictures: List<String?> = emptyList<String>()) = request {
+        apiService.feedback(
+            userManger.getToken(),
+            description.toRequestBody(),
+            pictures.toMultipartBody()
+        )
+    }
 
 
     /**
@@ -158,7 +143,7 @@ class AppRepository @Inject constructor(
      * @return Flow<ResponseData<BaseResponse<EmptyBean?>>>
      */
     fun apply(name: String, mobile: String, company: String, email: String, briefly: String?) =
-        flow {
+        request {
             val body = getBody().apply {
                 this["name"] = name
                 this["mobile"] = mobile
@@ -166,14 +151,15 @@ class AppRepository @Inject constructor(
                 this["email"] = email
                 this["briefly"] = briefly
             }
-            emit(ResponseData.onSuccess(apiService.applyTest(userManger.getToken(), body)))
-        }.flowOnIO()
+            apiService.applyTest(userManger.getToken(), body)
+        }
 
-    fun reset() = flow {
+
+    fun reset() = request {
         getUserDao().clear()
         getUserDao().reset()
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
 }
 

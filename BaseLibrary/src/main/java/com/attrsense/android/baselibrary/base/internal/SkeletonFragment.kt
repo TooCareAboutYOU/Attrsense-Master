@@ -2,6 +2,7 @@ package com.attrsense.android.baselibrary.base.internal
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.attrsense.android.baselibrary.base.open.viewmodel.OnViewModelCallback
 import com.attrsense.android.baselibrary.util.MMKVUtils
@@ -85,6 +86,10 @@ open class SkeletonFragment : RxFragment(), OnViewModelCallback {
     //手动移除指定Disposable
     override fun removeDisposable(disposable: Disposable) {
         (requireActivity() as SkeletonActivity).removeDisposable(disposable)
+    }
+
+    override fun onClick(view: View?) {
+
     }
 
     override fun showLoadingDialog(text: String) {

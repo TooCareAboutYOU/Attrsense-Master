@@ -1,15 +1,13 @@
 package com.attrsense.android.baselibrary.base.open.viewmodel
 
-import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.attrsense.android.baselibrary.base.open.model.ResponseData
+import com.attrsense.android.baselibrary.util.singleClick
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 /**
@@ -26,27 +24,23 @@ abstract class BaseViewModel : ViewModel(), OnViewModelCallback {
     }
 
     protected inline fun <T> Flow<T>.collectInLaunch(
-        viewModel: BaseViewModel? = null,
-        isShowLoading: Boolean = true,
-        title: String = "",
         crossinline action: suspend (value: T) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.Main) {
-
-            if (isShowLoading) {
-                viewModel?.showLoadingDialog(title)
-            }
-
             collect {
                 action.invoke(it)
-            }
-
-            if (isShowLoading) {
-                viewModel?.dismissLoadingDialog()
             }
         }
     }
 
+    override fun onClick(view: View?) {
+        super.onClick(view)
+        view?.singleClick {
+            this.mOnViewModelCallback?.onClick(view)
+        }?.apply {
+            addDisposable(this)
+        }
+    }
 
     override fun showLoadingDialog(text: String) {
         this.mOnViewModelCallback?.showLoadingDialog(text)

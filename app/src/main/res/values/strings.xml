@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">双深科技</string>
+    <string name="app_name">双深</string>
 
     <!--    意见反馈-->
     <string name="tab_main_user_feedback_title">意见反馈</string>
@@ -36,7 +36,4 @@
     <string name="tab_main_user_about_us_title">关于我们</string>
 
     <string name="text_commit">提 交</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

@@ -30,6 +30,7 @@ abstract class BaseDataBindingActivity<DB : ViewDataBinding> :
         initViewBefore(savedInstanceState)
         super.onCreate(savedInstanceState)
         this.mDataBinding = DataBindingUtil.setContentView(this, setLayoutResId())
+        mDataBinding.lifecycleOwner = this
         initView(savedInstanceState)
     }
 

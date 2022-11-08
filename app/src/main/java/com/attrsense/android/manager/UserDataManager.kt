@@ -26,20 +26,11 @@ class UserDataManager @Inject constructor(
         private const val KEY_USER_REFRESH_TOKEN = "key_user_refresh_token"
     }
 
-    fun isLogin(): Boolean {
-        val state = !TextUtils.isEmpty(mmkvUtils.getString(KEY_USER_TOKEN))
-        return state
-    }
+    fun isLogin(): Boolean = !TextUtils.isEmpty(mmkvUtils.getString(KEY_USER_TOKEN))
 
-    fun getMobile(): String? {
-        val mobile = mmkvUtils.getString(KEY_USER_MOBILE)
-        return mobile
-    }
+    fun getMobile(): String? = mmkvUtils.getString(KEY_USER_MOBILE)
 
-    fun getToken(): String? {
-        val token = mmkvUtils.getString(KEY_USER_TOKEN)
-        return token
-    }
+    fun getToken(): String? = mmkvUtils.getString(KEY_USER_TOKEN)
 
 
     fun save(mobile: String? = "", token: String? = "", refresh_token: String? = "") {

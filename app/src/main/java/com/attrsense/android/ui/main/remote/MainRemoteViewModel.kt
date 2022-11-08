@@ -6,6 +6,7 @@ import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveD
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData2
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
 import com.attrsense.android.repository.AppRepository
@@ -48,25 +49,26 @@ class MainRemoteViewModel @Inject constructor(
         appRepository.getRemoteFiles(
             page,
             perPage
-        ).collectInLaunch(this) {
-            getAllLiveData.value = it.apply {
-                when (this) {
-                    is ResponseData.onFailed -> {
-                        Log.e(
-                            "print_logs",
-                            "MainRemoteViewModel::getRemoteFiles: ${this.throwable}"
-                        )
-                    }
-                    is ResponseData.onSuccess -> {
-                        value?.data?.images?.also { imgList ->
-                            if (imgList.isNotEmpty()) {
-                                saveToDatabase(imgList)
+        ).showLoading(this)
+            .collectInLaunch {
+                getAllLiveData.value = it.apply {
+                    when (this) {
+                        is ResponseData.onFailed -> {
+                            Log.e(
+                                "print_logs",
+                                "MainRemoteViewModel::getRemoteFiles: ${this.throwable}"
+                            )
+                        }
+                        is ResponseData.onSuccess -> {
+                            value?.data?.images?.also { imgList ->
+                                if (imgList.isNotEmpty()) {
+                                    saveToDatabase(imgList)
+                                }
                             }
                         }
                     }
                 }
             }
-        }
     }
 
     /**
@@ -85,7 +87,7 @@ class MainRemoteViewModel @Inject constructor(
             rate,
             roiRate,
             imageFilePaths
-        ).collectInLaunch(this) {
+        ).showLoading(this).collectInLaunch {
             uploadLiveData.value = it.apply {
                 when (this) {
                     is ResponseData.onFailed -> {
@@ -177,28 +179,33 @@ class MainRemoteViewModel @Inject constructor(
 
 
     fun deleteByThumb(position: Int, thumbImage: String?, fileId: String?) {
-        appRepository.deleteFile(fileId).collectInLaunch(this) {
-            when (it) {
-                is ResponseData.onFailed -> {
-                    Log.e("print_logs", "MainLocalViewModel::deleteByThumb: 添加失败！${it.throwable}")
-                }
-                is ResponseData.onSuccess -> {
-                    databaseRepository.deleteByThumb(
-                        appRepository.userManger.getMobile(),
-                        thumbImage
-                    ).collectInLaunch { state ->
-                        when (state) {
-                            is ResponseData.onFailed -> {
+        appRepository.deleteFile(fileId)
+            .showLoading(this)
+            .collectInLaunch {
+                when (it) {
+                    is ResponseData.onFailed -> {
+                        Log.e(
+                            "print_logs",
+                            "MainLocalViewModel::deleteByThumb: 添加失败！${it.throwable}"
+                        )
+                    }
+                    is ResponseData.onSuccess -> {
+                        databaseRepository.deleteByThumb(
+                            appRepository.userManger.getMobile(),
+                            thumbImage
+                        ).collectInLaunch { state ->
+                            when (state) {
+                                is ResponseData.onFailed -> {
 
-                            }
-                            is ResponseData.onSuccess -> {
-                                deleteLiveData.value = ResponseData.onSuccess(position)
+                                }
+                                is ResponseData.onSuccess -> {
+                                    deleteLiveData.value = ResponseData.onSuccess(position)
+                                }
                             }
                         }
                     }
                 }
             }
-        }
     }
 
     fun deleteAll() {
@@ -216,9 +223,7 @@ class MainRemoteViewModel @Inject constructor(
 
 
     override fun onCleared() {
-        super.onCleared()
-        Log.i("print_logs", "MainRemoteViewModel::onCleared: ")
-
         deleteAll()
+        super.onCleared()
     }
 }

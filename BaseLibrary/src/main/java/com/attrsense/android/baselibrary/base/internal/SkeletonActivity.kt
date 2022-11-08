@@ -2,6 +2,7 @@ package com.attrsense.android.baselibrary.base.internal
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.attrsense.android.baselibrary.base.open.viewmodel.OnViewModelCallback
 import com.attrsense.android.baselibrary.util.MMKVUtils
@@ -18,7 +19,7 @@ import javax.inject.Inject
  * date : 2022/10/8
  * mark : custom something
  */
-open class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
+abstract class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
 
     @Inject
     lateinit var _mmkv: MMKVUtils
@@ -91,6 +92,10 @@ open class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
     //手动移除指定Disposable
     override fun removeDisposable(disposable: Disposable) {
         mDisposables.remove(disposable)
+    }
+
+    override fun onClick(view: View?) {
+
     }
 
     override fun showLoadingDialog(text: String) {

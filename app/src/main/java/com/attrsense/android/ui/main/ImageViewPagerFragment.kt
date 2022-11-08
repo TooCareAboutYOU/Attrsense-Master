@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
+import com.attrsense.android.baselibrary.util.singleClick
 import com.attrsense.android.databinding.FragmentImageViewPagerBinding
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.blankj.utilcode.util.ConvertUtils
@@ -109,17 +110,17 @@ class ImageViewPagerFragment private constructor(private val listener: OnViewPag
                 })
                 .into(mDataBinding.acIvPhotoView)
 
-            mDataBinding.acIvPhotoView.clicks().subscribe {
+            mDataBinding.acIvPhotoView.singleClick {
                 bitmap?.recycle()
                 listener?.onDismiss()
             }
 
-            mDataBinding.root.clicks().subscribe {
+            mDataBinding.root.singleClick {
                 bitmap?.recycle()
                 listener?.onDismiss()
             }
 
-            mDataBinding.acTvSave.clicks().subscribe {
+            mDataBinding.acTvSave.singleClick {
                 lifecycleScope.launchWhenResumed {
                     withContext(Dispatchers.IO) {
                         if (!TextUtils.isEmpty(entity.anfImage) && !File(entity.cacheImage).exists()) {

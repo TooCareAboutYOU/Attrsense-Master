@@ -1,5 +1,6 @@
 package com.attrsense.android.baselibrary.crash
 
+import android.app.Application
 import android.content.Context
 import java.io.File
 import java.io.FileWriter
@@ -39,7 +40,7 @@ class CrashHandler : Thread.UncaughtExceptionHandler {
         private const val FILE_NAME_SUFFIX = ".trace"
         private var mDefaultCrashHandler: Thread.UncaughtExceptionHandler? = null
         private var mContext: Context? = null
-        fun init(context: Context?) {
+        fun init(context: Application?) {
             mContext = context
 
             //,获取该线程的默认异常处理器。默认为：RuntimeInit#KillApplicationHandler

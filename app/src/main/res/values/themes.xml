@@ -20,7 +20,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/default_gray</item>
-        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <!--    启动页Style -->
@@ -28,45 +27,19 @@
         <!--以特定的单色填充背景-->
         <item name="windowSplashScreenBackground">@color/white</item>
         <!-- 启动页展示的图片,替换起始窗口中心的图标-->
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher</item>
         <!-- 展示时常(低版本不生效需要代码设置) 以在显示起始窗口的同时播放动画-->
         <item name="windowSplashScreenAnimationDuration">1000</item>
         <!-- 启动画面退出后 Activity 的主题-->
         <item name="postSplashScreenTheme">@style/Launcher</item>
-        <!-- 全屏-->
-        <!--        <item name="android:windowFullscreen">true</item>-->
     </style>
 
     <!--    启动页下一页的Style-->
     <style name="Launcher" parent="Theme.AttrSenseMaster">
-        <!--        <item name="android:windowTranslucentStatus">true</item>-->
-        <!--        <item name="android:windowTranslucentNavigation">true</item>-->
-<!--        <item name="android:windowContentTransitions">true</item>-->
+<!--        <item name="android:windowTranslucentStatus">false</item>-->
+<!--        <item name="android:windowTranslucentNavigation">false</item>-->
+<!--        <item name="android:windowContentTransitions">false</item>-->
     </style>
-
-
-
-    <!--  全局Toolbar-->
-<!--    <style name="AttrToolbarTheme">-->
-<!--        <item name="android:layout_width">match_parent</item>-->
-<!--        <item name="android:layout_height">?android:attr/actionBarSize</item>-->
-<!--        <item name="android:background">@android:color/white</item>-->
-<!--    </style>-->
-
-<!--    &lt;!&ndash; Dialog全屏style &ndash;&gt;-->
-<!--    <style name="MyDialog" parent="@android:style/Theme.NoTitleBar.Fullscreen">-->
-<!--        &lt;!&ndash; 是否有边框 &ndash;&gt;-->
-<!--        <item name="android:windowFrame">@null</item>-->
-<!--        &lt;!&ndash;是否在悬浮Activity之上  &ndash;&gt;-->
-<!--        <item name="android:windowIsFloating">true</item>-->
-<!--        &lt;!&ndash;标题  &ndash;&gt;-->
-<!--        <item name="android:windowNoTitle">false</item>-->
-<!--        &lt;!&ndash;阴影  &ndash;&gt;-->
-<!--        <item name="android:windowIsTranslucent">true</item>&lt;!&ndash;半透明&ndash;&gt;-->
-<!--        &lt;!&ndash; 点外边可以消失  &ndash;&gt;-->
-<!--        <item name="android:windowCloseOnTouchOutside">true</item>-->
-<!--    </style>-->
-
 
 
     <!--    提交按钮-->

@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
+import com.attrsense.android.baselibrary.util.singleClick
 import com.attrsense.android.databinding.ActivityRegisterBinding
 import com.attrsense.android.ui.login.LoginActivity
 import com.jakewharton.rxbinding4.view.clicks
@@ -67,12 +68,12 @@ class RegisterActivity :
             )
         }
 
-        mDataBinding.acBtnRequestCode.clicks().subscribe {
+        mDataBinding.acBtnRequestCode.singleClick {
 //            ToastUtils.showShort("验证码发送成功！")
             mDataBinding.acEtCode.setText("111111")
         }
 
-        mDataBinding.acBtnRegister.clicks().subscribe {
+        mDataBinding.acBtnRegister.singleClick {
             mViewModel.register(
                 mDataBinding.acEtMobile.text.toString(),
                 mDataBinding.acEtCode.text.toString()

@@ -6,6 +6,7 @@ import androidx.core.text.HtmlCompat
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
+import com.attrsense.android.baselibrary.util.singleClick
 import com.attrsense.android.databinding.ActivityApplyBinding
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
@@ -37,7 +38,7 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
 
         textListener()
 
-        mDataBinding.acBtnCommit.clicks().subscribe {
+        mDataBinding.acBtnCommit.singleClick {
             mViewModel.apply(
                 mDataBinding.acEtContact.text.toString(),
                 mDataBinding.acEtPhone.text.toString(),

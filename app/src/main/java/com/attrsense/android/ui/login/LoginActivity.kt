@@ -12,6 +12,7 @@ import com.attrsense.android.BuildConfig
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
+import com.attrsense.android.baselibrary.util.singleClick
 import com.attrsense.android.databinding.ActivityLoginBinding
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.register.RegisterActivity
@@ -74,11 +75,11 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
             mDataBinding.acEtMobile.setText("18874701235")
         }
 
-        mDataBinding.acBtnRequestCode.clicks().subscribe {
+        mDataBinding.acBtnRequestCode.singleClick {
             mDataBinding.acEtCode.setText("111111")
         }
 
-        mDataBinding.acBtnLogin.clicks().subscribe {
+        mDataBinding.acBtnLogin.singleClick {
             mViewModel.login(
                 mDataBinding.acEtMobile.text.toString(), mDataBinding.acEtCode.text.toString()
             )
@@ -97,7 +98,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
             }
         }
 
-        mDataBinding.acTvGoRegister.clicks().subscribe {
+        mDataBinding.acTvGoRegister.singleClick {
             RegisterActivity.jump(this)
         }
     }

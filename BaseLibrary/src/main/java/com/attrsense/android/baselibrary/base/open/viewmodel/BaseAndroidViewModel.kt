@@ -1,9 +1,11 @@
 package com.attrsense.android.baselibrary.base.open.viewmodel
 
+import android.util.Log
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.attrsense.android.baselibrary.app.SkeletonApplication
-import com.attrsense.android.baselibrary.base.open.model.ResponseData
+import com.attrsense.android.baselibrary.util.singleClick
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -26,24 +28,21 @@ abstract class BaseAndroidViewModel : AndroidViewModel(SkeletonApplication.getIn
     }
 
     protected inline fun <T> Flow<T>.collectInLaunch(
-        viewModel: BaseAndroidViewModel? = null,
-        isShowLoading: Boolean = true,
-        title: String = "",
         crossinline action: suspend (value: T) -> Unit
     ) = viewModelScope.launch(Dispatchers.Main) {
         collect {
-            if (isShowLoading) {
-                viewModel?.showLoadingDialog(title)
-            }
-
             action.invoke(it)
-
-            if (isShowLoading) {
-                viewModel?.dismissLoadingDialog()
-            }
         }
     }
 
+    override fun onClick(view: View?) {
+        super.onClick(view)
+        view?.singleClick {
+            this.mOnViewModelCallback?.onClick(view)
+        }?.apply {
+            addDisposable(this)
+        }
+    }
 
     override fun showLoadingDialog(text: String) {
         this.mOnViewModelCallback?.showLoadingDialog(text)

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
+import com.attrsense.android.baselibrary.util.singleClick
 import com.attrsense.android.baselibrary.view.GridLayoutDecoration
 import com.attrsense.android.databinding.ActivityFeedbackBinding
 import com.attrsense.android.ui.feedback.entity.ItemMultipleEntity
@@ -77,7 +78,7 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
         })
 
         //提交
-        mDataBinding.acBtnCommit.clicks().subscribe {
+        mDataBinding.acBtnCommit.singleClick {
             val pictures = arrayListOf<String?>().apply {
                 if (mList.size > 0) {
                     mList.forEach { this.add(it.imageUrl) }

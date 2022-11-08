@@ -1,15 +1,11 @@
 package com.attrsense.database.repository
 
-import android.util.Log
-import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.repository.SkeletonRepository
 import com.attrsense.database.db.AttrSenseRoomDatabase
-import com.attrsense.database.db.dao.AnfImageDao
+import com.attrsense.database.db.dao.LocalAnfDataDao
 import com.attrsense.database.db.dao.UserDao
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.database.db.entity.LocalAnfDataEntity
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -23,9 +19,7 @@ class DatabaseRepository @Inject constructor(
 
     fun getUserDao(): UserDao = db.getUserDao()
 
-    private fun getAnfDao(): AnfImageDao = anfDao
-
-    private fun getLocalAnfDao() = db.getLocalAnfData()
+    fun getLocalAnfDao(): LocalAnfDataDao = db.getLocalAnfData()
 
 
     /**
@@ -40,51 +34,50 @@ class DatabaseRepository @Inject constructor(
      * @param entity Array<out AnfImageEntity>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun add(vararg entity: AnfImageEntity) = flow {
+    fun add(vararg entity: AnfImageEntity) = request {
         anfDao.add(*entity)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 添加列表
      * @param anfPaths List<AnfImageEntity>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun addList(anfPaths: MutableList<AnfImageEntity>) = flow {
+    fun addList(anfPaths: MutableList<AnfImageEntity>) = request {
         if (anfPaths.isNotEmpty()) {
             anfPaths.forEach {
                 anfDao.getAddOrUpdateByThumb(it.mobile, it)
             }
-//            anfDao.addList(anfPaths)
-            emit(ResponseData.onSuccess(anfPaths))
+            anfPaths
         } else {
-            emit(ResponseData.onSuccess(null))
+            mutableListOf()
         }
-    }.flowOnIO()
+    }
 
     /**
      * 更新一个或多个
      * @param anfImageEntity Array<out AnfImageEntity>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun update(vararg anfImageEntity: AnfImageEntity) = flow {
+    fun update(vararg anfImageEntity: AnfImageEntity) = request {
         anfDao.update(*anfImageEntity)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 更新列表
      * @param entities List<AnfImageEntity>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun updateList(entities: List<AnfImageEntity>) = flow {
+    fun updateList(entities: List<AnfImageEntity>) = request {
         if (entities.isNotEmpty()) {
             anfDao.updateList(entities)
-            emit(ResponseData.onSuccess(entities))
+            entities
         } else {
-            emit(ResponseData.onSuccess(null))
+            null
         }
-    }.flowOnIO()
+    }
 
     /**
      * 获取所有(本地/云端)缓存数据
@@ -92,18 +85,18 @@ class DatabaseRepository @Inject constructor(
      * @param isLocal Boolean?
      * @return Flow<ResponseData<List<AnfImageEntity?>>>
      */
-    fun getAllByType(mobile: String?, isLocal: Boolean = true) = flow {
-        emit(ResponseData.onSuccess(anfDao.getAllByType(mobile, isLocal)))
-    }.flowOnIO()
+    fun getAllByType(mobile: String?, isLocal: Boolean = true) = request {
+        anfDao.getAllByType(mobile, isLocal)
+    }
 
     /**
      * 通过手机号查询
      * @param mobile String?
      * @return Flow<ResponseData<List<AnfImageEntity?>>>
      */
-    fun getAll(mobile: String?) = flow {
-        emit(ResponseData.onSuccess(anfDao.getAll(mobile)))
-    }.flowOnIO()
+    fun getAll(mobile: String?) = request {
+        anfDao.getAll(mobile)
+    }
 
     /**
      * 根据anf获取数据
@@ -111,9 +104,9 @@ class DatabaseRepository @Inject constructor(
      * @param anfPath String?
      * @return Flow<ResponseData<AnfImageEntity>>
      */
-    fun getByAnf(mobile: String?, anfPath: String?) = flow {
-        emit(ResponseData.onSuccess(anfDao.getByAnf(mobile, anfPath)))
-    }.flowOnIO()
+    fun getByAnf(mobile: String?, anfPath: String?) = request {
+        anfDao.getByAnf(mobile, anfPath)
+    }
 
     /**
      * 根据缩略图获取数据
@@ -121,9 +114,9 @@ class DatabaseRepository @Inject constructor(
      * @param originalPath String
      * @return Flow<ResponseData<AnfImageEntity>>
      */
-    fun getByOriginal(mobile: String?, originalPath: String) = flow {
-        emit(ResponseData.onSuccess(anfDao.getByOriginal(mobile, originalPath)))
-    }.flowOnIO()
+    fun getByOriginal(mobile: String?, originalPath: String) = request {
+        anfDao.getByOriginal(mobile, originalPath)
+    }
 
 
     /**
@@ -131,29 +124,29 @@ class DatabaseRepository @Inject constructor(
      * @param thumbImage String?
      * @return Flow<ResponseData<AnfImageEntity>>
      */
-    fun getByThumb(mobile: String?, thumbImage: String?) = flow {
-        emit(ResponseData.onSuccess(anfDao.getByThumb(mobile, thumbImage)))
-    }.flowOnIO()
+    fun getByThumb(mobile: String?, thumbImage: String?) = request {
+        anfDao.getByThumb(mobile, thumbImage)
+    }
 
     /**
      * 通过缩略图获取数据,有则修改，无则添加
      * @param newData AnfImageEntity
      * @return Flow<ResponseData<Boolean>>
      */
-    fun getAddOrUpdateByThumb(mobile: String?, newData: AnfImageEntity) = flow {
+    fun getAddOrUpdateByThumb(mobile: String?, newData: AnfImageEntity) = request {
         anfDao.getAddOrUpdateByThumb(mobile, newData)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 删除指定ANF数据和文件
      * @param anfImageEntity AnfImageEntity
      * @return Flow<ResponseData<Boolean>>
      */
-    fun delete(anfImageEntity: AnfImageEntity) = flow {
+    fun delete(anfImageEntity: AnfImageEntity) = request {
         anfDao.deleteEntity(anfImageEntity)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
 
     /**
@@ -162,20 +155,20 @@ class DatabaseRepository @Inject constructor(
      * @param thumbImage String?
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteByThumb(mobile: String?, thumbImage: String?) = flow {
+    fun deleteByThumb(mobile: String?, thumbImage: String?) = request {
         anfDao.deleteByThumb(mobile, thumbImage)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 批量删除数据和文件
      * @param anfImageEntity List<AnfImageEntity>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteList(anfImageEntity: List<AnfImageEntity>) = flow {
+    fun deleteList(anfImageEntity: List<AnfImageEntity>) = request {
         anfDao.deleteEntities(anfImageEntity)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 删除指定ANF数据和文件
@@ -183,10 +176,10 @@ class DatabaseRepository @Inject constructor(
      * @param anfImage String?
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteByAnf(mobile: String?, anfImage: String?) = flow {
+    fun deleteByAnf(mobile: String?, anfImage: String?) = request {
         anfDao.deleteByAnfPath(mobile, anfImage)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 根据AND批量删除
@@ -194,10 +187,10 @@ class DatabaseRepository @Inject constructor(
      * @param anfImage List<String>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteAnfs(mobile: String?, anfImage: List<String>) = flow {
+    fun deleteAnfs(mobile: String?, anfImage: List<String>) = request {
         anfDao.deleteByAnfPaths(mobile, anfImage)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 删除本地或者云端缓存数据
@@ -205,36 +198,36 @@ class DatabaseRepository @Inject constructor(
      * @param isLocal Boolean?
      * @return Flow<ResponseData<Boolean>>
      */
-    fun deleteType(mobile: String?, isLocal: Boolean = true) = flow {
+    fun deleteType(mobile: String?, isLocal: Boolean = true) = request {
         anfDao.deleteByType(mobile, isLocal)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 清空指定用户的所有数据
      * @param mobile String?
      * @return Flow<ResponseData<Boolean>>
      */
-    fun clearByToken(mobile: String?) = flow {
+    fun clearByMobile(mobile: String?) = request {
         anfDao.clearAll(mobile)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 清空数据库所有数据
      * @return Flow<ResponseData<Boolean>>
      */
-    fun clear() = flow {
+    fun clear() = request {
         anfDao.clearDb()
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
 
     /**
      * ---------------------------------------------------------------------------------------------
      *                                          优美的分割线
      * ---------------------------------------------------------------------------------------------
-     * @description：
+     * @description： 永久区：数据统计表
      */
 
     /**
@@ -242,19 +235,19 @@ class DatabaseRepository @Inject constructor(
      * @param entity LocalAnfDataEntity
      * @return Flow<ResponseData<Boolean>>
      */
-    fun addLocalData(entity: LocalAnfDataEntity) = flow {
+    fun addLocalData(entity: LocalAnfDataEntity) = request {
         getLocalAnfDao().addData(entity)
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 
     /**
      * 通过手机号查询
      * @param mobile String?
      * @return Flow<ResponseData<LocalAnfDataEntity>>
      */
-    fun getLocalData(mobile: String?) = flow {
-        emit(ResponseData.onSuccess(getLocalAnfDao().getData(mobile)))
-    }.flowOnIO()
+    fun getLocalData(mobile: String?) = request {
+        getLocalAnfDao().getData(mobile)
+    }
 
     /**
      * ---------------------------------------------------------------------------------------------
@@ -263,9 +256,9 @@ class DatabaseRepository @Inject constructor(
      * @description： 慎重操作 重置表自增索引
      */
 
-    fun reset() = flow {
+    fun reset() = request {
         anfDao.clearDb()
         anfDao.reset()
-        emit(ResponseData.onSuccess(true))
-    }.flowOnIO()
+        true
+    }
 }

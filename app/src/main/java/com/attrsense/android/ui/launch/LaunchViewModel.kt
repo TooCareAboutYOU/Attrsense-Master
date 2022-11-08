@@ -1,5 +1,7 @@
 package com.attrsense.android.ui.launch
 
+import android.util.Log
+import android.view.View
 import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
 import com.attrsense.android.repository.AppRepository
 import com.attrsense.database.repository.DatabaseRepository
@@ -16,4 +18,6 @@ class LaunchViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository,
     private val appRepository: AppRepository
 ) : BaseViewModel() {
+
+
 }

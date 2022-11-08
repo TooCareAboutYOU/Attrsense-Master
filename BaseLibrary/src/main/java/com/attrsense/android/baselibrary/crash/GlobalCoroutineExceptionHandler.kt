@@ -14,6 +14,6 @@ class GlobalCoroutineExceptionHandler : CoroutineExceptionHandler {
         get() = CoroutineExceptionHandler
 
     override fun handleException(context: CoroutineContext, exception: Throwable) {
-        Log.e("print_logs", "GlobalCoroutineExceptionHandler::handleException: ")
+        Log.e("print_logs", "GlobalCoroutineExceptionHandler::handleException: $exception")
     }
 }

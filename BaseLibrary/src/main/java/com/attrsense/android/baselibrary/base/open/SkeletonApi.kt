@@ -5,5 +5,5 @@ package com.attrsense.android.baselibrary.base.open
  * @date 2022/11/4 18:56
  * @description
  */
-interface BaseApi {
+interface SkeletonApi {
 }

@@ -3,11 +3,13 @@ package com.attrsense.android.ui.launch
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
+import com.attrsense.android.baselibrary.util.singleClick
 import com.attrsense.android.databinding.ActivityLaunchBinding
 import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.ui.main.MainActivity
@@ -16,6 +18,7 @@ import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -39,28 +42,42 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        launch()
-        //展示完毕的监听
-        splashScreen.setOnExitAnimationListener { provider ->
-            //移除监听
-            provider.remove()
-            //跳转到下个页面
-        }
+        mDataBinding.viewModel = mViewModel
 
-        mDataBinding.acTvNumber.clicks().subscribe {
-            jumpActivity()
+        launch()
+    }
+
+    override fun onClick(view: View?) {
+        when (view?.id) {
+            R.id.acTv_number -> {
+                jumpActivity()
+            }
+            else -> {}
         }
     }
 
     private fun launch() {
-        lifecycleScope.launch {
-            delay(1000L)
-            keepScreen.compareAndSet(true, false)
+//        lifecycleScope.launch {
+//            delay(1000L)
+//            keepScreen.compareAndSet(true, false)
+              jumpActivity()
 //            loadTimer()
-            jumpActivity()
+//        }
+
+        //绑定数据 返回false即可
+        splashScreen.setKeepVisibleCondition {
+            val state= keepScreen.get()
+            Log.i("print_logs", "LaunchActivity::launch: setKeepVisibleCondition $state")
+            state
         }
-        //绑定数据
-        splashScreen.setKeepVisibleCondition { keepScreen.get() }
+
+        //展示完毕的监听
+        splashScreen.setOnExitAnimationListener { provider ->
+            Log.d("print_logs", "LaunchActivity::initView: setOnExitAnimationListener")
+            //移除监听
+            provider.remove()
+            //跳转到下个页面
+        }
     }
 
     override fun onPause() {
@@ -79,17 +96,21 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
      * 三秒倒计时
      */
     private fun loadTimer() {
-        mJob = (MAX_COUNT downTo 0).asFlow()
+        mJob = (MAX_COUNT downTo 0)
+            .asFlow()
             .flowOn(Dispatchers.Default)
-            .onStart { Log.i("print_logs", "flow onStart") }
+            .onStart {
+                Log.i("print_logs", "LaunchActivity::loadTimer: onStart")
+                keepScreen.compareAndSet(true, false)
+            }
             .onEach {
+                Log.i("print_logs", "LaunchActivity::loadTimer: onEach")
                 it.setTimerText()
                 delay(1000L)
-            }
-            .onCompletion {
-                Log.i("print_logs", "flow onCompletion")
+            }.onCompletion { //在发送数据收集完之后添加数据
+                Log.i("print_logs", "LaunchActivity::loadTimer: onCompletion")
                 jumpActivity()
-            } //在发送数据收集完之后添加数据
+            }
             .launchIn(lifecycleScope) //在单独的协程中启动流的收集
     }
 
@@ -107,7 +128,7 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
 
     private fun toActivity(clz: Class<*>) {
         startActivity(Intent(this@LaunchActivity, clz))
-        overridePendingTransition(0, 0)
         finish()
+        overridePendingTransition(0, 0)
     }
 }
