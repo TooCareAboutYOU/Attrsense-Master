@@ -14,7 +14,6 @@ import com.attrsense.android.service.DownloadService
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.database.repository.DatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.ArrayList
 import javax.inject.Inject
 
 /**
@@ -87,7 +86,7 @@ class MainRemoteViewModel @Inject constructor(
             rate,
             roiRate,
             imageFilePaths
-        ).showLoading(this).collectInLaunch {
+        ).collectInLaunch {
             uploadLiveData.value = it.apply {
                 when (this) {
                     is ResponseData.OnFailed -> {

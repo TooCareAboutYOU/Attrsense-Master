@@ -36,7 +36,6 @@ fun <T : Any> Flow<ResponseData<T>>.showLoading(vm: ViewModel): Flow<ResponseDat
         if (BuildConfig.DEBUG) {
             Log.e("print_logs", "showLoading: $e")
         }
-        emit(ResponseData.OnFailed(e))
         when (vm) {
             is SkeletonViewModel -> {
                 vm.dismissLoadingDialog()
@@ -46,6 +45,7 @@ fun <T : Any> Flow<ResponseData<T>>.showLoading(vm: ViewModel): Flow<ResponseDat
             }
             else -> {}
         }
+        emit(ResponseData.OnFailed(e))
     }.onCompletion {
         when (vm) {
             is SkeletonViewModel -> {

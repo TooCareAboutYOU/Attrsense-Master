@@ -104,15 +104,6 @@ abstract class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
         }
     }
 
-    private fun dialogListener() {
-        loadingDialog?.setOnCancelListener {
-        }
-
-        loadingDialog?.setOnDismissListener {
-        }
-    }
-
-
     override fun showToast(text: String, isLong: Boolean) {
         val state = if (isLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
         Toast.makeText(this, text, state).show()
