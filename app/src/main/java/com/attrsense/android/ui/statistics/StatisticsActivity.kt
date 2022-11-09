@@ -1,7 +1,6 @@
 package com.attrsense.android.ui.statistics
 
 import android.os.Bundle
-import android.util.Log
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
@@ -26,10 +25,10 @@ class StatisticsActivity :
 
         mViewModel.localLiveData.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
 
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     it.value?.let { entity ->
                         mDataBinding.acTvLocalOriginalSizeNum.text =
                             ConvertUtils.byte2FitMemorySize(entity.originalAllSize.toLong())
@@ -43,10 +42,10 @@ class StatisticsActivity :
 
         mViewModel.remoteLiveData.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
 
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     it.value?.let { entity ->
                         mDataBinding.acTvRemoteOriginalSizeNum.text =
                             ConvertUtils.byte2FitMemorySize(entity.totalSrcImageSize.toLong())

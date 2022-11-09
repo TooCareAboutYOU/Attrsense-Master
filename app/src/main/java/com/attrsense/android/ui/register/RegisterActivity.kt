@@ -11,10 +11,9 @@ import androidx.fragment.app.FragmentActivity
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.singleClick
+import com.attrsense.android.baselibrary.util.expand.singleClick
 import com.attrsense.android.databinding.ActivityRegisterBinding
 import com.attrsense.android.ui.login.LoginActivity
-import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -82,10 +81,10 @@ class RegisterActivity :
 
         mViewModel.registerLivedata.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
                     showToast("注册失败！")
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     showToast("注册成功!")
                     startActivity(Intent(this, LoginActivity::class.java))
                     finish()

@@ -2,7 +2,7 @@ package com.attrsense.android.ui.feedback
 
 import androidx.lifecycle.MutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
 import com.attrsense.android.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class FeedbackViewModel @Inject constructor(private val appRepository: AppRepository) :
-    BaseViewModel() {
+    SkeletonViewModel() {
 
     val feedbackLivedata: MutableLiveData<Boolean> =
         MutableLiveData()
@@ -25,8 +25,8 @@ class FeedbackViewModel @Inject constructor(private val appRepository: AppReposi
             .showLoading(this)
             .collectInLaunch {
                 feedbackLivedata.value = when (it) {
-                    is ResponseData.onFailed -> false
-                    is ResponseData.onSuccess -> true
+                    is ResponseData.OnFailed -> false
+                    is ResponseData.OnSuccess -> true
                 }
             }
     }

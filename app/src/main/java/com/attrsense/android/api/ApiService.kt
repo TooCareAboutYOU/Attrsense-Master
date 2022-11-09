@@ -1,6 +1,5 @@
 package com.attrsense.android.api
 
-import com.attrsense.android.baselibrary.base.open.SkeletonApi
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.model.*
@@ -13,11 +12,10 @@ import retrofit2.http.*
  * date : 2022/10/8 10:36
  * mark :网络接口
  */
-interface ApiService : SkeletonApi {
+interface ApiService {
 
     @POST("v1/user/register")
     suspend fun register(@Body body: MutableMap<String, Any?>): BaseResponse<EmptyBean?>
-
 
     /**
      * 手机号+验证码登录

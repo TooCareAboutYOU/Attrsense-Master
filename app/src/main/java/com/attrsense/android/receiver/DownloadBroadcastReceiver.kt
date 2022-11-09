@@ -6,14 +6,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.util.Log
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.database.repository.DatabaseRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 @SuppressLint("Range")
@@ -29,7 +26,7 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
 //    private var executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
     private var downloadId: Long = -1L
-    private val PATH_BEFORE = "file://"
+    private val pathBeforeIndex = "file://"
 
     override fun onReceive(context: Context, intent: Intent?) {
         val downManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -58,8 +55,8 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
                                 var localAnfUri =
                                     cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
 
-                                if (localAnfUri.contains(PATH_BEFORE)) {
-                                    localAnfUri = localAnfUri.substringAfter(PATH_BEFORE)
+                                if (localAnfUri.contains(pathBeforeIndex)) {
+                                    localAnfUri = localAnfUri.substringAfter(pathBeforeIndex)
 
                                     val remoteUri =
                                         cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_URI))
@@ -80,8 +77,8 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
         launch {
             databaseRepository.getByAnf(userDataManager.getMobile(), remoteUri).collect { i ->
                 when (i) {
-                    is ResponseData.onFailed -> {}
-                    is ResponseData.onSuccess -> {
+                    is ResponseData.OnFailed -> {}
+                    is ResponseData.OnSuccess -> {
                         i.value?.let { entity ->
                             entity.anfImage = localAnfUri
                             entity.isDownload = true

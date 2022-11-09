@@ -2,9 +2,9 @@ package com.attrsense.android.ui.main.local
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData2
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonAndroidViewModel
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.database.repository.DatabaseRepository
 import com.attrsense.database.db.entity.AnfImageEntity
@@ -22,9 +22,9 @@ import javax.inject.Inject
 class MainLocalViewModel @Inject constructor(
     private val userDataManager: UserDataManager,
     private val databaseRepository: DatabaseRepository
-) : BaseAndroidViewModel() {
+) : SkeletonAndroidViewModel() {
 
-    val getLiveData = ResponseMutableLiveData2<MutableList<AnfImageEntity>>()
+    val getLiveData = ResponseMutableLiveData<MutableList<AnfImageEntity>>()
     val deleteLiveData: MutableLiveData<Int> = MutableLiveData()
 
     /**
@@ -36,13 +36,13 @@ class MainLocalViewModel @Inject constructor(
         databaseRepository.addList(entityList).collectInLaunch {
             getLiveData.value = it.also { data ->
                 when (data) {
-                    is ResponseData.onFailed -> {
+                    is ResponseData.OnFailed -> {
                         Log.e(
                             "print_logs",
                             "MainLocalViewModel::addEntities: 添加失败！${data.throwable}"
                         )
                     }
-                    is ResponseData.onSuccess -> {
+                    is ResponseData.OnSuccess -> {
                         data.value?.forEach { entity ->
                             addToStatistics(entity)
                         }
@@ -62,8 +62,8 @@ class MainLocalViewModel @Inject constructor(
 
         databaseRepository.addLocalData(data).collectInLaunch {
             when (it) {
-                is ResponseData.onFailed -> {}
-                is ResponseData.onSuccess -> {}
+                is ResponseData.OnFailed -> {}
+                is ResponseData.OnSuccess -> {}
             }
         }
     }
@@ -77,10 +77,10 @@ class MainLocalViewModel @Inject constructor(
     fun deleteByAnfPath(position: Int, anfImage: String?) {
         databaseRepository.deleteByAnf(userDataManager.getMobile(), anfImage).collectInLaunch {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
                     Log.e("print_logs", "MainLocalViewModel::deleteByAnfPath: ${it.throwable}")
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     deleteLiveData.value = position
                 }
             }

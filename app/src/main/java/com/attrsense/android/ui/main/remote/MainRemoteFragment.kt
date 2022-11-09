@@ -142,10 +142,10 @@ class MainRemoteFragment :
 
         mViewModel.getByThumbLiveData.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
 
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
 //                    it.value?.let { entity ->
 //                        showDialog(entity)
 //                    }
@@ -161,10 +161,10 @@ class MainRemoteFragment :
 
         mViewModel.deleteLiveData.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
                     showToast("删除失败！")
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     mAdapter.removeAt(it.value!!)
                     showToast("删除成功！")
                 }
@@ -182,12 +182,12 @@ class MainRemoteFragment :
         mDataBinding.swipeRefreshLayout.isRefreshing = false
         mAdapter.loadMoreModule.isEnableLoadMore = true
         when (response) {
-            is ResponseData.onFailed -> {
+            is ResponseData.OnFailed -> {
                 showToast("解压失败！")
                 Log.e("print_logs", "MainRemoteFragment::loadData: ${response.throwable}")
                 mAdapter.loadMoreModule.loadMoreFail()
             }
-            is ResponseData.onSuccess -> {
+            is ResponseData.OnSuccess -> {
                 response.value?.data?.images?.apply {
                     if (this.isNotEmpty()) {
                         if (pageIndex == 1) {

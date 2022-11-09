@@ -6,9 +6,8 @@ import androidx.core.text.HtmlCompat
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.singleClick
+import com.attrsense.android.baselibrary.util.expand.singleClick
 import com.attrsense.android.databinding.ActivityApplyBinding
-import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -50,10 +49,10 @@ class ApplyActivity : BaseDataBindingVMActivity<ActivityApplyBinding, ApplyViewM
 
         mViewModel.applyLiveData.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
                     showToast("提交失败：${it.throwable}")
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     mDataBinding.acEtContact.text = null
                     mDataBinding.acEtPhone.text = null
                     mDataBinding.acEtCompany.text = null

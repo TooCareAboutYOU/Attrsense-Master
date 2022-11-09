@@ -249,6 +249,9 @@ class DatabaseRepository @Inject constructor(
         getLocalAnfDao().getData(mobile)
     }
 
+
+
+
     /**
      * ---------------------------------------------------------------------------------------------
      *                                          优美的分割线
@@ -257,7 +260,7 @@ class DatabaseRepository @Inject constructor(
      */
 
     fun reset() = request {
-        anfDao.clearDb()
+        clear()
         anfDao.reset()
         true
     }

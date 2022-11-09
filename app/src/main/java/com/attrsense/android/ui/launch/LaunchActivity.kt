@@ -9,16 +9,13 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
-import com.attrsense.android.baselibrary.util.singleClick
 import com.attrsense.android.databinding.ActivityLaunchBinding
 import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.manager.UserDataManager
-import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 

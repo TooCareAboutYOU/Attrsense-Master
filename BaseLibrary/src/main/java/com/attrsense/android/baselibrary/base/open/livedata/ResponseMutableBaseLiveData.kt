@@ -1,18 +1,18 @@
 package com.attrsense.android.baselibrary.base.open.livedata
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 
 /**
  * @author zhangshuai
- * @date 2022/11/2 18:34
+ * @date 2022/11/2 18:37
  * @description
  */
-abstract class ResponseLiveData2<T> : LiveData<ResponseData<T>> {
+class ResponseMutableBaseLiveData<T> : MutableLiveData<ResponseData<BaseResponse<T>>> {
 
     constructor() : super()
 
-    constructor(value: ResponseData<T>) : super(value)
+    constructor(value: ResponseData<BaseResponse<T>>) : super(value)
 
 }

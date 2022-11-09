@@ -9,8 +9,8 @@ package com.attrsense.android.baselibrary.base.open.model
 sealed class ResponseData<out T : Any?> {
 
     //请求成功
-    data class onSuccess<out T : Any>(val value: T?) : ResponseData<T>()
+    data class OnSuccess<out T : Any>(val value: T?) : ResponseData<T>()
 
     //请求失败
-    data class onFailed(val throwable: Throwable) : ResponseData<Nothing>()
+    data class OnFailed(val throwable: Throwable) : ResponseData<Nothing>()
 }

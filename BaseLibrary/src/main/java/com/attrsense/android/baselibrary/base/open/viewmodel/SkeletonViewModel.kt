@@ -1,11 +1,9 @@
 package com.attrsense.android.baselibrary.base.open.viewmodel
 
-import android.util.Log
 import android.view.View
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.attrsense.android.baselibrary.app.SkeletonApplication
-import com.attrsense.android.baselibrary.util.singleClick
+import com.attrsense.android.baselibrary.util.expand.singleClick
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -17,9 +15,7 @@ import kotlinx.coroutines.launch
  * date : 2022/10/12 10:17
  * mark : custom something
  */
-abstract class BaseAndroidViewModel : AndroidViewModel(SkeletonApplication.getInstance()),
-    OnViewModelCallback {
-
+abstract class SkeletonViewModel : ViewModel(), OnViewModelCallback {
 
     private var mOnViewModelCallback: OnViewModelCallback? = null
 
@@ -29,9 +25,11 @@ abstract class BaseAndroidViewModel : AndroidViewModel(SkeletonApplication.getIn
 
     protected inline fun <T> Flow<T>.collectInLaunch(
         crossinline action: suspend (value: T) -> Unit
-    ) = viewModelScope.launch(Dispatchers.Main) {
-        collect {
-            action.invoke(it)
+    ) {
+        viewModelScope.launch(Dispatchers.Main) {
+            collect {
+                action.invoke(it)
+            }
         }
     }
 
@@ -69,4 +67,5 @@ abstract class BaseAndroidViewModel : AndroidViewModel(SkeletonApplication.getIn
         viewModelScope.cancel()
         this.mOnViewModelCallback = null
     }
+
 }

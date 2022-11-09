@@ -4,13 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.singleClick
+import com.attrsense.android.baselibrary.util.expand.singleClick
 import com.attrsense.android.databinding.FragmentImageViewPagerBinding
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.blankj.utilcode.util.ConvertUtils
@@ -22,7 +21,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.snpetest.JniInterface
-import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -152,10 +150,10 @@ class ImageViewPagerFragment private constructor(private val listener: OnViewPag
 
         mViewModel.getLiveData.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
                     showToast("保存失败：${it.throwable}")
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     showToast("保存成功!")
                 }
             }

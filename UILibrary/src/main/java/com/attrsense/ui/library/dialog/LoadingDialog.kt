@@ -4,19 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.DataBindingUtil.setContentView
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import com.attrsense.ui.library.R
 
 /**

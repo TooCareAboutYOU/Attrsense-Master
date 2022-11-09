@@ -1,7 +1,6 @@
 package com.attrsense.android.manager
 
 import android.text.TextUtils
-import android.util.Log
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import javax.inject.Inject
 

@@ -2,7 +2,6 @@ package com.attrsense.android.baselibrary.base.internal
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.attrsense.android.baselibrary.base.open.viewmodel.OnViewModelCallback
 import com.attrsense.android.baselibrary.util.MMKVUtils

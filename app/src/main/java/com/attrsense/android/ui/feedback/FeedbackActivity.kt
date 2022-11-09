@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
-import com.attrsense.android.baselibrary.util.singleClick
+import com.attrsense.android.baselibrary.util.expand.singleClick
 import com.attrsense.android.baselibrary.view.GridLayoutDecoration
 import com.attrsense.android.databinding.ActivityFeedbackBinding
 import com.attrsense.android.ui.feedback.entity.ItemMultipleEntity
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
-import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint

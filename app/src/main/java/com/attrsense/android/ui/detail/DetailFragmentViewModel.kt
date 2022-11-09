@@ -1,6 +1,6 @@
 package com.attrsense.android.ui.detail
 
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailFragmentViewModel @Inject constructor(
     private val detailFragmentRepository: DetailFragmentRepository
-) : BaseViewModel() {
+) : SkeletonViewModel() {
 
 
 }

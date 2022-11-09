@@ -2,6 +2,7 @@ package com.attrsense.android.baselibrary.base.open.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.attrsense.android.baselibrary.BuildConfig
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -17,39 +18,41 @@ import kotlinx.coroutines.flow.onStart
 /**
  * 请求加载弹框
  * @receiver Flow<ResponseData<T>>
- * @param viewModel ViewModel
+ * @param vm ViewModel
  * @return Flow<ResponseData<T>>
  */
-fun <T : Any> Flow<ResponseData<T>>.showLoading(viewModel: ViewModel): Flow<ResponseData<T>> {
+fun <T : Any> Flow<ResponseData<T>>.showLoading(vm: ViewModel): Flow<ResponseData<T>> {
     return this.onStart {
-        when (viewModel) {
-            is BaseViewModel -> {
-                viewModel.showLoadingDialog()
+        when (vm) {
+            is SkeletonViewModel -> {
+                vm.showLoadingDialog()
             }
-            is BaseAndroidViewModel -> {
-                viewModel.showLoadingDialog()
+            is SkeletonAndroidViewModel -> {
+                vm.showLoadingDialog()
             }
             else -> {}
         }
     }.catch { e ->
-        Log.e("print_logs", "showLoading: $e")
-        emit(ResponseData.onFailed(e))
-        when (viewModel) {
-            is BaseViewModel -> {
-                viewModel.dismissLoadingDialog()
+        if (BuildConfig.DEBUG) {
+            Log.e("print_logs", "showLoading: $e")
+        }
+        emit(ResponseData.OnFailed(e))
+        when (vm) {
+            is SkeletonViewModel -> {
+                vm.dismissLoadingDialog()
             }
-            is BaseAndroidViewModel -> {
-                viewModel.dismissLoadingDialog()
+            is SkeletonAndroidViewModel -> {
+                vm.dismissLoadingDialog()
             }
             else -> {}
         }
     }.onCompletion {
-        when (viewModel) {
-            is BaseViewModel -> {
-                viewModel.dismissLoadingDialog()
+        when (vm) {
+            is SkeletonViewModel -> {
+                vm.dismissLoadingDialog()
             }
-            is BaseAndroidViewModel -> {
-                viewModel.dismissLoadingDialog()
+            is SkeletonAndroidViewModel -> {
+                vm.dismissLoadingDialog()
             }
             else -> {}
         }

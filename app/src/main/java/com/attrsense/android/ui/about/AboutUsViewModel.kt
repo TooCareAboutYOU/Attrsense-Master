@@ -1,6 +1,6 @@
 package com.attrsense.android.ui.about
 
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -10,5 +10,6 @@ import javax.inject.Inject
  * mark : custom something
  */
 @HiltViewModel
-class AboutUsViewModel @Inject constructor() : BaseViewModel() {
+class AboutUsViewModel @Inject constructor() : SkeletonViewModel() {
+
 }

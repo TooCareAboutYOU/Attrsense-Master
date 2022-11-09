@@ -22,7 +22,9 @@ open class SkeletonRepository {
         block: suspend () -> T
     ): Flow<ResponseData<T>> {
         return flow {
-            emit(ResponseData.onSuccess(block()))
+            emit(ResponseData.OnSuccess(block()))
         }.flowOn(Dispatchers.Default)
     }
+
+
 }

@@ -1,12 +1,11 @@
 package com.attrsense.android.ui.main.my
 
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
-import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.repository.AppRepository
 import com.attrsense.database.repository.DatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,19 +21,19 @@ class MainMyViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository,
     private val appRepository: AppRepository
 ) :
-    BaseViewModel() {
+    SkeletonViewModel() {
 
-    val logoutLivedata = ResponseMutableLiveData<EmptyBean?>()
+    val logoutLivedata = ResponseMutableBaseLiveData<EmptyBean?>()
 
     fun logout() {
         //网络接口退出
         appRepository.logout().showLoading(this).collectInLaunch {
             it.apply {
                 when (it) {
-                    is ResponseData.onFailed -> {
+                    is ResponseData.OnFailed -> {
                         showToast(it.throwable.toString())
                     }
-                    is ResponseData.onSuccess -> {
+                    is ResponseData.OnSuccess -> {
                         clearUserByToken(it)
                     }
                 }
@@ -47,10 +46,10 @@ class MainMyViewModel @Inject constructor(
         databaseRepository.clearByMobile(appRepository.userManger.getMobile())
             .collectInLaunch { state ->
                 when (state) {
-                    is ResponseData.onFailed -> {
+                    is ResponseData.OnFailed -> {
 
                     }
-                    is ResponseData.onSuccess -> {
+                    is ResponseData.OnSuccess -> {
                         //删除用户表对应用户
                         databaseRepository.getUserDao()
                             .deleteByMobile(appRepository.userManger.getMobile())

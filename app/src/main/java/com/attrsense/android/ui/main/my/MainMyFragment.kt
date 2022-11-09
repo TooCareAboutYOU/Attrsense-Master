@@ -6,7 +6,7 @@ import android.util.Log
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.singleClick
+import com.attrsense.android.baselibrary.util.expand.singleClick
 import com.attrsense.android.databinding.FragmentMainMyBinding
 import com.attrsense.android.ui.about.AboutUsActivity
 import com.attrsense.android.ui.apply.ApplyActivity
@@ -16,7 +16,6 @@ import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.statistics.StatisticsActivity
-import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -36,11 +35,11 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
 
         mViewModel.logoutLivedata.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
                     showToast("退出异常！")
                     Log.e("print_logs", "MainMyFragment::jumpActivity: ${it.throwable}")
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     toActivity(LoginActivity::class.java)
                     (requireActivity() as MainActivity).finish()
                 }

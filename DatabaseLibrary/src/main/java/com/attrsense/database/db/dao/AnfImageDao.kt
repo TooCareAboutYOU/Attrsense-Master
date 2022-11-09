@@ -1,6 +1,5 @@
 package com.attrsense.database.db.dao
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -10,7 +9,6 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.blankj.utilcode.util.FileUtils
-import kotlinx.coroutines.internal.synchronized
 
 /**
  * author : zhangshuai@attrsense.com

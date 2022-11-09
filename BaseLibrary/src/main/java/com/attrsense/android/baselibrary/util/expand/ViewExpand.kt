@@ -1,4 +1,4 @@
-package com.attrsense.android.baselibrary.util
+package com.attrsense.android.baselibrary.util.expand
 
 import android.view.View
 import android.widget.Checkable

@@ -88,11 +88,11 @@ class MainLocalFragment :
     private fun liveDataObserves() {
         mViewModel.getLiveData.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
                     showToast(it.throwable.toString())
                     Log.e("print_logs", "MainLocalFragment::liveDataObserves: ${it.throwable}")
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     it.value?.apply {
                         if (this.isNotEmpty()) {
                             mAdapter.addData(this)

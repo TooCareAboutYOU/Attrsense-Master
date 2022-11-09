@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.attrsense.android.baselibrary.base.internal.SkeletonActivity
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseAndroidViewModel
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonAndroidViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 
 /**
  * author : zhangshuai@attrsense.com
@@ -21,10 +21,10 @@ open class BaseActivity : SkeletonActivity() {
     fun <VM : ViewModel> loadViewModel(vm: Class<VM>): VM {
         return ViewModelProvider(this)[vm].also {
             when (it) {
-                is BaseViewModel -> {
+                is SkeletonViewModel -> {
                     it.setOnViewModelCallback(this)
                 }
-                is BaseAndroidViewModel -> {
+                is SkeletonAndroidViewModel -> {
                     it.setOnViewModelCallback(this)
                 }
                 else -> {

@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.attrsense.database.base.BaseEntity
-import com.google.gson.Gson
 
 /**
  * author : zhangshuai@attrsense.com

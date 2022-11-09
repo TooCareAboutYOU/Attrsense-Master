@@ -12,11 +12,10 @@ import com.attrsense.android.BuildConfig
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.singleClick
+import com.attrsense.android.baselibrary.util.expand.singleClick
 import com.attrsense.android.databinding.ActivityLoginBinding
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.register.RegisterActivity
-import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -87,10 +86,10 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
 
         mViewModel.loginLivedata.observe(this) {
             when (it) {
-                is ResponseData.onFailed -> {
+                is ResponseData.OnFailed -> {
                     showToast("登录失败！${it.throwable}")
                 }
-                is ResponseData.onSuccess -> {
+                is ResponseData.OnSuccess -> {
                     showToast("登录成功！")
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()

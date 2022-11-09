@@ -16,21 +16,21 @@ import java.io.FileOutputStream
 object FilesHelper {
 
     /**
-     * 创建文件夹
+     * 保存缩略图
      * @param context Context
-     * @param fileName String 文件夹名
-     * @return String
+     * @param path String 本地文件路径
      */
-    private fun createDir(context: Context, folderName: String): File {
-        val file = File(
-            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath + File.separator,
-            folderName
-        )
-        if (!file.exists()) {
-            file.mkdirs()
+    fun saveThumb(context: Context, localPath: String?): String? {
+        val result = localPath?.let {
+            val rightPath=PhotoBitmapUtils.amendRotatePhoto(it,context)
+            val bitmap = BitmapFactory.decodeFile(rightPath)
+            val thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.width, bitmap.height)
+            val filename = it.substringAfterLast("/")
+            saveFile(context, thumb, "${System.currentTimeMillis()}_$filename")
         }
-        return file
+        return result
     }
+
 
     /**
      * 保存Bitmap
@@ -55,19 +55,20 @@ object FilesHelper {
 
 
     /**
-     * 保存缩略图
+     * 创建文件夹
      * @param context Context
-     * @param path String 本地文件路径
+     * @param folderName String 文件夹名
+     * @return String
      */
-    fun saveThumb(context: Context, localPath: String?): String? {
-        val result = localPath?.let {
-            val rightPath=PhotoBitmapUtils.amendRotatePhoto(it,context)
-            val bitmap = BitmapFactory.decodeFile(rightPath)
-            val thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.width, bitmap.height)
-            val filename = it.substringAfterLast("/")
-            saveFile(context, thumb, "${System.currentTimeMillis()}_$filename")
+    fun createDir(context: Context, folderName: String): File {
+        val file = File(
+            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath + File.separator,
+            folderName
+        )
+        if (!file.exists()) {
+            file.mkdirs()
         }
-        return result
+        return file
     }
 
 }

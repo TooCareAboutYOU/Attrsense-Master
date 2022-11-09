@@ -1,8 +1,8 @@
 package com.attrsense.android.ui.apply
 
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
 import com.attrsense.android.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,9 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ApplyViewModel @Inject constructor(
     private val appRepository: AppRepository
-) : BaseViewModel() {
+) : SkeletonViewModel() {
 
-    val applyLiveData = ResponseMutableLiveData<EmptyBean?>()
+    val applyLiveData = ResponseMutableBaseLiveData<EmptyBean?>()
 
     /**
      * 提交申请

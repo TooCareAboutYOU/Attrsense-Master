@@ -1,7 +1,6 @@
 package com.attrsense.ui.library.dialog
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Point
 import android.view.Gravity
 import android.view.View

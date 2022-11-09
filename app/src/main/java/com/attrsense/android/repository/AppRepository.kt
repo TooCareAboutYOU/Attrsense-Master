@@ -75,7 +75,7 @@ class AppRepository @Inject constructor(
 
 
     /**
-     * 文件上传
+     * 获取云端文件
      * @param rate 压缩参数1
      * @param roiRate 压缩参数2
      * @param imageFilePath 图片文件

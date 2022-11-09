@@ -1,7 +1,6 @@
 package com.attrsense.android.baselibrary.base.internal
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.attrsense.android.baselibrary.base.open.viewmodel.OnViewModelCallback
@@ -11,7 +10,6 @@ import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
-import kotlinx.coroutines.*
 import javax.inject.Inject
 
 /**

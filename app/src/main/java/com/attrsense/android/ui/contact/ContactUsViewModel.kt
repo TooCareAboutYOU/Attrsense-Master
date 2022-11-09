@@ -1,6 +1,6 @@
 package com.attrsense.android.ui.contact
 
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -10,5 +10,5 @@ import javax.inject.Inject
  * mark : custom something
  */
 @HiltViewModel
-class ContactUsViewModel @Inject constructor() : BaseViewModel() {
+class ContactUsViewModel @Inject constructor() : SkeletonViewModel() {
 }

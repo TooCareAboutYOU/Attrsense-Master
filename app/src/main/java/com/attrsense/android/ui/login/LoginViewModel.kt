@@ -1,8 +1,8 @@
 package com.attrsense.android.ui.login
 
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.base.open.viewmodel.BaseViewModel
+import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
 import com.attrsense.android.model.LoginBean
 import com.attrsense.android.repository.AppRepository
@@ -18,18 +18,18 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val appRepository: AppRepository
-) : BaseViewModel() {
+) : SkeletonViewModel() {
 
-    val loginLivedata = ResponseMutableLiveData<LoginBean?>()
+    val loginLivedata = ResponseMutableBaseLiveData<LoginBean?>()
 
     fun login(mobile: String, code: String) {
         appRepository.login(mobile, code).showLoading(this)
             .collectInLaunch {
                 when (it) {
-                    is ResponseData.onFailed -> {
+                    is ResponseData.OnFailed -> {
 
                     }
-                    is ResponseData.onSuccess -> {
+                    is ResponseData.OnSuccess -> {
                         saveUser(mobile, it.value?.data?.token, it.value?.data?.refresh_token)
                         loginLivedata.value = it
                     }

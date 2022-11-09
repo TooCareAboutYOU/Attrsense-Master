@@ -62,13 +62,13 @@ class DownloadService : Service() {
                 runBlocking {
                     databaseRepository.getByThumb(userDataManager.getMobile(), thumb).collect {
                         when (it) {
-                            is ResponseData.onFailed -> {
+                            is ResponseData.OnFailed -> {
                                 Log.e(
                                     "print_logs",
                                     "DownloadService::onStartCommand: ${it.throwable}"
                                 )
                             }
-                            is ResponseData.onSuccess -> {
+                            is ResponseData.OnSuccess -> {
                                 getStringExtra(KEY_ANF_PATH)?.also { anfHttpPath ->
                                     if (it.value?.isDownload == false) {
                                         download(anfHttpPath)
@@ -101,7 +101,8 @@ class DownloadService : Service() {
             "Pictures/anf",
             anfPath.substringAfterLast("/")
         )
-        val downloadId = downManager.enqueue(request)
+        //返回 downloadId
+        downManager.enqueue(request)
     }
 
     override fun onDestroy() {

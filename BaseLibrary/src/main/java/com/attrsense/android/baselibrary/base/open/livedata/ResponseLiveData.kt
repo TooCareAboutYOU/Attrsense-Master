@@ -1,7 +1,6 @@
 package com.attrsense.android.baselibrary.base.open.livedata
 
 import androidx.lifecycle.LiveData
-import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 
 /**
@@ -9,10 +8,10 @@ import com.attrsense.android.baselibrary.base.open.model.ResponseData
  * @date 2022/11/2 18:34
  * @description
  */
-abstract class ResponseLiveData<T> : LiveData<ResponseData<BaseResponse<T>>> {
+abstract class ResponseLiveData<T> : LiveData<ResponseData<T>> {
 
     constructor() : super()
 
-    constructor(value: ResponseData<BaseResponse<T>>) : super(value)
+    constructor(value: ResponseData<T>) : super(value)
 
 }

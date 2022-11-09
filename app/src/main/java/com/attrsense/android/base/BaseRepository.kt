@@ -1,8 +1,6 @@
 package com.attrsense.android.base
 
 import android.text.TextUtils
-import com.attrsense.android.baselibrary.base.open.model.BaseResponse
-import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.repository.SkeletonRepository
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
