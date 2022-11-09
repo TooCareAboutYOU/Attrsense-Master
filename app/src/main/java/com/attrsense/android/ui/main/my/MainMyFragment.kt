@@ -6,7 +6,7 @@ import android.util.Log
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.expand.singleClick
+import com.attrsense.ui.library.expand.singleClick
 import com.attrsense.android.databinding.FragmentMainMyBinding
 import com.attrsense.android.ui.about.AboutUsActivity
 import com.attrsense.android.ui.apply.ApplyActivity

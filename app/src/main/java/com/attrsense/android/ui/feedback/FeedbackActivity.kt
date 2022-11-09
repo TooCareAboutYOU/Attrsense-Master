@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
-import com.attrsense.android.baselibrary.util.expand.singleClick
-import com.attrsense.android.baselibrary.view.GridLayoutDecoration
+import com.attrsense.ui.library.expand.singleClick
+import com.attrsense.ui.library.recycler.GridLayoutDecoration
 import com.attrsense.android.databinding.ActivityFeedbackBinding
 import com.attrsense.android.ui.feedback.entity.ItemMultipleEntity
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
@@ -69,7 +69,6 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
     }
 
     private fun setListener() {
-        mDataBinding.acEtDescription.requestFocus()
         addDisposable(mDataBinding.acEtDescription.textChanges().subscribe {
             mDataBinding.acBtnCommit.isEnabled = it.isNotEmpty()
             mDataBinding.acTvCount.text =
@@ -95,7 +94,7 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
                 mDataBinding.acEtDescription.text = null
                 mList.clear()
                 mList.add(ItemMultipleEntity(ItemMultipleEntity.PLACE_HOLDER))
-                mAdapter.notifyDataSetChanged()
+                mAdapter.notifyItemInserted(0)
             } else {
                 showToast("提交失败,请重试！")
             }

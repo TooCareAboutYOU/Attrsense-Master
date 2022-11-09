@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentActivity
 import com.attrsense.ui.library.BuildConfig
 import com.attrsense.ui.library.R
 import com.attrsense.ui.library.databinding.LayoutToolBarBinding
+import com.attrsense.ui.library.expand.singleClick
 
 /**
  * @author zhangshuai
@@ -119,7 +120,7 @@ class AttrToolBarView constructor(
      * @return AppCompatImageView
      */
     fun setLeftClick(block: () -> Unit): AppCompatImageView {
-        mBinding.acIvLeft.setOnClickListener {
+        mBinding.acIvLeft.singleClick {
             block()
         }
         return this.mBinding.acIvLeft
@@ -224,7 +225,7 @@ class AttrToolBarView constructor(
      * @return AppCompatImageView
      */
     fun setRightClick(block: () -> Unit): AppCompatImageView {
-        mBinding.acIvRight.setOnClickListener {
+        mBinding.acIvRight.singleClick {
             block()
         }
         return this.mBinding.acIvRight

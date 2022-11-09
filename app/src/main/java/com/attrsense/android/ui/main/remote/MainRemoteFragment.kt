@@ -5,25 +5,17 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.view.GridLayoutDecoration
+import com.attrsense.ui.library.recycler.GridLayoutDecoration
 import com.attrsense.android.databinding.FragmentMainRemoteBinding
-import com.attrsense.android.databinding.LayoutImageViewPagerBinding
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
-import com.attrsense.android.ui.main.ImageViewPagerFragment
-import com.attrsense.database.db.entity.AnfImageEntity
-import com.attrsense.ui.library.dialog.ImageShowDialog
+import com.attrsense.android.ui.main.detail.ImageViewPagerFragment
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
 import com.attrsense.ui.library.recycler.RecyclerLoadMoreView
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
@@ -146,17 +138,13 @@ class MainRemoteFragment :
 
                 }
                 is ResponseData.OnSuccess -> {
-//                    it.value?.let { entity ->
-//                        showDialog(entity)
-//                    }
                     clickPosition = it.value!!
-
                 }
             }
         }
 
         mViewModel.getAllDbLiveData.observe(this) {
-            showDialog(clickPosition, it)
+            ImageViewPagerFragment.showDialog(requireActivity(), clickPosition, it)
         }
 
         mViewModel.deleteLiveData.observe(this) {
@@ -236,44 +224,5 @@ class MainRemoteFragment :
     private fun upload(list: List<String>) {
         showLoadingDialog("压缩中...")
         mViewModel.uploadFile("4", "4", list)
-    }
-
-
-    private fun showDialog(enterPosition: Int, localList: MutableList<AnfImageEntity>) {
-
-        val viewBinding: LayoutImageViewPagerBinding = DataBindingUtil.inflate(
-            layoutInflater, R.layout.layout_image_view_pager, null, true
-        )
-
-        val dialog = ImageShowDialog(requireActivity()).apply {
-            show()
-            setCancelable(true)
-            setContentView(viewBinding.root)
-        }
-        viewBinding.viewPager2.adapter =
-            ViewPager2Adapter(requireActivity() as AppCompatActivity, dialog, localList)
-
-        viewBinding.viewPager2.setCurrentItem(enterPosition, false)
-
-        dialog.setOnDismissListener {
-            viewBinding.viewPager2.removeAllViews()
-        }
-    }
-
-    private class ViewPager2Adapter(
-        private val activity: FragmentActivity,
-        private val dialog: ImageShowDialog,
-        private val dataList: MutableList<AnfImageEntity>
-    ) : FragmentStateAdapter(activity) {
-        override fun getItemCount(): Int = dataList.size
-
-        override fun createFragment(position: Int): Fragment {
-            return ImageViewPagerFragment.newInstance(dataList[position],
-                object : ImageViewPagerFragment.OnViewPagerFragmentListener {
-                    override fun onDismiss() {
-                        dialog.dismiss()
-                    }
-                })
-        }
     }
 }

@@ -1,4 +1,4 @@
-package com.attrsense.android.baselibrary.view
+package com.attrsense.ui.library.recycler
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding

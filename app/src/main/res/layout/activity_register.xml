@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.attrsense.android.ui.register.RegisterViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -98,6 +102,7 @@
                 android:id="@+id/acBtn_request_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                
                 android:text="发送验证码"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -113,6 +118,7 @@
             android:layout_margin="?android:attr/actionBarSize"
             android:background="@color/color_999999"
             android:enabled="false"
+            
             android:text="注  册"
             android:textColor="@android:color/white"
             android:textSize="18sp"

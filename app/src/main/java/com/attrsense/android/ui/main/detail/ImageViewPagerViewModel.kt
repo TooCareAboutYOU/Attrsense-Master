@@ -1,4 +1,4 @@
-package com.attrsense.android.ui.main
+package com.attrsense.android.ui.main.detail
 
 import android.util.Log
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData

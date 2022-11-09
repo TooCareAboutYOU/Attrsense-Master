@@ -6,7 +6,7 @@ import androidx.core.text.HtmlCompat
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.expand.singleClick
+import com.attrsense.ui.library.expand.singleClick
 import com.attrsense.android.databinding.ActivityApplyBinding
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint

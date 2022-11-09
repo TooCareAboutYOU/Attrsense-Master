@@ -12,7 +12,7 @@ import com.attrsense.android.BuildConfig
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.expand.singleClick
+import com.attrsense.ui.library.expand.singleClick
 import com.attrsense.android.databinding.ActivityLoginBinding
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.register.RegisterActivity
@@ -52,6 +52,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        mDataBinding.viewModel = mViewModel
         addBackPress(this)
 
         val mobile: Observable<CharSequence> =
@@ -77,11 +78,13 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         mDataBinding.acBtnRequestCode.singleClick {
             mDataBinding.acEtCode.setText("111111")
         }
-
         mDataBinding.acBtnLogin.singleClick {
             mViewModel.login(
                 mDataBinding.acEtMobile.text.toString(), mDataBinding.acEtCode.text.toString()
             )
+        }
+        mDataBinding.acTvGoRegister.singleClick {
+            RegisterActivity.jump(this)
         }
 
         mViewModel.loginLivedata.observe(this) {
@@ -95,10 +98,6 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
                     finish()
                 }
             }
-        }
-
-        mDataBinding.acTvGoRegister.singleClick {
-            RegisterActivity.jump(this)
         }
     }
 }

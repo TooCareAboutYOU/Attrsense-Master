@@ -87,10 +87,6 @@ open class SkeletonFragment : RxFragment(), OnViewModelCallback {
         (requireActivity() as SkeletonActivity).removeDisposable(disposable)
     }
 
-    override fun onClick(view: View?) {
-
-    }
-
     override fun showLoadingDialog(text: String) {
 //        try {
 //            if (!requireActivity().isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {

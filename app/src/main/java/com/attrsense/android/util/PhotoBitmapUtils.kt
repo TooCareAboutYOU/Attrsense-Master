@@ -111,7 +111,7 @@ object PhotoBitmapUtils {
         options!!.inJustDecodeBounds = false
         options.inSampleSize = 10 // 图片的大小设置为原来的十分之一
         val bmp = BitmapFactory.decodeFile(path, options)
-        options = null
+//        options = null
         return bmp
     }
 

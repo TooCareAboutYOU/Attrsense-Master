@@ -3,7 +3,6 @@ package com.attrsense.android.ui.launch
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +12,7 @@ import com.attrsense.android.databinding.ActivityLaunchBinding
 import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.manager.UserDataManager
+import com.attrsense.ui.library.expand.singleClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -42,14 +42,9 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
         mDataBinding.viewModel = mViewModel
 
         launch()
-    }
 
-    override fun onClick(view: View?) {
-        when (view?.id) {
-            R.id.acTv_number -> {
-                jumpActivity()
-            }
-            else -> {}
+        mDataBinding.acTvNumber.singleClick {
+            jumpActivity()
         }
     }
 
@@ -57,13 +52,15 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
 //        lifecycleScope.launch {
 //            delay(1000L)
 //            keepScreen.compareAndSet(true, false)
-              jumpActivity()
 //            loadTimer()
 //        }
 
+//        loadTimer()
+        jumpActivity()
+
         //绑定数据 返回false即可
         splashScreen.setKeepVisibleCondition {
-            val state= keepScreen.get()
+            val state = keepScreen.get()
             Log.i("print_logs", "LaunchActivity::launch: setKeepVisibleCondition $state")
             state
         }
@@ -106,7 +103,7 @@ class LaunchActivity : BaseDataBindingVMActivity<ActivityLaunchBinding, LaunchVi
                 delay(1000L)
             }.onCompletion { //在发送数据收集完之后添加数据
                 Log.i("print_logs", "LaunchActivity::loadTimer: onCompletion")
-                jumpActivity()
+//                jumpActivity()
             }
             .launchIn(lifecycleScope) //在单独的协程中启动流的收集
     }

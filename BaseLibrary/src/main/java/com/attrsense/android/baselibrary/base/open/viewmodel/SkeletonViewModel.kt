@@ -1,12 +1,9 @@
 package com.attrsense.android.baselibrary.base.open.viewmodel
 
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.attrsense.android.baselibrary.util.expand.singleClick
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -33,15 +30,6 @@ abstract class SkeletonViewModel : ViewModel(), OnViewModelCallback {
         }
     }
 
-    override fun onClick(view: View?) {
-        super.onClick(view)
-        view?.singleClick {
-            this.mOnViewModelCallback?.onClick(view)
-        }?.apply {
-            addDisposable(this)
-        }
-    }
-
     override fun showLoadingDialog(text: String) {
         this.mOnViewModelCallback?.showLoadingDialog(text)
     }
@@ -64,7 +52,6 @@ abstract class SkeletonViewModel : ViewModel(), OnViewModelCallback {
 
     override fun onCleared() {
         super.onCleared()
-        viewModelScope.cancel()
         this.mOnViewModelCallback = null
     }
 

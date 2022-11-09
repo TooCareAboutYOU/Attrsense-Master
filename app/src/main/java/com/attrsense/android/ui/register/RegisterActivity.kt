@@ -11,9 +11,9 @@ import androidx.fragment.app.FragmentActivity
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.util.expand.singleClick
 import com.attrsense.android.databinding.ActivityRegisterBinding
 import com.attrsense.android.ui.login.LoginActivity
+import com.attrsense.ui.library.expand.singleClick
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -42,7 +42,10 @@ class RegisterActivity :
         }
     }
 
+
     override fun initView(savedInstanceState: Bundle?) {
+        mDataBinding.viewModel = mViewModel
+
         mDataBinding.toolbar.load(this).apply {
             setCenterTitle("注\t\t册")
             setLeftClick {
@@ -52,7 +55,8 @@ class RegisterActivity :
 
         mDataBinding.acEtMobile.requestFocus()
 
-        val mobile: Observable<CharSequence> = mDataBinding.acEtMobile.textChanges().skipInitialValue()
+        val mobile: Observable<CharSequence> =
+            mDataBinding.acEtMobile.textChanges().skipInitialValue()
         val code: Observable<CharSequence> = mDataBinding.acEtCode.textChanges().skipInitialValue()
         Observable.combineLatest(mobile, code) { t1, t2 ->
             !TextUtils.isEmpty(t1) && t1.length == 11 && !TextUtils.isEmpty(t2) && t2.length == 6
@@ -68,7 +72,7 @@ class RegisterActivity :
         }
 
         mDataBinding.acBtnRequestCode.singleClick {
-//            ToastUtils.showShort("验证码发送成功！")
+            showToast("验证码发送成功！")
             mDataBinding.acEtCode.setText("111111")
         }
 

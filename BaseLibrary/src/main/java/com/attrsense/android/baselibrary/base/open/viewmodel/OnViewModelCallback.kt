@@ -1,6 +1,5 @@
 package com.attrsense.android.baselibrary.base.open.viewmodel
 
-import android.view.View
 import io.reactivex.rxjava3.disposables.Disposable
 
 /**
@@ -8,11 +7,7 @@ import io.reactivex.rxjava3.disposables.Disposable
  * @date 2022/11/3 18:13
  * @description 访问网络时显示加载Dialog视图
  */
-interface OnViewModelCallback : View.OnClickListener {
-
-    override fun onClick(view: View?){
-
-    }
+interface OnViewModelCallback {
 
     fun showLoadingDialog(text: String = "")
 

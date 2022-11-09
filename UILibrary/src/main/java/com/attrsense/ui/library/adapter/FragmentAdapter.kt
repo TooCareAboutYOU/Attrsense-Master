@@ -1,4 +1,4 @@
-package com.attrsense.android.widget
+package com.attrsense.ui.library.adapter
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment

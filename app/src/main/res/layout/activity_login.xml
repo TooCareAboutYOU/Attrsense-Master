@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.attrsense.android.ui.login.LoginViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -92,6 +96,7 @@
                 android:id="@+id/acBtn_request_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                
                 android:text="发送验证码"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -107,6 +112,7 @@
             android:layout_margin="?android:attr/actionBarSize"
             android:background="@color/color_999999"
             android:enabled="false"
+            
             android:text="登  录"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -119,6 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            
             android:text="没有账号？去注册->"
             android:textColor="@color/color_4A90E2"
             android:textSize="12sp"

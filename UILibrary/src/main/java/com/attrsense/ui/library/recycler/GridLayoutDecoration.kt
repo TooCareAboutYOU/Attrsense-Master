@@ -1,4 +1,4 @@
-package com.attrsense.android.baselibrary.view
+package com.attrsense.ui.library.recycler
 
 import android.graphics.Rect
 import android.view.View

@@ -8,7 +8,7 @@ import com.attrsense.android.databinding.ActivityMainBinding
 import com.attrsense.android.ui.main.local.MainLocalFragment
 import com.attrsense.android.ui.main.my.MainMyFragment
 import com.attrsense.android.ui.main.remote.MainRemoteFragment
-import com.attrsense.android.widget.FragmentAdapter
+import com.attrsense.ui.library.adapter.FragmentAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -60,16 +60,17 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
         mDataBinding.tabBottomNavigation.menu.getItem(position).isChecked = true
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mDataBinding.viewpager2.unregisterOnPageChangeCallback(viewPager2PageChangeCallback)
-    }
-
     private val viewPager2PageChangeCallback = object :
         ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
-            mDataBinding.tabBottomNavigation.menu.getItem(position).isChecked = true
+//            mDataBinding.tabBottomNavigation.menu.getItem(position).isChecked = true
+            selectedItem(position)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mDataBinding.viewpager2.unregisterOnPageChangeCallback(viewPager2PageChangeCallback)
     }
 }

@@ -4,26 +4,19 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.android.baselibrary.view.GridLayoutDecoration
+import com.attrsense.ui.library.recycler.GridLayoutDecoration
 import com.attrsense.android.databinding.FragmentMainLocalBinding
-import com.attrsense.android.databinding.LayoutImageViewPagerBinding
 import com.attrsense.android.manager.UserDataManager
-import com.attrsense.android.ui.main.ImageViewPagerFragment
+import com.attrsense.android.ui.main.detail.ImageViewPagerFragment
 import com.attrsense.android.util.FilesHelper
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
 import com.attrsense.database.db.entity.AnfImageEntity
-import com.attrsense.ui.library.dialog.ImageShowDialog
 import com.blankj.utilcode.util.FileUtils
 import com.example.snpetest.JniInterface
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
@@ -73,6 +66,8 @@ class MainLocalFragment :
                 addItemDecoration(GridLayoutDecoration(10))
                 adapter = mAdapter
             }
+
+            mAdapter.setEmptyView(com.attrsense.ui.library.R.layout.layout_load_empty_view)
         }
 
         initListener()
@@ -111,7 +106,7 @@ class MainLocalFragment :
 
     private fun initListener() {
         mAdapter.setOnItemClickListener { _, _, position ->
-            showDialog(position)
+            ImageViewPagerFragment.showDialog(requireActivity(), position, mAdapter.data)
         }
 
         mAdapter.setOnItemLongClickListener { _, _, position ->
@@ -167,44 +162,6 @@ class MainLocalFragment :
             }
         } else {
             dismissLoadingDialog()
-        }
-    }
-
-
-    private fun showDialog(enterPosition: Int) {
-        val viewBinding: LayoutImageViewPagerBinding = DataBindingUtil.inflate(
-            layoutInflater, R.layout.layout_image_view_pager, null, true
-        )
-
-        val dialog = ImageShowDialog(requireActivity()).apply {
-            show()
-            setCancelable(true)
-            setContentView(viewBinding.root)
-        }
-        viewBinding.viewPager2.adapter =
-            ViewPager2Adapter(requireActivity() as AppCompatActivity, dialog, mAdapter.data)
-
-        viewBinding.viewPager2.setCurrentItem(enterPosition, false)
-
-        dialog.setOnDismissListener {
-            viewBinding.viewPager2.removeAllViews()
-        }
-    }
-
-    private class ViewPager2Adapter(
-        activity: FragmentActivity,
-        private val dialog: ImageShowDialog,
-        private val dataList: MutableList<AnfImageEntity>
-    ) : FragmentStateAdapter(activity) {
-        override fun getItemCount(): Int = dataList.size
-
-        override fun createFragment(position: Int): Fragment {
-            return ImageViewPagerFragment.newInstance(dataList[position],
-                object : ImageViewPagerFragment.OnViewPagerFragmentListener {
-                    override fun onDismiss() {
-                        dialog.dismiss()
-                    }
-                })
         }
     }
 
