@@ -5,9 +5,11 @@ import android.content.Context
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/10/26 12:44
  * @description
  */
@@ -17,11 +19,16 @@ class CrashHandler : Thread.UncaughtExceptionHandler {
         if (!dir.exists()) {
             dir.mkdirs()
         }
-        val l = System.currentTimeMillis()
-        val file = File(dir, "$l.txt")
+
+        val time = System.currentTimeMillis()
+
+        val simpleDateFormat=SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒 E", Locale.CHINA)
+        val date=Date(time)
+        val result=simpleDateFormat.format(date)
+        val file = File(dir, "$time.txt")
         try {
             PrintWriter(FileWriter(file)).apply {
-                println("time: ${System.currentTimeMillis()}")
+                println("time: $result")
                 println("thread：${t.name}")
                 println("error：$e")
                 close()

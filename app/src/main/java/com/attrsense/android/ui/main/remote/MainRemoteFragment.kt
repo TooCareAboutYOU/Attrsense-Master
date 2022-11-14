@@ -1,22 +1,29 @@
 package com.attrsense.android.ui.main.remote
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.ui.library.recycler.GridLayoutDecoration
 import com.attrsense.android.databinding.FragmentMainRemoteBinding
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
 import com.attrsense.android.ui.main.detail.ImageViewPagerFragment
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
+import com.attrsense.ui.library.recycler.GridLayoutDecoration
 import com.attrsense.ui.library.recycler.RecyclerLoadMoreView
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +33,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainRemoteFragment :
     BaseDataBindingVMFragment<FragmentMainRemoteBinding, MainRemoteViewModel>() {
 
+
     private lateinit var mAdapter: RemoteImageAdapter
+    private lateinit var intentActivityResultLauncher: ActivityResultLauncher<Intent>
 
     //页码
     private var pageIndex = 1
@@ -37,18 +46,46 @@ class MainRemoteFragment :
     override fun setLayoutResId(): Int = R.layout.fragment_main_remote
 
     override fun initView(savedInstanceState: Bundle?) {
+        intentActivityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+
+                }
+            }
+
+
         mDataBinding.toolbar.load(requireActivity()).apply {
             this.hideLeftIcon()
             this.setRightClick {
-                rxPermissions.request(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA
-                ).subscribe {
-                    try {
-                        SelectorBottomDialog.show(this@MainRemoteFragment)
-                    } catch (e: IllegalStateException) {
-                        e.printStackTrace()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    if (!Environment.isExternalStorageManager()) {
+                        val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                        intent.data = Uri.parse("package:" + context?.packageName)
+                        intentActivityResultLauncher.launch(intent)
+                    } else {
+                        rxPermissions.request(
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA
+                        ).subscribe {
+                            try {
+                                SelectorBottomDialog.show(this@MainRemoteFragment)
+                            } catch (e: IllegalStateException) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                } else {
+                    rxPermissions.request(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                    ).subscribe {
+                        try {
+                            SelectorBottomDialog.show(this@MainRemoteFragment)
+                        } catch (e: IllegalStateException) {
+                            e.printStackTrace()
+                        }
                     }
                 }
             }

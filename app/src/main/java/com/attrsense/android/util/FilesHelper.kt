@@ -5,11 +5,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
 import android.os.Environment
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
+
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/10/27 15:45
  * @description 文件操作
  */
@@ -22,7 +22,7 @@ object FilesHelper {
      */
     fun saveThumb(context: Context, localPath: String?): String? {
         val result = localPath?.let {
-            val rightPath=PhotoBitmapUtils.amendRotatePhoto(it,context)
+            val rightPath = PhotoBitmapUtils.amendRotatePhoto(it, context)
             val bitmap = BitmapFactory.decodeFile(rightPath)
             val thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.width, bitmap.height)
             val filename = it.substringAfterLast("/")
@@ -37,18 +37,25 @@ object FilesHelper {
      * @param context Context
      * @param fileName String 文件名
      */
-    fun saveFile(context: Context, bitmap: Bitmap, fileName: String): String {
-        val bitmapFile = File(createDir(context, "thumb"), fileName)
+    fun saveFile(context: Context, bitmap: Bitmap, folderName: String): String {
+        val bitmapFile = File(createDir(context, "thumb"), folderName)
         try {
             if (!bitmapFile.exists()) {
                 bitmapFile.createNewFile()
             }
             val fileOutputStream = FileOutputStream(bitmapFile)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fileOutputStream)
+
             fileOutputStream.flush()
             fileOutputStream.close()
+            if (!bitmap.isRecycled) {
+                bitmap.recycle()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+//            MediaScannerConnection.scanFile(context, arrayOf(bitmapFile.toString()), null, null)
+//            Log.i("print_logs", "FilesHelper::saveFile: 通知相册!")
         }
         return bitmapFile.absolutePath
     }
@@ -61,6 +68,8 @@ object FilesHelper {
      * @return String
      */
     fun createDir(context: Context, folderName: String): File {
+        //sdk存储路径
+//        val sdkPath = Environment.getExternalStoragePublicDirectory("Attrsense").absolutePath + File.separator
         val file = File(
             context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath + File.separator,
             folderName

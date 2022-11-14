@@ -22,7 +22,7 @@ import com.attrsense.ui.library.databinding.LayoutToolBarBinding
 import com.attrsense.ui.library.expand.singleClick
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/10/26 18:08
  * @description
  */

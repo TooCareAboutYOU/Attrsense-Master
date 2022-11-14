@@ -7,7 +7,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/10/25 16:37
  * @description
  */

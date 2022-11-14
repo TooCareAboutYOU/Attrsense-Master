@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/2 12:10
  * @description ViewPager2嵌套RecyclerView滑动冲突
  */

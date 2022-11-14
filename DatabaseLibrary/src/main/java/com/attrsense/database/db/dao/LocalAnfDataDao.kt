@@ -1,15 +1,10 @@
 package com.attrsense.database.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
-import androidx.room.Update
+import androidx.room.*
 import com.attrsense.database.db.entity.LocalAnfDataEntity
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/7 11:31
  * @description
  */

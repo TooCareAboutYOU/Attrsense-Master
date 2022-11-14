@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.attrsense.database.base.BaseEntity
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/7 11:26
  * @description
  */

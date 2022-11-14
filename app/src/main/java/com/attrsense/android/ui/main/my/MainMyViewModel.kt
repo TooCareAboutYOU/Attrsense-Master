@@ -1,5 +1,7 @@
 package com.attrsense.android.ui.main.my
 
+import android.os.Environment
+import com.attrsense.android.BuildConfig
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
@@ -8,7 +10,9 @@ import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
 import com.attrsense.android.repository.AppRepository
 import com.attrsense.database.repository.DatabaseRepository
+import com.blankj.utilcode.util.FileUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -56,8 +60,11 @@ class MainMyViewModel @Inject constructor(
                         //最后清空临时存储
                         appRepository.userManger.unSave()
 
-//                        appRepository.reset()
-//                        databaseRepository.reset()
+                        if (BuildConfig.DEBUG) {
+                            appRepository.reset()
+                            databaseRepository.reset()
+                            FileUtils.deleteAllInDir(Environment.getExternalStoragePublicDirectory("Attrsense").absolutePath + File.separator)
+                        }
 
                         logoutLivedata.value = callback
                     }

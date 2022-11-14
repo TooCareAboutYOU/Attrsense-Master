@@ -2,8 +2,8 @@ package com.attrsense.android.service
 
 import android.app.DownloadManager
 import android.app.Service
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.IBinder
@@ -70,7 +70,7 @@ class DownloadService : Service() {
                             }
                             is ResponseData.OnSuccess -> {
                                 getStringExtra(KEY_ANF_PATH)?.also { anfHttpPath ->
-                                    if (it.value?.isDownload == false) {
+                                    if (it.value?.isDownloadHttpAnf == false) {
                                         download(anfHttpPath)
                                     }
                                 }

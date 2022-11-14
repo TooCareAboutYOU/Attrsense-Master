@@ -12,7 +12,7 @@ import kotlin.math.absoluteValue
 import kotlin.math.sign
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/2 12:03
  * @description 方式二：ViewPager2嵌套RecyclerView滑动冲突
  * 使用方式：包裹RecyclerView布局

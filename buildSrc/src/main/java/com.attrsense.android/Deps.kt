@@ -18,8 +18,8 @@ object Versions {
         const val versionName = "1.0.0"
         val sourceCompatibilityVersion = JavaVersion.VERSION_1_8
         val targetCompatibilityVersion = JavaVersion.VERSION_1_8
-        const val jvmTargetVersion = "1.8"
-        const val cmakeVersion = "3.18.1"
+        const val jvmTargetVersion = "11"
+        const val cmakeVersion = "3.22.1"
         const val multiDexEnabled = true
     }
 

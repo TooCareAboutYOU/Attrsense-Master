@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/2 18:37
  * @description
  */

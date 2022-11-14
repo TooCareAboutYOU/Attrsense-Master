@@ -8,7 +8,7 @@ import org.json.JSONObject
 import retrofit2.Converter
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/2 15:19
  * @description
  */

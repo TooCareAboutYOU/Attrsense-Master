@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.util.Log
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.manager.UserDataManager
 import com.attrsense.database.repository.DatabaseRepository
@@ -81,10 +82,10 @@ class DownloadBroadcastReceiver : BroadcastReceiver() {
                     is ResponseData.OnSuccess -> {
                         i.value?.let { entity ->
                             entity.anfImage = localAnfUri
-                            entity.isDownload = true
+                            entity.isDownloadHttpAnf = true
                             databaseRepository.update(entity)
                                 .collect {
-//                                    Log.i("print_logs", "下载成功: ")
+                                    Log.i("print_logs", "下载成功: ${localAnfUri}, $remoteUri")
                                 }
                         }
                     }

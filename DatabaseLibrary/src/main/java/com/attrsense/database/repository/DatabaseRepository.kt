@@ -70,13 +70,9 @@ class DatabaseRepository @Inject constructor(
      * @param entities List<AnfImageEntity>
      * @return Flow<ResponseData<Boolean>>
      */
-    fun updateList(entities: List<AnfImageEntity>) = request {
-        if (entities.isNotEmpty()) {
-            anfDao.updateList(entities)
-            entities
-        } else {
-            null
-        }
+    fun update(mobile: String?, entities: AnfImageEntity) = request {
+        anfDao.updateByThumb(mobile, entities)
+        entities
     }
 
     /**
@@ -248,8 +244,6 @@ class DatabaseRepository @Inject constructor(
     fun getLocalData(mobile: String?) = request {
         getLocalAnfDao().getData(mobile)
     }
-
-
 
 
     /**

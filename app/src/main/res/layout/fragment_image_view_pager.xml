@@ -13,19 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/default_gray">
-
-
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/acIv_photo_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
         <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/acIv_photo_thumb_view"
@@ -44,6 +32,17 @@
             android:layout_height="36dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/acIv_photo_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

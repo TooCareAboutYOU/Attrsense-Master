@@ -2,13 +2,11 @@ package com.attrsense.android.baselibrary.util
 
 import android.app.Activity
 import android.text.TextUtils
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import java.util.concurrent.CopyOnWriteArrayList
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/10/31 15:26
  * @description
  */

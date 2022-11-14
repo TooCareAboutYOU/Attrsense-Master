@@ -1,12 +1,6 @@
 package com.attrsense.database.db.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
-import androidx.room.Update
+import androidx.room.*
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.blankj.utilcode.util.FileUtils
 
@@ -57,26 +51,6 @@ interface AnfImageDao {
     suspend fun getByThumb(mobile: String?, thumbImage: String?): AnfImageEntity?
 
 
-    @Transaction
-    suspend fun getAddOrUpdateByThumb(mobile: String?, newData: AnfImageEntity) {
-        val entity = getByThumb(mobile, newData.thumbImage)
-        if (entity == null) {
-            add(newData)
-        } else {
-//            entity.mobile = newData.mobile
-//            entity.token = newData.token
-//            entity.originalImage = newData.originalImage
-//            entity.thumbImage = newData.thumbImage
-//            entity.anfImage = newData.anfImage
-//            if (newData.isDownload) {
-//                entity.cacheImage = newData.cacheImage
-//            }
-//            entity.isLocal = newData.isLocal
-//            update(entity)
-        }
-    }
-
-
     /**
      * 删除
      * 使用需谨慎
@@ -113,6 +87,39 @@ interface AnfImageDao {
      *
      */
 
+    @Transaction
+    suspend fun updateByThumb(mobile: String?, entity: AnfImageEntity) {
+        val oldEntity = getByThumb(mobile, entity.thumbImage)
+        if (oldEntity != null) {
+            oldEntity.mobile = entity.mobile
+            oldEntity.token = entity.token
+            oldEntity.originalImage = entity.originalImage
+            oldEntity.thumbImage = entity.thumbImage
+            oldEntity.anfImage = entity.anfImage
+            oldEntity.cacheImage = entity.cacheImage
+            oldEntity.isLocal = entity.isLocal
+            update(oldEntity)
+        }
+    }
+
+    @Transaction
+    suspend fun getAddOrUpdateByThumb(mobile: String?, newData: AnfImageEntity) {
+        val entity = getByThumb(mobile, newData.thumbImage)
+        if (entity == null) {
+            add(newData)
+        } else {
+//            entity.mobile = newData.mobile
+//            entity.token = newData.token
+//            entity.originalImage = newData.originalImage
+//            entity.thumbImage = newData.thumbImage
+//            entity.anfImage = newData.anfImage
+//            if (newData.isDownloadHttpAnf) {
+//                entity.cacheImage = newData.cacheImage
+//            }
+//            entity.isLocal = newData.isLocal
+//            update(entity)
+        }
+    }
 
     //单个删除
     @Transaction

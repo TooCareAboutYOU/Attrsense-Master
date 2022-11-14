@@ -2,6 +2,7 @@ package com.attrsense.android.ui.main.detail
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -12,11 +13,11 @@ import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.ui.library.expand.singleClick
 import com.attrsense.android.databinding.FragmentImageViewPagerBinding
 import com.attrsense.android.databinding.LayoutImageViewPagerBinding
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.ui.library.dialog.ImageShowDialog
+import com.attrsense.ui.library.expand.singleClick
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.FileUtils
 import com.bumptech.glide.Glide
@@ -34,7 +35,7 @@ import java.io.File
 
 
 @AndroidEntryPoint
-class ImageViewPagerFragment private constructor(private val listener: OnViewPagerFragmentListener?) :
+class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragmentListener?) :
     BaseDataBindingVMFragment<FragmentImageViewPagerBinding, ImageViewPagerViewModel>() {
 
     private lateinit var entity: AnfImageEntity
@@ -70,6 +71,11 @@ class ImageViewPagerFragment private constructor(private val listener: OnViewPag
                 )
 
             viewBinding.viewPager2.setCurrentItem(enterPosition, false)
+            if (dataList.size == 2) {
+                viewBinding.viewPager2.offscreenPageLimit = 1
+            } else if (dataList.size > 2) {
+                viewBinding.viewPager2.offscreenPageLimit = 2
+            }
 
             dialog.setOnDismissListener {
                 viewBinding.viewPager2.removeAllViews()
@@ -107,28 +113,10 @@ class ImageViewPagerFragment private constructor(private val listener: OnViewPag
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .into(mDataBinding.acIvPhotoThumbView)
 
-        mViewModel.getLiveData.observe(this) {
-            when (it) {
-                is ResponseData.OnFailed -> {
-                    showToast("保存失败：${it.throwable}")
-                }
-                is ResponseData.OnSuccess -> {
-                    showToast("保存成功!")
-                }
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mDataBinding.acIvPhotoThumbView.visibility = View.VISIBLE
-        mDataBinding.loadingProgress.visibility = View.VISIBLE
-
         lifecycleScope.launch {
             bitmap = withContext(Dispatchers.IO) {
                 JniInterface.decoderCommitPath2Buffer(entity.anfImage)
             }
-
             mDataBinding.acTvInfo.text =
                 StringBuilder().append("原JPG：${ConvertUtils.byte2FitMemorySize(entity.srcSize.toLong())}")
                     .append("\n").append("ANF：${FileUtils.getSize(entity.anfImage)}").append("\n")
@@ -167,7 +155,6 @@ class ImageViewPagerFragment private constructor(private val listener: OnViewPag
                 .into(mDataBinding.acIvPhotoView)
 
 
-
             mDataBinding.acIvPhotoView.singleClick {
                 recycleBitmap()
                 listener?.onDismiss()
@@ -181,22 +168,49 @@ class ImageViewPagerFragment private constructor(private val listener: OnViewPag
             mDataBinding.acTvSave.singleClick {
                 lifecycleScope.launchWhenResumed {
                     withContext(Dispatchers.IO) {
-                        if (!TextUtils.isEmpty(entity.anfImage) && !File(entity.cacheImage).exists()) {
-                            val path = JniInterface.decoderCommit(entity.anfImage)
-                            entity.cacheImage = path
-                            mViewModel.updateList(arrayListOf(entity))
+
+                        if (!TextUtils.isEmpty(entity.anfImage)) {
+                            if (!File(entity.cacheImage).exists()) {
+                                val path = JniInterface.decoderCommit(entity.anfImage)
+                                entity.cacheImage = path
+                                mViewModel.update(entity)
+                                MediaScannerConnection.scanFile(
+                                    context,
+                                    arrayOf(path),
+                                    null,
+                                    null
+                                )
+                            } else {
+                                showToast("保存成功!")
+                            }
                         }
                     }
                 }
             }
         }
+
+        mViewModel.getLiveData.observe(this) {
+            when (it) {
+                is ResponseData.OnFailed -> {
+                    showToast("保存失败：${it.throwable}")
+                }
+                is ResponseData.OnSuccess -> {
+                    showToast("保存成功!")
+                }
+            }
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onResume() {
+        super.onResume()
+//        mDataBinding.acIvPhotoThumbView.visibility = View.VISIBLE
+//        mDataBinding.loadingProgress.visibility = View.VISIBLE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         recycleBitmap()
     }
-
 
     private fun recycleBitmap() {
         if (bitmap != null) {

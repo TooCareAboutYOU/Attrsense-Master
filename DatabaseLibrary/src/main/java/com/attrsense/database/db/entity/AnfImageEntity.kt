@@ -53,7 +53,7 @@ data class AnfImageEntity(
     var isLocal: Boolean = true,
 
     //针对远端anf文件是否已经下载
-    @ColumnInfo(name = "is_download")
-    var isDownload: Boolean = false
+    @ColumnInfo(name = "is_download_http_anf")
+    var isDownloadHttpAnf: Boolean = false
 
 ) : BaseEntity()

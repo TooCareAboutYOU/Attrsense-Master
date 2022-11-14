@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/10/26 15:49
  * @description
  */

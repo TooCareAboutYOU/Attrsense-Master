@@ -4,8 +4,9 @@ import android.util.Log
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
-import com.attrsense.database.repository.DatabaseRepository
+import com.attrsense.android.manager.UserDataManager
 import com.attrsense.database.db.entity.AnfImageEntity
+import com.attrsense.database.repository.DatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,10 +17,11 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ImageViewPagerViewModel @Inject constructor(
-    private val databaseRepository: DatabaseRepository
+    private val databaseRepository: DatabaseRepository,
+    private val userDataManager: UserDataManager
 ) : SkeletonViewModel() {
 
-    val getLiveData = ResponseMutableLiveData<List<AnfImageEntity>?>()
+    val getLiveData = ResponseMutableLiveData<AnfImageEntity>()
 
     /**
      * 更多数据
@@ -27,8 +29,8 @@ class ImageViewPagerViewModel @Inject constructor(
      * @return Job
      * 注： addEntities()方法有同样的效果
      */
-    fun updateList(entityList: List<AnfImageEntity>) {
-        databaseRepository.updateList(entityList).collectInLaunch {
+    fun update(entity: AnfImageEntity) {
+        databaseRepository.update(userDataManager.getMobile(),entity).collectInLaunch {
             when (it) {
                 is ResponseData.OnFailed -> {
                     Log.e(

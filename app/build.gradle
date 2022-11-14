@@ -45,8 +45,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility rootProject.ext.android["javaVersion"]
+        targetCompatibility rootProject.ext.android["javaVersion"]
     }
     kotlinOptions {
         jvmTarget = rootProject.ext.android["jvmTarget"]
@@ -81,13 +81,10 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     implementation rootProject.ext.dependencies["hiltDaggerAndroid"]
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.4.+'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
     kapt rootProject.ext.dependencies["glideCompiler"]
 
-    implementation files("libs/JniLibs-release_ANF230_V3.1_beta1.5.aar")
+    implementation files("libs/JniLibs-release_ANF230_V3.1_beta1.6.aar")
 
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")

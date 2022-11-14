@@ -12,7 +12,7 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 
 /**
- * author: zhangshuai
+ * author: zhangshuai@attrsense.com
  * email: zhangshuai@attrsense.com
  * mark:
  *      callId每次请求的标识

@@ -12,10 +12,10 @@ import com.attrsense.android.BuildConfig
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.ui.library.expand.singleClick
 import com.attrsense.android.databinding.ActivityLoginBinding
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.register.RegisterActivity
+import com.attrsense.ui.library.expand.singleClick
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable

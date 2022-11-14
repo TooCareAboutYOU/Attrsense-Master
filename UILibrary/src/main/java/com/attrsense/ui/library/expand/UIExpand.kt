@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Checkable
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/2 09:40
  * @description
  */

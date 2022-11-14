@@ -1,10 +1,15 @@
 package com.attrsense.ui.library.dialog
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.attrsense.ui.library.databinding.DialogSelectorBottomBinding
@@ -30,6 +35,17 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
     private var mFragment: Fragment? = null
     private var mCallback: onClickEventListener? = null
     private var maxCount: Int? = 9
+    private lateinit var mBinding: DialogSelectorBottomBinding
+
+
+    /**
+     * 图片返回到上层业务
+     */
+    interface onClickEventListener {
+        fun onClickPhotos()
+        fun onClickCamera()
+        fun onClickFolder()
+    }
 
     constructor(
         fragment: Fragment? = null,
@@ -51,21 +67,11 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
         this.maxCount = maxCount
     }
 
-    /**
-     * 图片返回到上层业务
-     */
-    interface onClickEventListener {
-        fun onClickPhotos()
-        fun onClickCamera()
-        fun onClickFolder()
-    }
-
-    private lateinit var mBinding: DialogSelectorBottomBinding
-
     companion object {
         //拍照返回值
         const val CAMERA_REQUEST_CODE = 10
         const val SELECTOR_REQUEST_CODE = 100
+        const val KEY_RESULT = "result"
 
         fun show(
             fragment: Fragment,
@@ -88,6 +94,20 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
                 SelectorBottomDialog::class.java.simpleName
             )
         }
+    }
+
+    private lateinit var intentActivityResultLauncher: ActivityResultLauncher<Intent>
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        intentActivityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    //获取返回的结果
+                    Log.i("print_logs", "MainLocalFragment::initView: 授权成功！")
+
+                }
+            }
     }
 
     override fun onCreateView(
@@ -129,12 +149,12 @@ class SelectorBottomDialog() : BaseBottomSheetDialogFragment() {
                 // 最大选择图片数量，默认9
                 .maxNum(this.maxCount!!)
                 .build()
+
             if (mActivity != null) {
                 ISNav.getInstance().toListActivity(mActivity, config, SELECTOR_REQUEST_CODE)
             } else {
                 ISNav.getInstance().toListActivity(mFragment, config, SELECTOR_REQUEST_CODE)
             }
-
             mCallback?.onClickPhotos()
             this.dismiss()
         }

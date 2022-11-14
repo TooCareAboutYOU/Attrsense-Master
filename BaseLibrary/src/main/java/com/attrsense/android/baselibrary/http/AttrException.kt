@@ -3,7 +3,7 @@ package com.attrsense.android.baselibrary.http
 
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/2 15:48
  * @description
  */

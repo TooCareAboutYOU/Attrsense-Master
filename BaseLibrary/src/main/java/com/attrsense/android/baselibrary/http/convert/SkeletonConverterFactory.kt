@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import java.lang.reflect.Type
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/2 15:58
  * @description 自定义转换器，状态码统一处理
  */

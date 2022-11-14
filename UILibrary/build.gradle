@@ -24,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility rootProject.ext.android["javaVersion"]
+        targetCompatibility rootProject.ext.android["javaVersion"]
     }
     kotlinOptions {
         jvmTarget = rootProject.ext.android["jvmTarget"]
@@ -63,4 +63,6 @@ dependencies {
     api rootProject.ext.dependencies["glide"]
     kapt rootProject.ext.dependencies["glideCompiler"]
     api rootProject.ext.dependencies["glideTransformations"]
+//    api rootProject.ext.dependencies["transferee"]
+//    api rootProject.ext.dependencies["transfereeGlideImageLoader"]
 }

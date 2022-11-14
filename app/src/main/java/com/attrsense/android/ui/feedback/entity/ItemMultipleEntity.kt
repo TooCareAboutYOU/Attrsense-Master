@@ -3,7 +3,7 @@ package com.attrsense.android.ui.feedback.entity
 import com.chad.library.adapter.base.entity.MultiItemEntity
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/10/25 16:42
  * @description
  */

@@ -1,6 +1,5 @@
 package com.attrsense.android.ui.main.detail
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -8,7 +7,7 @@ import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.ui.library.dialog.ImageShowDialog
 
 /**
- * @author zhangshuai
+ * @author zhangshuai@attrsense.com
  * @date 2022/11/9 11:48
  * @description
  */
