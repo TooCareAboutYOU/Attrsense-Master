@@ -13,7 +13,7 @@ kapt {
 android {
     signingConfigs {
         release {
-            storeFile file('../../attrsense.jks')
+            storeFile file('/Users/zhangshuai/Project____/Android/attr/Attrsense-Master/attrsense.jks')
             storePassword 'attrsense'
             keyAlias 'attrsense'
             keyPassword 'attrsense'
