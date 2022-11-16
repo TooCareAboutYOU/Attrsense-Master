@@ -80,7 +80,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/acTv_local_original_size"
                 app:layout_constraintLeft_toRightOf="@id/barrier1"
                 app:layout_constraintTop_toTopOf="@id/acTv_local_original_size"
-                android:text="0" />
+                android:text="0.000B" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/acTv_local_anf_size_num"
@@ -90,7 +90,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/acTv_local_anf_size"
                 app:layout_constraintLeft_toRightOf="@id/barrier1"
                 app:layout_constraintTop_toTopOf="@id/acTv_local_anf_size"
-                android:text="0" />
+                android:text="0.000B" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/acTv_local_count_num"
@@ -179,7 +179,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/acTv_remote_original_size"
                 app:layout_constraintLeft_toRightOf="@id/barrier2"
                 app:layout_constraintTop_toTopOf="@id/acTv_remote_original_size"
-                android:text="0" />
+                android:text="0.000B" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/acTv_remote_anf_size_num"
@@ -189,7 +189,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/acTv_remote_anf_size"
                 app:layout_constraintLeft_toRightOf="@id/barrier2"
                 app:layout_constraintTop_toTopOf="@id/acTv_remote_anf_size"
-                android:text="0" />
+                android:text="0.000B" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/acTv_remote_count_num"
