@@ -21,7 +21,7 @@ object PhotoBitmapUtils {
     /**
      * 存放拍摄图片的文件夹
      */
-    private val FILES_NAME = "/MyPhoto"
+    private val FILES_NAME = "/.MyPhoto"
 
     /**
      * 获取的时间格式

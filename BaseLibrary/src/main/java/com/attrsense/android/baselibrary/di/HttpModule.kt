@@ -1,13 +1,13 @@
 package com.attrsense.android.baselibrary.di
 
 import android.annotation.SuppressLint
-import android.text.TextUtils
-import android.util.Log
 import com.attrsense.android.baselibrary.BuildConfig
 import com.attrsense.android.baselibrary.config.BaseConfig
 import com.attrsense.android.baselibrary.http.HttpDns
 import com.attrsense.android.baselibrary.http.HttpEventListener
 import com.attrsense.android.baselibrary.http.convert.SkeletonConverterFactory
+import com.attrsense.android.baselibrary.util.MMKVUtils
+import com.attrsense.android.baselibrary.util.StringUtils
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -18,7 +18,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
@@ -45,40 +47,54 @@ object HttpModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
-        val interceptorLogger = HttpLoggingInterceptor(HttpLogger())
-        interceptorLogger.level = HttpLoggingInterceptor.Level.BODY
-
-        val builder = OkHttpClient.Builder()
+    fun provideOkHttpClient(mmkvUtils: MMKVUtils): OkHttpClient.Builder {
+        val interceptorLogger = HttpLoggingInterceptor(HttpLogger()).apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        return OkHttpClient.Builder()
             .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
             .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
             .readTimeout(TIME_OUT, TimeUnit.SECONDS)
             .eventListenerFactory(HttpEventListener.FACTORY)
             .sslSocketFactory(createSSLSocketFactory()!!, trustManager)
             .hostnameVerifier(hostnameVerifier)
-            .dns(HttpDns())
+            .dns(HttpDns()).apply {
+//                addInterceptor(HeadInterceptor(mmkvUtils))
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(interceptorLogger)
+                    addInterceptor(OkHttpProfilerInterceptor())
+                }
+            }
+    }
 
-        if (BuildConfig.DEBUG) {
-            builder.addInterceptor(interceptorLogger)
-            builder.addInterceptor(OkHttpProfilerInterceptor())
+    private class HeadInterceptor(private val mmkvUtils: MMKVUtils) : Interceptor {
+        private val Authorization = "Authorization2"
+
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val request = chain.request()
+            val builder = request.newBuilder().apply {
+                val token=mmkvUtils.getString("key_user_token")
+                token?.let {
+                    val value = StringUtils.encodeHeadInfo(it)
+                    addHeader(Authorization, value)
+                }
+            }
+            return chain.proceed(builder.build())
         }
-
-        return builder.build()
     }
 
     @Singleton
     @Provides
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
+    fun provideRetrofit(client: OkHttpClient.Builder): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BaseConfig.BASE_URL)
-            .client(client)
+            .client(client.build())
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(SkeletonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory.invoke())
             .build()
     }
-
 
     private class HttpLogger : HttpLoggingInterceptor.Logger {
 

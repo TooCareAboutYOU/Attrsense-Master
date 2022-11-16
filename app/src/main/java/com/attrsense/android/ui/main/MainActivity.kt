@@ -8,12 +8,13 @@ import com.attrsense.android.databinding.ActivityMainBinding
 import com.attrsense.android.ui.main.local.MainLocalFragment
 import com.attrsense.android.ui.main.my.MainMyFragment
 import com.attrsense.android.ui.main.remote.MainRemoteFragment
+import com.attrsense.android.util.FilesHelper
 import com.attrsense.ui.library.adapter.FragmentAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
- *
+ * 首页
  */
 @AndroidEntryPoint
 class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewModel>() {
@@ -65,6 +66,11 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        FilesHelper.clearCache()
     }
 
     override fun onDestroy() {

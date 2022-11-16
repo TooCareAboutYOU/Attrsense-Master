@@ -1,21 +1,22 @@
 package com.attrsense.android.ui.main.my
 
 import android.content.Intent
-import android.os.*
+import android.os.Bundle
 import android.util.Log
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.fragment.BaseDataBindingVMFragment
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
-import com.attrsense.ui.library.expand.singleClick
 import com.attrsense.android.databinding.FragmentMainMyBinding
+import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.ui.about.AboutUsActivity
 import com.attrsense.android.ui.apply.ApplyActivity
 import com.attrsense.android.ui.contact.ContactUsActivity
 import com.attrsense.android.ui.feedback.FeedbackActivity
 import com.attrsense.android.ui.login.LoginActivity
-import com.attrsense.android.manager.UserDataManager
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.statistics.StatisticsActivity
+import com.attrsense.android.util.FilesHelper
+import com.attrsense.ui.library.expand.singleClick
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

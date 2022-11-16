@@ -5,6 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
 import android.os.Environment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.*
 
 
@@ -15,6 +18,8 @@ import java.io.*
  */
 object FilesHelper {
 
+    private val cacheList: ArrayList<String?> by lazy { arrayListOf() }
+
     /**
      * 保存缩略图
      * @param context Context
@@ -23,6 +28,7 @@ object FilesHelper {
     fun saveThumb(context: Context, localPath: String?): String? {
         val result = localPath?.let {
             val rightPath = PhotoBitmapUtils.amendRotatePhoto(it, context)
+            cacheList.add(rightPath)
             val bitmap = BitmapFactory.decodeFile(rightPath)
             val thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.width, bitmap.height)
             val filename = it.substringAfterLast("/")
@@ -78,6 +84,26 @@ object FilesHelper {
             file.mkdirs()
         }
         return file
+    }
+
+    /**
+     * 清空缓存的纠正图片
+     */
+    fun clearCache() {
+        if (cacheList.isNotEmpty()) {
+            CoroutineScope(Dispatchers.Default).launch {
+                cacheList.forEach {
+                    it?.apply {
+                        if (this.isNotBlank()) {
+                            val rightFile = File(this)
+                            if (rightFile.exists()) {
+                                rightFile.delete()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

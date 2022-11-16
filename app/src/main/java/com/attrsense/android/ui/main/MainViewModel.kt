@@ -13,4 +13,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
 ) : SkeletonViewModel() {
 
+    init {
+
+    }
 }

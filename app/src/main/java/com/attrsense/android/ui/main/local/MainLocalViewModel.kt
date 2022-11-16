@@ -6,9 +6,9 @@ import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveD
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonAndroidViewModel
 import com.attrsense.android.manager.UserDataManager
-import com.attrsense.database.repository.DatabaseRepository
 import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.database.db.entity.LocalAnfDataEntity
+import com.attrsense.database.repository.DatabaseRepository
 import com.blankj.utilcode.util.FileUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

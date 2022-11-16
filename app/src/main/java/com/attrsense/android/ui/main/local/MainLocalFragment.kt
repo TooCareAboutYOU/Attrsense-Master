@@ -61,35 +61,24 @@ class MainLocalFragment :
             this.setCenterTitle("双深")
             this.setRightIcon(com.attrsense.ui.library.R.drawable.icon_add)
             this.setRightClick {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    if (!Environment.isExternalStorageManager()) {
-                        val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                        intent.data = Uri.parse("package:" + context?.packageName)
-                        intentActivityResultLauncher.launch(intent)
-                    } else {
-                        rxPermissions.request(
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.CAMERA
-                        ).subscribe {
-                            try {
+                rxPermissions.request(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ).subscribe {
+                    try {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            if (!Environment.isExternalStorageManager()) {
+                                requestAllFilesPermission()
+                            } else {
                                 SelectorBottomDialog.show(this@MainLocalFragment)
-                            } catch (e: IllegalStateException) {
-                                e.printStackTrace()
                             }
-                        }
-                    }
-                } else {
-                    rxPermissions.request(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
-                    ).subscribe {
-                        try {
+                        } else {
                             SelectorBottomDialog.show(this@MainLocalFragment)
-                        } catch (e: IllegalStateException) {
-                            e.printStackTrace()
                         }
+
+                    } catch (e: IllegalStateException) {
+                        e.printStackTrace()
                     }
                 }
             }
@@ -142,7 +131,15 @@ class MainLocalFragment :
 
     private fun initListener() {
         mAdapter.setOnItemClickListener { _, _, position ->
-            ImageViewPagerFragment.showDialog(requireActivity(), position, mAdapter.data)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (!Environment.isExternalStorageManager()) {
+                    requestAllFilesPermission()
+                } else {
+                    ImageViewPagerFragment.showDialog(requireActivity(), position, mAdapter.data)
+                }
+            } else {
+                ImageViewPagerFragment.showDialog(requireActivity(), position, mAdapter.data)
+            }
         }
 
         mAdapter.setOnItemLongClickListener { _, _, position ->
@@ -212,6 +209,12 @@ class MainLocalFragment :
     override fun onDestroyView() {
         super.onDestroyView()
         localList.clear()
+    }
+
+    private fun requestAllFilesPermission(){
+        val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+        intent.data = Uri.parse("package:" + context?.packageName)
+        intentActivityResultLauncher.launch(intent)
     }
 
 }

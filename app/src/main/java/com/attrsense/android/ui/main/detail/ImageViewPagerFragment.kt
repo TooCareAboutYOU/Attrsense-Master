@@ -167,10 +167,9 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
 
             mDataBinding.acTvSave.singleClick {
                 lifecycleScope.launchWhenResumed {
-                    withContext(Dispatchers.IO) {
-
-                        if (!TextUtils.isEmpty(entity.anfImage)) {
-                            if (!File(entity.cacheImage).exists()) {
+                    if (!TextUtils.isEmpty(entity.anfImage)) {
+                        if (!File(entity.cacheImage).exists()) {
+                            withContext(Dispatchers.IO) {
                                 val path = JniInterface.decoderCommit(entity.anfImage)
                                 entity.cacheImage = path
                                 mViewModel.update(entity)
@@ -180,9 +179,9 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
                                     null,
                                     null
                                 )
-                            } else {
-                                showToast("保存成功!")
                             }
+                        } else {
+                            showToast("文件已保存!")
                         }
                     }
                 }
@@ -199,12 +198,6 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
                 }
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        mDataBinding.acIvPhotoThumbView.visibility = View.VISIBLE
-//        mDataBinding.loadingProgress.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

@@ -1,6 +1,5 @@
 package com.attrsense.ui.library.expand
 
-import android.util.Log
 import android.view.View
 import android.widget.Checkable
 

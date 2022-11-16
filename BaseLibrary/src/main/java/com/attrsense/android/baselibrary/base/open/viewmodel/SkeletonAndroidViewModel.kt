@@ -1,10 +1,8 @@
 package com.attrsense.android.baselibrary.base.open.viewmodel
 
-import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.attrsense.android.baselibrary.app.SkeletonApplication
-import com.attrsense.ui.library.expand.singleClick
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
