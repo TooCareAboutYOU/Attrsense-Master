@@ -166,8 +166,8 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
             }
 
             mDataBinding.acTvSave.singleClick {
-                showLoadingDialog("保存中")
-                lifecycleScope.launchWhenResumed {
+                showLoadingDialog("保存中...")
+                lifecycleScope.launch {
                     if (!TextUtils.isEmpty(entity.anfImage)) {
                         if (!File(entity.cacheImage).exists()) {
                             withContext(Dispatchers.IO) {

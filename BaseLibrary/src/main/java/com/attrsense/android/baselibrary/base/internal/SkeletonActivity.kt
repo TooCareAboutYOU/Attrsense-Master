@@ -1,7 +1,9 @@
 package com.attrsense.android.baselibrary.base.internal
 
 import android.os.Bundle
+import android.os.Looper
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.attrsense.android.baselibrary.base.open.viewmodel.OnViewModelCallback
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.ui.library.dialog.LoadingDialog
@@ -9,6 +11,8 @@ import com.tbruyelle.rxpermissions3.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -106,6 +110,14 @@ abstract class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
 
     override fun showToast(text: String, isLong: Boolean) {
         val state = if (isLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
-        Toast.makeText(this, text, state).show()
+        if (isMainThread()) {
+            Toast.makeText(this, text, state).show()
+        } else {
+            lifecycleScope.launch(Dispatchers.Main) {
+                Toast.makeText(this@SkeletonActivity, text, state).show()
+            }
+        }
     }
+
+    private fun isMainThread(): Boolean = Looper.myLooper() == Looper.getMainLooper()
 }

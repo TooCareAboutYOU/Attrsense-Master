@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.drawable.ColorDrawable
+import android.os.Looper
 import android.text.TextUtils
 import android.view.ViewGroup.LayoutParams
 import android.view.WindowManager
@@ -11,6 +12,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.attrsense.ui.library.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * @author zhangshuai@attrsense.com
@@ -60,7 +64,7 @@ class LoadingDialog : AlertDialog {
 //    }
 
     constructor(context: Context) : super(context) {
-        showDialog()
+        load()
     }
 
     /**
@@ -71,7 +75,7 @@ class LoadingDialog : AlertDialog {
      */
     constructor(context: Context, textHint: String?) : super(context) {
         this.textHint = textHint
-        showDialog()
+        load()
 
     }
 
@@ -83,7 +87,7 @@ class LoadingDialog : AlertDialog {
      */
     constructor(context: Context, loadingDialogType: Int) : super(context) {
         this.loadingDialogType = loadingDialogType
-        showDialog()
+        load()
     }
 
     /**
@@ -113,8 +117,20 @@ class LoadingDialog : AlertDialog {
         mLoadingResId = loadingResId
         mTextSize = textSize
         mTextColorResId = textColor
-        showDialog()
+        load()
     }
+
+
+    private fun load() {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            showDialog()
+        } else {
+            CoroutineScope(Dispatchers.Main).launch {
+                showDialog()
+            }
+        }
+    }
+
 
     private fun showDialog() {
         if (!isActivityRunning(context) && !isShowing) {
