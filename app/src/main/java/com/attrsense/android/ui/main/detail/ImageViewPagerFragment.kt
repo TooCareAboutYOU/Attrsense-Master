@@ -166,6 +166,7 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
             }
 
             mDataBinding.acTvSave.singleClick {
+                showLoadingDialog("保存中")
                 lifecycleScope.launchWhenResumed {
                     if (!TextUtils.isEmpty(entity.anfImage)) {
                         if (!File(entity.cacheImage).exists()) {
@@ -189,6 +190,7 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
         }
 
         mViewModel.getLiveData.observe(this) {
+            dismissLoadingDialog()
             when (it) {
                 is ResponseData.OnFailed -> {
                     showToast("保存失败：${it.throwable}")

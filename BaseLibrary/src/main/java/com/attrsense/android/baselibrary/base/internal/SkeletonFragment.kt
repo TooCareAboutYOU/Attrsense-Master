@@ -88,26 +88,10 @@ open class SkeletonFragment : RxFragment(), OnViewModelCallback {
     }
 
     override fun showLoadingDialog(text: String) {
-//        try {
-//            if (!requireActivity().isFinishing && (loadingDialog == null || !loadingDialog?.isShowing!!)) {
-//                loadingDialog = LoadingDialog(requireActivity(), text)
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-
         (requireActivity() as SkeletonActivity).showLoadingDialog(text)
     }
 
     override fun dismissLoadingDialog() {
-//        try {
-//            if (!requireActivity().isFinishing && !requireActivity().isDestroyed && loadingDialog != null && loadingDialog?.isShowing!!) {
-//                loadingDialog?.cancel()
-//                loadingDialog = null
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
         (requireActivity() as SkeletonActivity).dismissLoadingDialog()
     }
 
