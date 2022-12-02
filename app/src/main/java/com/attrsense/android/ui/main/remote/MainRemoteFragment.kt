@@ -206,7 +206,7 @@ class MainRemoteFragment :
         when (response) {
             is ResponseData.OnFailed -> {
                 showToast("解压失败！")
-                Log.e("print_logs", "MainRemoteFragment::loadData: ${response.throwable}")
+                Log.e("print_logs", "MainRemoteFragment::loadData: ${response.throwable.message}")
                 mAdapter.loadMoreModule.loadMoreFail()
             }
             is ResponseData.OnSuccess -> {

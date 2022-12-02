@@ -17,5 +17,5 @@ interface OnViewModelCallback {
 
     fun removeDisposable(disposable: Disposable)
 
-    fun showToast(text: String = "", isLong: Boolean = false)
+    fun showToast(text: String? = "", isLong: Boolean = false)
 }

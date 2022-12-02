@@ -15,7 +15,6 @@ import java.lang.reflect.Type
 class SkeletonConverterFactory(private val gson: Gson) : Converter.Factory() {
 
     companion object {
-
         @JvmStatic
         fun create(): SkeletonConverterFactory {
             return create(Gson())

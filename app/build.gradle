@@ -7,9 +7,12 @@ plugins {
     id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
 }
-kapt {
-    correctErrorTypes = true
-}
+
+apply from: '../script/AppConfig.gradle'
+
+//kapt {
+//    correctErrorTypes = true
+//}
 android {
     signingConfigs {
         release {
@@ -19,17 +22,11 @@ android {
             keyPassword 'attrsense'
         }
     }
+
     namespace 'com.attrsense.android'
-    compileSdk rootProject.ext.android["compileSdkVersion"]
 
     defaultConfig {
         applicationId rootProject.ext.android["applicationId"]
-        minSdk rootProject.ext.android["minSdkVersion"]
-        targetSdk rootProject.ext.android["targetSdkVersion"]
-        versionCode rootProject.ext.android["versionCode"]
-        versionName rootProject.ext.android["versionName"]
-        multiDexEnabled = rootProject.ext.android["multiDexEnabled"]
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -38,28 +35,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-    }
-    compileOptions {
-        sourceCompatibility rootProject.ext.android["javaVersion"]
-        targetCompatibility rootProject.ext.android["javaVersion"]
-    }
-    kotlinOptions {
-        jvmTarget = rootProject.ext.android["jvmTarget"]
-    }
-    externalNativeBuild {
-        cmake {
-            path file('src/main/cpp/CMakeLists.txt')
-            version rootProject.ext.android["cmakeVersion"]
-        }
-    }
-    buildFeatures {
-        viewBinding true
-        dataBinding true
     }
 
     sourceSets {
@@ -74,6 +49,15 @@ android {
             outputFileName = "${buildType.name}_v${defaultConfig.versionName}_${defaultConfig.versionCode}.apk"
         }
     }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version rootProject.ext.android["cmakeVersion"]
+        }
+    }
+
+
 }
 
 
@@ -85,6 +69,8 @@ dependencies {
     kapt rootProject.ext.dependencies["glideCompiler"]
 
     implementation files("libs/JniLibs-release_ANF230_V3.1_beta1.6.aar")
+
+//    implementation files("libs/JniLibs-release.aar")
 
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")

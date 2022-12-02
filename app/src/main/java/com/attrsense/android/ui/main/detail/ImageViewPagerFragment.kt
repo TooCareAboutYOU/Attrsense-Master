@@ -39,7 +39,7 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
     BaseDataBindingVMFragment<FragmentImageViewPagerBinding, ImageViewPagerViewModel>() {
 
     private lateinit var entity: AnfImageEntity
-    private var bitmap: Bitmap? = null
+    private var mBitmap: Bitmap? = null
 
     interface OnViewPagerFragmentListener {
         fun onDismiss()
@@ -114,17 +114,18 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
             .into(mDataBinding.acIvPhotoThumbView)
 
         lifecycleScope.launch {
-            bitmap = withContext(Dispatchers.IO) {
+            mBitmap = withContext(Dispatchers.IO) {
                 JniInterface.decoderCommitPath2Buffer(entity.anfImage)
             }
+
             mDataBinding.acTvInfo.text =
                 StringBuilder().append("原JPG：${ConvertUtils.byte2FitMemorySize(entity.srcSize.toLong())}")
                     .append("\n").append("ANF：${FileUtils.getSize(entity.anfImage)}").append("\n")
-                    .append("宽：${bitmap?.width}").append("\n").append("高：${bitmap?.height}")
+                    .append("宽：${mBitmap?.width}").append("\n").append("高：${mBitmap?.height}")
                     .toString()
 
             Glide.with(this@ImageViewPagerFragment)
-                .load(bitmap)
+                .load(mBitmap)
                 .error(R.drawable.icon_bad_image)
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -193,7 +194,7 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
             dismissLoadingDialog()
             when (it) {
                 is ResponseData.OnFailed -> {
-                    showToast("保存失败：${it.throwable}")
+                    showToast("保存失败：${it.throwable.message}")
                 }
                 is ResponseData.OnSuccess -> {
                     showToast("保存成功!")
@@ -208,9 +209,9 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
     }
 
     private fun recycleBitmap() {
-        if (bitmap != null) {
-            bitmap?.recycle()
-            bitmap = null
+        if (mBitmap != null) {
+            mBitmap?.recycle()
+            mBitmap = null
         }
     }
 }

@@ -15,7 +15,6 @@ import com.attrsense.android.ui.feedback.FeedbackActivity
 import com.attrsense.android.ui.login.LoginActivity
 import com.attrsense.android.ui.main.MainActivity
 import com.attrsense.android.ui.statistics.StatisticsActivity
-import com.attrsense.android.util.FilesHelper
 import com.attrsense.ui.library.expand.singleClick
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -38,7 +37,7 @@ class MainMyFragment : BaseDataBindingVMFragment<FragmentMainMyBinding, MainMyVi
             when (it) {
                 is ResponseData.OnFailed -> {
                     showToast("退出异常！")
-                    Log.e("print_logs", "MainMyFragment::jumpActivity: ${it.throwable}")
+                    Log.e("print_logs", "MainMyFragment::jumpActivity: ${it.throwable.message}")
                 }
                 is ResponseData.OnSuccess -> {
                     toActivity(LoginActivity::class.java)

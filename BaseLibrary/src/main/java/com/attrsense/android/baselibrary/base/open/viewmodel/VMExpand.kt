@@ -34,7 +34,7 @@ fun <T : Any> Flow<ResponseData<T>>.showLoading(vm: ViewModel): Flow<ResponseDat
         }
     }.catch { e ->
         if (BuildConfig.DEBUG) {
-            Log.e("print_logs", "showLoading: $e")
+            Log.e("print_logs", "VMExpand::catch: $e")
         }
         when (vm) {
             is SkeletonViewModel -> {

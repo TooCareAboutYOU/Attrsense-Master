@@ -95,7 +95,7 @@ open class SkeletonFragment : RxFragment(), OnViewModelCallback {
         (requireActivity() as SkeletonActivity).dismissLoadingDialog()
     }
 
-    override fun showToast(text: String, isLong: Boolean) {
+    override fun showToast(text: String?, isLong: Boolean) {
         (requireActivity() as SkeletonActivity).showToast(text, isLong)
     }
 

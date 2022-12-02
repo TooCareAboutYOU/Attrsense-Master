@@ -35,7 +35,7 @@ class MainMyViewModel @Inject constructor(
             it.apply {
                 when (it) {
                     is ResponseData.OnFailed -> {
-                        showToast(it.throwable.toString())
+                        showToast(it.throwable.message)
                     }
                     is ResponseData.OnSuccess -> {
                         clearUserByToken(it)

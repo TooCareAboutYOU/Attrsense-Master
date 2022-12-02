@@ -2,7 +2,9 @@ package com.attrsense.android.baselibrary.base.open.repository
 
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 /**
  * author : zhangshuai@attrsense.com

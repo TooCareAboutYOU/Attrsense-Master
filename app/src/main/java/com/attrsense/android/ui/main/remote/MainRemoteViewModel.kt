@@ -55,7 +55,7 @@ class MainRemoteViewModel @Inject constructor(
                         is ResponseData.OnFailed -> {
                             Log.e(
                                 "print_logs",
-                                "MainRemoteViewModel::getRemoteFiles: ${this.throwable}"
+                                "MainRemoteViewModel::getRemoteFiles: ${this.throwable.message}"
                             )
                         }
                         is ResponseData.OnSuccess -> {
@@ -92,7 +92,7 @@ class MainRemoteViewModel @Inject constructor(
                     is ResponseData.OnFailed -> {
                         Log.e(
                             "print_logs",
-                            "MainRemoteViewModel::getRemoteFiles: ${this.throwable}"
+                            "MainRemoteViewModel::getRemoteFiles: ${this.throwable.message}"
                         )
                     }
                     is ResponseData.OnSuccess -> {
@@ -185,7 +185,7 @@ class MainRemoteViewModel @Inject constructor(
                     is ResponseData.OnFailed -> {
                         Log.e(
                             "print_logs",
-                            "MainLocalViewModel::deleteByThumb: 添加失败！${it.throwable}"
+                            "MainLocalViewModel::deleteByThumb: 添加失败！${it.throwable.message}"
                         )
                     }
                     is ResponseData.OnSuccess -> {

@@ -47,7 +47,7 @@ abstract class SkeletonAndroidViewModel : AndroidViewModel(SkeletonApplication.g
         this.mOnViewModelCallback?.removeDisposable(disposable)
     }
 
-    override fun showToast(text: String, isLong: Boolean) {
+    override fun showToast(text: String?, isLong: Boolean) {
         this.mOnViewModelCallback?.showToast(text, isLong)
     }
 

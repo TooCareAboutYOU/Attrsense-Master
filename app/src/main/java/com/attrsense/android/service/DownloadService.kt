@@ -65,7 +65,7 @@ class DownloadService : Service() {
                             is ResponseData.OnFailed -> {
                                 Log.e(
                                     "print_logs",
-                                    "DownloadService::onStartCommand: ${it.throwable}"
+                                    "DownloadService::onStartCommand: ${it.throwable.message}"
                                 )
                             }
                             is ResponseData.OnSuccess -> {

@@ -35,7 +35,7 @@ class ImageViewPagerViewModel @Inject constructor(
                 is ResponseData.OnFailed -> {
                     Log.e(
                         "print_logs",
-                        "MainLocalViewModel::addEntities: 添加失败！${it.throwable}"
+                        "MainLocalViewModel::addEntities: 添加失败！${it.throwable.message}"
                     )
                 }
                 is ResponseData.OnSuccess -> {

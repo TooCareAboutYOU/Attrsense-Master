@@ -1,0 +1,33 @@
+kapt {
+    correctErrorTypes = true
+}
+android {
+    compileSdk rootProject.ext.android["compileSdkVersion"]
+
+    defaultConfig {
+        minSdk rootProject.ext.android["minSdkVersion"]
+        targetSdk rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        multiDexEnabled = rootProject.ext.android["multiDexEnabled"]
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments = [AROUTER_MODULE_NAME: project.getName()]
+//            }
+//        }
+    }
+    compileOptions {
+        sourceCompatibility rootProject.ext.android["javaVersion"]
+        targetCompatibility rootProject.ext.android["javaVersion"]
+    }
+    kotlinOptions {
+        jvmTarget = rootProject.ext.android["jvmTarget"]
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+
+}

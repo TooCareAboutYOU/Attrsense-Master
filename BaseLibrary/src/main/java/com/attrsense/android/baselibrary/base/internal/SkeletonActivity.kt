@@ -108,7 +108,7 @@ abstract class SkeletonActivity : RxAppCompatActivity(), OnViewModelCallback {
         }
     }
 
-    override fun showToast(text: String, isLong: Boolean) {
+    override fun showToast(text: String?, isLong: Boolean) {
         val state = if (isLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
         if (isMainThread()) {
             Toast.makeText(this, text, state).show()

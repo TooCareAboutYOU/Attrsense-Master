@@ -1,5 +1,6 @@
 package com.attrsense.android.baselibrary.http.convert
 
+import android.util.Log
 import com.attrsense.android.baselibrary.http.AttrException
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
@@ -22,11 +23,12 @@ class SkeletonResponseBodyConverter<T> constructor(
         try {
             val obj = JSONObject(jsonString)
             val code = obj.getString("errorCode")
+            Log.i("print_logs", "SkeletonResponseBodyConverter::convert: $jsonString")
             if (code != "200") {
                 val message = obj.getString("message")
-                throw AttrException(code, errorMsg = message, Throwable(message))
+                throw Throwable("$code：$message")
             }
-            return adapter.fromJson(obj.getString("data"))
+            return adapter.fromJson(jsonString)//obj.getString("data")
         } catch (e: Exception) {
             e.printStackTrace()
             throw AttrException(cause = e)

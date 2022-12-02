@@ -39,7 +39,7 @@ class MainLocalViewModel @Inject constructor(
                     is ResponseData.OnFailed -> {
                         Log.e(
                             "print_logs",
-                            "MainLocalViewModel::addEntities: 添加失败！${data.throwable}"
+                            "MainLocalViewModel::addEntities: 添加失败！${data.throwable.message}"
                         )
                     }
                     is ResponseData.OnSuccess -> {
@@ -78,7 +78,7 @@ class MainLocalViewModel @Inject constructor(
         databaseRepository.deleteByAnf(userDataManager.getMobile(), anfImage).collectInLaunch {
             when (it) {
                 is ResponseData.OnFailed -> {
-                    Log.e("print_logs", "MainLocalViewModel::deleteByAnfPath: ${it.throwable}")
+                    Log.e("print_logs", "MainLocalViewModel::deleteByAnfPath: ${it.throwable.message}")
                 }
                 is ResponseData.OnSuccess -> {
                     deleteLiveData.value = position

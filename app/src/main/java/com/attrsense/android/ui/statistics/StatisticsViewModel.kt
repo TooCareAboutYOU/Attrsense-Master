@@ -31,7 +31,7 @@ class StatisticsViewModel @Inject constructor(
         appRepository.getUserInfo().showLoading(this).collectInLaunch {
             when (it) {
                 is ResponseData.OnFailed -> {
-                    showToast(it.throwable.toString())
+                    showToast(it.throwable.message)
                 }
                 is ResponseData.OnSuccess -> {
                     it.value?.data?.let { bean ->
@@ -46,7 +46,7 @@ class StatisticsViewModel @Inject constructor(
         databaseRepository.getLocalData(appRepository.userManger.getMobile()).collectInLaunch {
             when (it) {
                 is ResponseData.OnFailed -> {
-                    Log.e("print_logs", "StatisticsViewModel::getLocalData: ${it.throwable}")
+                    Log.e("print_logs", "StatisticsViewModel::getLocalData: ${it.throwable.message}")
                 }
                 is ResponseData.OnSuccess -> {
                     it.value?.let { entity ->

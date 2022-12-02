@@ -90,7 +90,7 @@ class LoginActivity : BaseDataBindingVMActivity<ActivityLoginBinding, LoginViewM
         mViewModel.loginLivedata.observe(this) {
             when (it) {
                 is ResponseData.OnFailed -> {
-                    showToast("登录失败！${it.throwable}")
+                    showToast("登录失败！${it.throwable.message}")
                 }
                 is ResponseData.OnSuccess -> {
                     showToast("登录成功！")

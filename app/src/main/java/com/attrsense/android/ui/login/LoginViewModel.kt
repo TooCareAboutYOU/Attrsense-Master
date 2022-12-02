@@ -1,5 +1,6 @@
 package com.attrsense.android.ui.login
 
+import android.util.Log
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
@@ -27,7 +28,7 @@ class LoginViewModel @Inject constructor(
             .collectInLaunch {
                 when (it) {
                     is ResponseData.OnFailed -> {
-
+                        showToast(it.throwable.message)
                     }
                     is ResponseData.OnSuccess -> {
                         saveUser(mobile, it.value?.data?.token, it.value?.data?.refresh_token)

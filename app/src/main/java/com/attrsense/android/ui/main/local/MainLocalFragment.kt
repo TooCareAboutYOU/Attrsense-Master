@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
@@ -109,8 +108,7 @@ class MainLocalFragment :
         mViewModel.getLiveData.observe(this) {
             when (it) {
                 is ResponseData.OnFailed -> {
-                    showToast(it.throwable.toString())
-                    Log.e("print_logs", "MainLocalFragment::liveDataObserves: ${it.throwable}")
+                    showToast(it.throwable.message)
                 }
                 is ResponseData.OnSuccess -> {
                     it.value?.apply {
@@ -173,8 +171,7 @@ class MainLocalFragment :
                             mViewModel.addEntities(mutableListOf(entity))
                         }
                     } else {
-                        val paths =
-                            data.getStringArrayListExtra(SelectorBottomDialog.KEY_RESULT) as ArrayList // 图片集合地址
+                        val paths = data.getStringArrayListExtra(SelectorBottomDialog.KEY_RESULT) as ArrayList // 图片集合地址
                         val anfPaths = JniInterface.encoderCommitList(paths)
                         if (anfPaths.isNotEmpty()) {
                             localList.clear()
@@ -191,7 +188,6 @@ class MainLocalFragment :
                                     srcSize = FileUtils.getFileLength(paths[index]).toInt(),
                                     isLocal = true
                                 )
-
                                 localList.add(entity)
                             }
                             mViewModel.addEntities(localList)
