@@ -32,29 +32,27 @@ fun <T : Any> Flow<ResponseData<T>>.showLoading(vm: ViewModel): Flow<ResponseDat
             }
             else -> {}
         }
-    }.catch { e ->
+    }.catchs().onCompletion {
+        if (BuildConfig.DEBUG) {
+            Log.e("print_logs", "VMExpand::onCompletion")
+        }
+        when (vm) {
+            is SkeletonViewModel -> {
+                vm.dismissLoadingDialog()
+            }
+            is SkeletonAndroidViewModel -> {
+                vm.dismissLoadingDialog()
+            }
+            else -> {}
+        }
+    }
+}
+
+fun <T : Any> Flow<ResponseData<T>>.catchs(): Flow<ResponseData<T>> {
+    return this.catch { e ->
         if (BuildConfig.DEBUG) {
             Log.e("print_logs", "VMExpand::catch: $e")
         }
-        when (vm) {
-            is SkeletonViewModel -> {
-                vm.dismissLoadingDialog()
-            }
-            is SkeletonAndroidViewModel -> {
-                vm.dismissLoadingDialog()
-            }
-            else -> {}
-        }
         emit(ResponseData.OnFailed(e))
-    }.onCompletion {
-        when (vm) {
-            is SkeletonViewModel -> {
-                vm.dismissLoadingDialog()
-            }
-            is SkeletonAndroidViewModel -> {
-                vm.dismissLoadingDialog()
-            }
-            else -> {}
-        }
     }
 }

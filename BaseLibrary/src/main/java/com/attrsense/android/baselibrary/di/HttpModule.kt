@@ -41,9 +41,7 @@ import javax.net.ssl.*
 @InstallIn(SingletonComponent::class)
 object HttpModule {
 
-    private const val TIME_OUT_30S = 30L
-    private const val TIME_OUT_20S = 20L
-    private val TIME_OUT = if (BuildConfig.DEBUG) TIME_OUT_30S else TIME_OUT_20S
+    private val TIME_OUT = if (BuildConfig.DEBUG) 20L else 25L
 
     @Singleton
     @Provides
@@ -73,7 +71,7 @@ object HttpModule {
         override fun intercept(chain: Interceptor.Chain): Response {
             val request = chain.request()
             val builder = request.newBuilder().apply {
-                val token=mmkvUtils.getString("key_user_token")
+                val token = mmkvUtils.getString("key_user_token")
                 token?.let {
                     val value = StringUtils.encodeHeadInfo(it)
                     addHeader(Authorization, value)

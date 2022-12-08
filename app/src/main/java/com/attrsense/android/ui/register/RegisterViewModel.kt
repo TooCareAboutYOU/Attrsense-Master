@@ -1,6 +1,6 @@
 package com.attrsense.android.ui.register
 
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseBaseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
@@ -18,7 +18,7 @@ class RegisterViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : SkeletonViewModel() {
 
-    val registerLivedata = ResponseMutableBaseLiveData<EmptyBean?>()
+    val registerLivedata = ResponseBaseMutableLiveData<EmptyBean?>()
 
     fun register(mobile: String, code: String) {
         appRepository.register(mobile, code)

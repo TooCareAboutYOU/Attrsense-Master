@@ -2,7 +2,7 @@ package com.attrsense.android.ui.main.remote
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseBaseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonAndroidViewModel
@@ -27,8 +27,8 @@ class MainRemoteViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : SkeletonAndroidViewModel() {
 
-    val getAllLiveData = ResponseMutableBaseLiveData<ImagesBean?>()
-    val uploadLiveData = ResponseMutableBaseLiveData<ImagesBean?>()
+    val getAllLiveData = ResponseBaseMutableLiveData<ImagesBean?>()
+    val uploadLiveData = ResponseBaseMutableLiveData<ImagesBean?>()
 
     val deleteLiveData = ResponseMutableLiveData<Int>()
 

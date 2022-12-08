@@ -1,7 +1,6 @@
 package com.attrsense.android.ui.login
 
-import android.util.Log
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseBaseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
@@ -21,7 +20,7 @@ class LoginViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : SkeletonViewModel() {
 
-    val loginLivedata = ResponseMutableBaseLiveData<LoginBean?>()
+    val loginLivedata = ResponseBaseMutableLiveData<LoginBean?>()
 
     fun login(mobile: String, code: String) {
         appRepository.login(mobile, code).showLoading(this)

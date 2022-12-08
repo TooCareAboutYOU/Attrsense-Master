@@ -2,7 +2,7 @@ package com.attrsense.android.ui.main.my
 
 import android.os.Environment
 import com.attrsense.android.BuildConfig
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseBaseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
@@ -27,7 +27,7 @@ class MainMyViewModel @Inject constructor(
 ) :
     SkeletonViewModel() {
 
-    val logoutLivedata = ResponseMutableBaseLiveData<EmptyBean?>()
+    val logoutLivedata = ResponseBaseMutableLiveData<EmptyBean?>()
 
     fun logout() {
         //网络接口退出

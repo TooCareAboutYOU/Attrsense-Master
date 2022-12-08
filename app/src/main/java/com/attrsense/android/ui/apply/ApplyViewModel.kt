@@ -1,6 +1,6 @@
 package com.attrsense.android.ui.apply
 
-import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableBaseLiveData
+import com.attrsense.android.baselibrary.base.open.livedata.ResponseBaseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
 import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
@@ -18,7 +18,7 @@ class ApplyViewModel @Inject constructor(
     private val appRepository: AppRepository
 ) : SkeletonViewModel() {
 
-    val applyLiveData = ResponseMutableBaseLiveData<EmptyBean?>()
+    val applyLiveData = ResponseBaseMutableLiveData<EmptyBean?>()
 
     /**
      * 提交申请

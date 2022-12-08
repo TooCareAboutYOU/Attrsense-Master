@@ -9,17 +9,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.attrsense.android.R
 import com.attrsense.android.baselibrary.base.open.activity.BaseDataBindingVMActivity
-import com.attrsense.ui.library.expand.singleClick
-import com.attrsense.ui.library.recycler.GridLayoutDecoration
 import com.attrsense.android.databinding.ActivityFeedbackBinding
 import com.attrsense.android.ui.feedback.entity.ItemMultipleEntity
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
+import com.attrsense.ui.library.expand.singleClick
+import com.attrsense.ui.library.recycler.GridLayoutDecoration
 import com.jakewharton.rxbinding4.widget.textChanges
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.ArrayList
 
 /**
  * 意见反馈
@@ -93,8 +92,9 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
                 showToast("提交成功！")
                 mDataBinding.acEtDescription.text = null
                 mList.clear()
-                mList.add(ItemMultipleEntity(ItemMultipleEntity.PLACE_HOLDER))
-                mAdapter.notifyItemInserted(0)
+//                mList.add(ItemMultipleEntity(ItemMultipleEntity.PLACE_HOLDER))
+//                mAdapter.notifyItemInserted(0)
+                mAdapter.addData(ItemMultipleEntity(ItemMultipleEntity.PLACE_HOLDER))
             } else {
                 showToast("提交失败,请重试！")
             }
