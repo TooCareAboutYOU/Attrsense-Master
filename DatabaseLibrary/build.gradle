@@ -16,12 +16,12 @@ android {
     namespace 'com.attrsense.database'
 //    compileSdk rootProject.ext.android["compileSdkVersion"]
 //
-//    defaultConfig {
+    defaultConfig {
 //        minSdk rootProject.ext.android["minSdkVersion"]
 //        targetSdk rootProject.ext.android["targetSdkVersion"]
 //        multiDexEnabled = rootProject.ext.android["multiDexEnabled"]
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        consumerProguardFiles "consumer-rules.pro"
+        consumerProguardFiles "consumer-rules.pro"
 //
 ////        kapt {
 //////            includeCompileClasspath = false
@@ -29,14 +29,14 @@ android {
 ////                arg("AROUTER_MODULE_NAME", project.getName())
 ////            }
 ////        }
-//    }
-//
-//    buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
-//    }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
 //    compileOptions {
 //        sourceCompatibility rootProject.ext.android["javaVersion"]
 //        targetCompatibility rootProject.ext.android["javaVersion"]

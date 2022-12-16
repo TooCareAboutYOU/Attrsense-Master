@@ -42,6 +42,7 @@ class AttrSenseApplication : SkeletonApplication() {
         registerReceiver()
     }
 
+
     /**
      * ---------------------------------------------------------------------------------------------
      *                                          优美的分割线
@@ -72,6 +73,7 @@ class AttrSenseApplication : SkeletonApplication() {
      */
     fun sendReceiver(intent: Intent, isSync: Boolean = false) {
         getReceiver.apply {
+            intent.action = ACTION
             if (isSync) {
                 sendBroadcastSync(intent)
             } else {

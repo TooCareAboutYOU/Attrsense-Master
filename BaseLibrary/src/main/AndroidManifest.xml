@@ -4,17 +4,17 @@
 
     <application>
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.providers.CameraTempFileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true"
-            tools:replace="name,authorities,exported,grantUriPermissions">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                tools:replace="android:name,android:resource"
-                android:resource="@xml/camera_temp_file_path" />
-        </provider>
+<!--        <provider-->
+<!--            android:name="androidx.core.content.FileProvider"-->
+<!--            android:authorities="${applicationId}.providers.CameraTempFileProvider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true"-->
+<!--            tools:replace="name,authorities,exported,grantUriPermissions">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                tools:replace="android:name,android:resource"-->
+<!--                android:resource="@xml/camera_temp_file_path" />-->
+<!--        </provider>-->
     </application>
 
 </manifest>

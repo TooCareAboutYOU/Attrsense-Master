@@ -14,14 +14,14 @@ apply from: '../script/AppConfig.gradle'
 //    correctErrorTypes = true
 //}
 android {
-    signingConfigs {
-        release {
-            storeFile file('/Users/zhangshuai/Project____/Android/attr/Attrsense-Master/attrsense.jks')
-            storePassword 'attrsense'
-            keyAlias 'attrsense'
-            keyPassword 'attrsense'
-        }
-    }
+//    signingConfigs {
+//        release {
+//            storeFile file('/Users/zhangshuai/Project____/Android/attr/Attrsense-Master/attrsense.jks')
+//            storePassword 'attrsense'
+//            keyAlias 'attrsense'
+//            keyPassword 'attrsense'
+//        }
+//    }
 
     namespace 'com.attrsense.android'
 
