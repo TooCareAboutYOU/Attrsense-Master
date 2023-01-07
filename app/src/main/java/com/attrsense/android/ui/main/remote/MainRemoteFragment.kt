@@ -257,7 +257,7 @@ class MainRemoteFragment :
 
     private fun upload(list: List<String>) {
         showLoadingDialog("压缩中...")
-        mViewModel.uploadFile("4", "4", list)
+        mViewModel.uploadFile("3", "3", list)
     }
 
     private fun requestAllFilesPermission(){

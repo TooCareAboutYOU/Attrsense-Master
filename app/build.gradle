@@ -56,6 +56,6 @@ dependencies {
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")
 
-    implementation files("libs/JniLibs-release_230_V3.1_beta2.5.aar")
+    implementation files("libs/JniLibs-release_v3.1_beta3.0.aar")
 }
 
