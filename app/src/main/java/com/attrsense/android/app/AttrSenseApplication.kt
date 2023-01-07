@@ -4,11 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Looper
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.attrsense.android.baselibrary.app.SkeletonApplication
-import com.example.snpetest.JniInterface
+import com.example.snpetest.AttrManager
 import dagger.hilt.android.HiltAndroidApp
 
 /**
@@ -30,15 +29,7 @@ class AttrSenseApplication : SkeletonApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        Looper.myQueue().addIdleHandler {
-            try {
-                JniInterface.initialAll(applicationContext)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            false
-        }
-
+        AttrManager.init(this)
         registerReceiver()
     }
 

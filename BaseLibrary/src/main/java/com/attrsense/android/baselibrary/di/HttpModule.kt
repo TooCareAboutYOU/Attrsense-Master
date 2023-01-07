@@ -2,7 +2,6 @@ package com.attrsense.android.baselibrary.di
 
 import android.annotation.SuppressLint
 import com.attrsense.android.baselibrary.BuildConfig
-import com.attrsense.android.baselibrary.config.BaseConfig
 import com.attrsense.android.baselibrary.http.HttpDns
 import com.attrsense.android.baselibrary.http.HttpEventListener
 import com.attrsense.android.baselibrary.http.convert.SkeletonConverterFactory
@@ -85,7 +84,7 @@ object HttpModule {
     @Provides
     fun provideRetrofit(client: OkHttpClient.Builder): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BaseConfig.BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(client.build())
             .addConverterFactory(SkeletonConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())

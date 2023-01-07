@@ -10,19 +10,7 @@ plugins {
 
 apply from: '../script/AppConfig.gradle'
 
-//kapt {
-//    correctErrorTypes = true
-//}
 android {
-//    signingConfigs {
-//        release {
-//            storeFile file('/Users/zhangshuai/Project____/Android/attr/Attrsense-Master/attrsense.jks')
-//            storePassword 'attrsense'
-//            keyAlias 'attrsense'
-//            keyPassword 'attrsense'
-//        }
-//    }
-
     namespace 'com.attrsense.android'
 
     defaultConfig {
@@ -56,8 +44,6 @@ android {
             version rootProject.ext.android["cmakeVersion"]
         }
     }
-
-
 }
 
 
@@ -67,12 +53,9 @@ dependencies {
     implementation rootProject.ext.dependencies["hiltDaggerAndroid"]
     kapt rootProject.ext.dependencies["hiltDaggerCompiler"]
     kapt rootProject.ext.dependencies["glideCompiler"]
-
-    implementation files("libs/JniLibs-release_ANF230_V3.1_beta1.6.aar")
-
-//    implementation files("libs/JniLibs-release.aar")
-
     implementation project(":DatabaseLibrary")
     implementation project(":BaseLibrary")
+
+    implementation files("libs/JniLibs-release_230_V3.1_beta2.5.aar")
 }
 

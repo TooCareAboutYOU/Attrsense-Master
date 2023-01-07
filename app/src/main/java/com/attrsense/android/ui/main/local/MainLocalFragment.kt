@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +25,7 @@ import com.attrsense.database.db.entity.AnfImageEntity
 import com.attrsense.ui.library.dialog.SelectorBottomDialog
 import com.attrsense.ui.library.recycler.GridLayoutDecoration
 import com.blankj.utilcode.util.FileUtils
-import com.example.snpetest.JniInterface
+import com.example.snpetest.AttrManager
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +43,7 @@ class MainLocalFragment :
     private lateinit var intentActivityResultLauncher: ActivityResultLauncher<Intent>
 
 
-    private val localList: MutableList<AnfImageEntity> = mutableListOf()
+    private val localList: MutableList<AnfImageEntity> by lazy { mutableListOf() }
     private lateinit var mAdapter: LocalImageAdapter
 
     override fun setLayoutResId(): Int = R.layout.fragment_main_local
@@ -133,9 +134,13 @@ class MainLocalFragment :
                 if (!Environment.isExternalStorageManager()) {
                     requestAllFilesPermission()
                 } else {
+                    Log.i("print_logs", "MainLocalFragment::initListener: 1")
+
                     ImageViewPagerFragment.showDialog(requireActivity(), position, mAdapter.data)
                 }
             } else {
+                Log.i("print_logs", "MainLocalFragment::initListener: 2")
+
                 ImageViewPagerFragment.showDialog(requireActivity(), position, mAdapter.data)
             }
         }
@@ -157,22 +162,24 @@ class MainLocalFragment :
                 lifecycleScope.launch(Dispatchers.IO) {
                     if (requestCode == SelectorBottomDialog.CAMERA_REQUEST_CODE) {
                         val path = data.getStringExtra(SelectorBottomDialog.KEY_RESULT) // 图片地址
-                        val anfPath = JniInterface.encoderCommit(path)
-                        if (anfPath.isNotEmpty()) {
+                        val anfPath =   path?.let { AttrManager.encoder(it) }
+                        anfPath?.let {
                             val entity = AnfImageEntity(
                                 token = userDataManager.getToken(),
                                 mobile = userDataManager.getMobile(),
                                 originalImage = path,
                                 thumbImage = FilesHelper.saveThumb(requireActivity(), path),
-                                anfImage = anfPath,
+                                anfImage = it,
                                 srcSize = FileUtils.getFileLength(path).toInt(),
                                 isLocal = true
                             )
                             mViewModel.addEntities(mutableListOf(entity))
                         }
+
+//                        JniInterface.encoderCommit(path)
                     } else {
                         val paths = data.getStringArrayListExtra(SelectorBottomDialog.KEY_RESULT) as ArrayList // 图片集合地址
-                        val anfPaths = JniInterface.encoderCommitList(paths)
+                        val anfPaths =  AttrManager.encoders(paths)
                         if (anfPaths.isNotEmpty()) {
                             localList.clear()
                             anfPaths.forEachIndexed { index, anfPath ->
@@ -192,6 +199,7 @@ class MainLocalFragment :
                             }
                             mViewModel.addEntities(localList)
                         }
+                        //JniInterface.encoderCommitList(paths)
                     }
                 }
             } else {

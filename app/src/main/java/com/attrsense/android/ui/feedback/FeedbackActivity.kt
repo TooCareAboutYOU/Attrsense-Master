@@ -32,7 +32,7 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
     }
 
 
-    private lateinit var mAdapter: FeedbackPictureSelectorAdapter
+    private val mAdapter= FeedbackPictureSelectorAdapter(mList)
 
     //记录需要添加图片的item位置
     private var clickPosition: Int = 0
@@ -54,7 +54,7 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
             }
         }
 
-        mAdapter = FeedbackPictureSelectorAdapter(mList)
+//        mAdapter = FeedbackPictureSelectorAdapter(mList)
 
         mDataBinding.recyclerview.apply {
             layoutManager =
@@ -181,7 +181,6 @@ class FeedbackActivity : BaseDataBindingVMActivity<ActivityFeedbackBinding, Feed
                         }
                     }
                 }
-
                 mAdapter.notifyDataSetChanged()
             }
         }

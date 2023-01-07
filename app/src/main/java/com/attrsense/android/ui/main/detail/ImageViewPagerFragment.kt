@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -26,11 +27,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.example.snpetest.JniInterface
+import com.example.snpetest.AttrManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 
 
@@ -114,8 +113,12 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
             .into(mDataBinding.acIvPhotoThumbView)
 
         lifecycleScope.launch {
-            mBitmap = withContext(Dispatchers.IO) {
-                JniInterface.decoderCommitPath2Buffer(entity.anfImage)
+//            mBitmap = withContext(Dispatchers.IO) {
+//                JniInterface.decoderCommitPath2Buffer(entity.anfImage)
+//            }
+
+            mBitmap = entity.anfImage?.let {
+                AttrManager.decoderBitmap(it)
             }
 
             mDataBinding.acTvInfo.text =
@@ -136,6 +139,7 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
+                        Log.i("print_logs", "ImageViewPagerFragment::onLoadFailed: ")
                         mDataBinding.loadingProgress.visibility = View.GONE
                         return false
                     }
@@ -147,6 +151,7 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
+                        Log.i("print_logs", "ImageViewPagerFragment::onResourceReady: ")
                         mDataBinding.acIvPhotoThumbView.visibility = View.GONE
                         mDataBinding.loadingProgress.visibility = View.GONE
                         return false
@@ -171,17 +176,32 @@ class ImageViewPagerFragment constructor(private val listener: OnViewPagerFragme
                 lifecycleScope.launch {
                     if (!TextUtils.isEmpty(entity.anfImage)) {
                         if (!File(entity.cacheImage).exists()) {
-                            withContext(Dispatchers.IO) {
-                                val path = JniInterface.decoderCommit(entity.anfImage)
-                                entity.cacheImage = path
-                                mViewModel.update(entity)
-                                MediaScannerConnection.scanFile(
-                                    context,
-                                    arrayOf(path),
-                                    null,
-                                    null
-                                )
+                            Log.i("print_logs", "路径: ${entity.anfImage}")
+
+                            val path = entity.anfImage?.let {
+                                AttrManager.decoder(it)
                             }
+                            entity.cacheImage = path
+                            mViewModel.update(entity)
+                            MediaScannerConnection.scanFile(
+                                context,
+                                arrayOf(path),
+                                null,
+                                null
+                            )
+
+//                            withContext(Dispatchers.IO) {
+//                                JniInterface.decoderCommit(entity.anfImage)
+//                                val path = JniInterface.decoderCommit(entity.anfImage)
+//                                entity.cacheImage = path
+//                                mViewModel.update(entity)
+//                                MediaScannerConnection.scanFile(
+//                                    context,
+//                                    arrayOf(path),
+//                                    null,
+//                                    null
+//                                )
+//                            }
                         } else {
                             showToast("文件已保存!")
                         }
