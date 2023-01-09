@@ -3,7 +3,7 @@ package com.attrsense.android.ui.login
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseBaseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
-import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
+import com.attrsense.android.baselibrary.base.open.viewmodel.showLoadingAndCatch
 import com.attrsense.android.model.LoginBean
 import com.attrsense.android.repository.AppRepository
 import com.attrsense.database.db.entity.UserEntity
@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(
     val loginLivedata = ResponseBaseMutableLiveData<LoginBean?>()
 
     fun login(mobile: String, code: String) {
-        appRepository.login(mobile, code).showLoading(this)
+        appRepository.login(mobile, code).showLoadingAndCatch(this)
             .collectInLaunch {
                 when (it) {
                     is ResponseData.OnFailed -> {

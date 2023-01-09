@@ -1,10 +1,12 @@
 package com.attrsense.android.baselibrary.di
 
 import android.annotation.SuppressLint
+import android.util.Log
 import com.attrsense.android.baselibrary.BuildConfig
 import com.attrsense.android.baselibrary.http.HttpDns
 import com.attrsense.android.baselibrary.http.HttpEventListener
 import com.attrsense.android.baselibrary.http.convert.SkeletonConverterFactory
+import com.attrsense.android.baselibrary.http.interceptor.TimeOutInterceptor
 import com.attrsense.android.baselibrary.util.MMKVUtils
 import com.attrsense.android.baselibrary.util.StringUtils
 import com.google.gson.Gson
@@ -40,7 +42,7 @@ import javax.net.ssl.*
 @InstallIn(SingletonComponent::class)
 object HttpModule {
 
-    private val TIME_OUT = if (BuildConfig.DEBUG) 20L else 25L
+    private val TIME_OUT = if (BuildConfig.DEBUG) 30L else 30L
 
     @Singleton
     @Provides
@@ -61,6 +63,7 @@ object HttpModule {
                     addInterceptor(interceptorLogger)
                     addInterceptor(OkHttpProfilerInterceptor())
                 }
+                addInterceptor(TimeOutInterceptor())
             }
     }
 
@@ -79,6 +82,7 @@ object HttpModule {
             return chain.proceed(builder.build())
         }
     }
+
 
     @Singleton
     @Provides
@@ -124,6 +128,7 @@ object HttpModule {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                Log.e("print_logs", "HttpLogger: ${e.message}")
             }
         }
     }

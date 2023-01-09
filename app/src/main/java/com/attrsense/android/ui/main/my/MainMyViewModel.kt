@@ -7,7 +7,7 @@ import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
-import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
+import com.attrsense.android.baselibrary.base.open.viewmodel.showLoadingAndCatch
 import com.attrsense.android.repository.AppRepository
 import com.attrsense.database.repository.DatabaseRepository
 import com.blankj.utilcode.util.FileUtils
@@ -31,7 +31,7 @@ class MainMyViewModel @Inject constructor(
 
     fun logout() {
         //网络接口退出
-        appRepository.logout().showLoading(this).collectInLaunch {
+        appRepository.logout().showLoadingAndCatch(this).collectInLaunch {
             it.apply {
                 when (it) {
                     is ResponseData.OnFailed -> {

@@ -65,6 +65,7 @@ class MainActivity : BaseDataBindingVMActivity<ActivityMainBinding, MainViewMode
         ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
+            mDataBinding.tabBottomNavigation.menu.getItem(position).isChecked = true
         }
     }
 

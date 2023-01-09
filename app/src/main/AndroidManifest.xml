@@ -19,6 +19,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />-->
 
+<!--    android:hardwareAccelerated = "true"的时候会牺牲内存来加快图片的加载速度。-->
+<!--    android:largeHeap = "false"会限制app应用申请的内存大小。-->
     <application
         android:name=".app.AttrSenseApplication"
         android:allowBackup="false"
@@ -32,6 +34,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AttrSenseMaster"
         android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         tools:targetApi="31">
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -4,7 +4,7 @@ import android.util.Log
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonViewModel
-import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
+import com.attrsense.android.baselibrary.base.open.viewmodel.showLoadingAndCatch
 import com.attrsense.android.model.UserDataBean
 import com.attrsense.android.repository.AppRepository
 import com.attrsense.database.db.entity.LocalAnfDataEntity
@@ -28,7 +28,7 @@ class StatisticsViewModel @Inject constructor(
     val localLiveData = ResponseMutableLiveData<LocalAnfDataEntity?>()
 
     fun getRemoteData() {
-        appRepository.getUserInfo().showLoading(this).collectInLaunch {
+        appRepository.getUserInfo().showLoadingAndCatch(this).collectInLaunch {
             when (it) {
                 is ResponseData.OnFailed -> {
                     showToast(it.throwable.message)

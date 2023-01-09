@@ -2,10 +2,12 @@ package com.attrsense.android.api
 
 import com.attrsense.android.baselibrary.base.open.model.BaseResponse
 import com.attrsense.android.baselibrary.base.open.model.EmptyBean
+import com.attrsense.android.baselibrary.http.anno.SpecificTimeout
 import com.attrsense.android.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
+import java.util.concurrent.TimeUnit
 
 /**
  * author : zhangshuai@attrsense.com
@@ -50,6 +52,7 @@ interface ApiService {
      */
     @POST("v1/upload_file")
     @Multipart
+    @SpecificTimeout(60, TimeUnit.SECONDS)
     suspend fun uploadFile(
         @Header("Authorization") token: String?,
         @Part("rate") rate: RequestBody?,

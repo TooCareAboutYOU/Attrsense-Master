@@ -21,29 +21,37 @@ import kotlinx.coroutines.flow.onStart
  * @param vm ViewModel
  * @return Flow<ResponseData<T>>
  */
-fun <T : Any> Flow<ResponseData<T>>.showLoading(vm: ViewModel): Flow<ResponseData<T>> {
+fun <T : Any> Flow<ResponseData<T>>.showLoadingAndCatch(
+    vm: ViewModel,
+    isShowDialog: Boolean = true,
+    dialogText: String = ""
+): Flow<ResponseData<T>> {
     return this.onStart {
-        when (vm) {
-            is SkeletonViewModel -> {
-                vm.showLoadingDialog()
+        if (isShowDialog) {
+            when (vm) {
+                is SkeletonViewModel -> {
+                    vm.showLoadingDialog(dialogText)
+                }
+                is SkeletonAndroidViewModel -> {
+                    vm.showLoadingDialog(dialogText)
+                }
+                else -> {}
             }
-            is SkeletonAndroidViewModel -> {
-                vm.showLoadingDialog()
-            }
-            else -> {}
         }
     }.catchs().onCompletion {
         if (BuildConfig.DEBUG) {
             Log.e("print_logs", "VMExpand::onCompletion")
         }
-        when (vm) {
-            is SkeletonViewModel -> {
-                vm.dismissLoadingDialog()
+        if (isShowDialog) {
+            when (vm) {
+                is SkeletonViewModel -> {
+                    vm.dismissLoadingDialog()
+                }
+                is SkeletonAndroidViewModel -> {
+                    vm.dismissLoadingDialog()
+                }
+                else -> {}
             }
-            is SkeletonAndroidViewModel -> {
-                vm.dismissLoadingDialog()
-            }
-            else -> {}
         }
     }
 }

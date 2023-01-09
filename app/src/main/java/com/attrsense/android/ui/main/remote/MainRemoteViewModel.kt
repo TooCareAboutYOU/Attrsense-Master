@@ -6,7 +6,7 @@ import com.attrsense.android.baselibrary.base.open.livedata.ResponseBaseMutableL
 import com.attrsense.android.baselibrary.base.open.livedata.ResponseMutableLiveData
 import com.attrsense.android.baselibrary.base.open.model.ResponseData
 import com.attrsense.android.baselibrary.base.open.viewmodel.SkeletonAndroidViewModel
-import com.attrsense.android.baselibrary.base.open.viewmodel.showLoading
+import com.attrsense.android.baselibrary.base.open.viewmodel.showLoadingAndCatch
 import com.attrsense.android.model.ImageInfoBean
 import com.attrsense.android.model.ImagesBean
 import com.attrsense.android.repository.AppRepository
@@ -48,7 +48,7 @@ class MainRemoteViewModel @Inject constructor(
         appRepository.getRemoteFiles(
             page,
             perPage
-        ).showLoading(this)
+        ).showLoadingAndCatch(this)
             .collectInLaunch {
                 getAllLiveData.value = it.apply {
                     when (this) {
@@ -179,7 +179,7 @@ class MainRemoteViewModel @Inject constructor(
 
     fun deleteByThumb(position: Int, thumbImage: String?, fileId: String?) {
         appRepository.deleteFile(fileId)
-            .showLoading(this)
+            .showLoadingAndCatch(this, dialogText = "删除中")
             .collectInLaunch {
                 when (it) {
                     is ResponseData.OnFailed -> {
